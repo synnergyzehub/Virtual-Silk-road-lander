@@ -21,17 +21,17 @@ def show_retailer_analysis():
     """, unsafe_allow_html=True)
     
     # Create layout
-    tabs = st.tabs(["JC Penney Analysis", "Retailer Comparison", "Industry Trends"])
+    tabs = st.tabs(["JC Penney Analysis", "ECG Retailer Comparison", "Industry Market Pulse"])
     
     # JC Penney Analysis tab
     with tabs[0]:
         show_jcpenney_analysis()
     
-    # Retailer Comparison tab
+    # ECG Retailer Comparison tab
     with tabs[1]:
         show_retailer_comparison()
     
-    # Industry Trends tab
+    # Industry Market Pulse tab
     with tabs[2]:
         show_industry_trends()
     
@@ -127,8 +127,8 @@ def show_jcpenney_analysis():
                 Since JC Penney is no longer publicly traded, we recommend analyzing:
                 
                 1. **Simon Property Group (SPG)** - One of JC Penney's owners (select in the tab above)
-                2. **Comparable department stores** - Use the "Retailer Comparison" tab to analyze Macy's, Kohl's, etc.
-                3. **Industry trends** - View broader retail industry metrics in the "Industry Trends" tab
+                2. **Comparable department stores** - Use the "ECG Retailer Comparison" tab to analyze Macy's, Kohl's, etc.
+                3. **Industry trends** - View broader retail industry metrics in the "Industry Market Pulse" tab
                 """)
                 
                 # Try to get SPG data as a preview
@@ -324,9 +324,9 @@ def show_jcpenney_analysis():
             st.warning("Please select at least one retailer for comparison.")
 
 def show_retailer_comparison():
-    """Show comparison between major retailers"""
+    """Show ECG's proprietary comparison between major retailers"""
     
-    st.subheader("Retailer Comparison")
+    st.subheader("ECG Retailer Comparison Analysis")
     
     # Select retailers for comparison
     all_retailers = {
@@ -576,14 +576,14 @@ def show_retailer_comparison():
         st.warning("Please select at least one retailer for comparison.")
 
 def show_industry_trends():
-    """Show broader retail industry trends"""
+    """Show ECG's proprietary industry market pulse"""
     
-    st.subheader("Retail Industry Trends")
+    st.subheader("Industry Market Pulse")
     
     # Industry metrics over time
     st.markdown("""
-    Analyzing broad retail industry trends provides context for individual retailer performance
-    and helps inform buying decisions for the upcoming seasons.
+    ECG's proprietary Industry Market Pulse provides exclusive insights into retail industry trends, 
+    helping inform strategic buying decisions and competitive positioning for the upcoming seasons.
     """)
     
     # Trend categories
