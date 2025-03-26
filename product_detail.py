@@ -43,13 +43,21 @@ def show_product_detail():
         fabric_options = ["Standard (as described)", "Premium Upgrade (+10%)", "Eco-Friendly Option (+15%)"]
         selected_fabric = st.selectbox("Select Fabric Type:", fabric_options)
         
+        # Initialize variables to avoid LSP warnings
+        selected_wash = None
+        selected_color = None
+        
         # Wash/Finish selection (if applicable)
         if 'wash_options' in product:
             st.markdown("#### Wash/Finish Options")
             selected_wash = st.selectbox("Select Wash/Finish:", product['wash_options'])
+            # Store in session state
+            st.session_state.current_selected_wash = selected_wash
         elif 'color_options' in product:
             st.markdown("#### Color Options")
             selected_color = st.selectbox("Select Base Color:", product['color_options'])
+            # Store in session state
+            st.session_state.current_selected_color = selected_color
         
         # Branding options
         st.markdown("#### Branding Options")
@@ -62,13 +70,16 @@ def show_product_detail():
         st.markdown("#### Size Distribution")
         st.write("Enter quantity for each size (minimum total: " + str(product['moq']) + " pcs)")
         
+        # Initialize variables to avoid LSP warnings
+        size_quantities = {}
+        total_quantity = product['moq']  # Default value
+        
         # Create size distribution form
         if 'available_sizes' in product:
             sizes = product['available_sizes']
             
             # Create columns for size inputs
             size_cols = st.columns(len(sizes))
-            size_quantities = {}
             
             # Create quantity input for each size
             for i, size in enumerate(sizes):
@@ -82,6 +93,10 @@ def show_product_detail():
             
             # Calculate total quantity
             total_quantity = sum(size_quantities.values())
+            
+            # Store in session state for access elsewhere
+            st.session_state.current_size_quantities = size_quantities
+            st.session_state.current_total_quantity = total_quantity
             
             # Show total with validation
             if total_quantity < product['moq']:
