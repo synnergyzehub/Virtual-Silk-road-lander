@@ -8,6 +8,7 @@ from product_detail import show_product_detail
 from order_booking import show_order_booking
 from order_confirmation import show_order_confirmation
 from merchandiser_agent import show_merchandiser_agent
+from retailer_analysis import show_retailer_analysis
 
 # Configure the page
 st.set_page_config(
@@ -53,6 +54,16 @@ with st.sidebar:
         if st.session_state.cart:
             if st.button("🛒 View Order", use_container_width=True):
                 st.session_state.page = 'order_booking'
+        
+        # Market Intelligence Section
+        st.markdown("### Market Intelligence")
+        
+        # Add JC Penney analysis button
+        if st.button("📊 Retailer Analysis", use_container_width=True):
+            st.session_state.page = 'retailer_analysis'
+        
+        # Add a hint about JC Penney analysis
+        st.info("Access market data on JC Penney and other major retailers to inform your buying decisions.")
         
         # Add access to the merchandiser agent
         st.markdown("### Your Support Team")
@@ -112,6 +123,8 @@ elif st.session_state.page == 'order_confirmation':
     show_order_confirmation()
 elif st.session_state.page == 'merchandiser_agent':
     show_merchandiser_agent()
+elif st.session_state.page == 'retailer_analysis':
+    show_retailer_analysis()
 
 # Footer
 st.markdown("---")
