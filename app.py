@@ -58,12 +58,12 @@ with st.sidebar:
         # Market Intelligence Section
         st.markdown("### Market Intelligence")
         
-        # Add JC Penney analysis button
-        if st.button("📊 Retailer Analysis", use_container_width=True):
+        # Add ECG Market Health Check button
+        if st.button("📊 ECG Market Health Check", use_container_width=True):
             st.session_state.page = 'retailer_analysis'
         
-        # Add a hint about JC Penney analysis
-        st.info("Access market data on JC Penney and other major retailers to inform your buying decisions.")
+        # Add a hint about the ECG Market Health Check
+        st.info("Access ECG's proprietary market health analysis on major retailers to inform your strategic decisions.")
         
         # Add access to the merchandiser agent
         st.markdown("### Your Support Team")
