@@ -1,55 +1,63 @@
 import streamlit as st
 
 def show_onboarding():
-    """Display the onboarding process for new users"""
+    """Display the onboarding process for new users of the Buying House Portal"""
     
-    st.title("Welcome to the Stock Analysis Tool")
+    st.title("Welcome to the Buying House Portal")
     
     # Introduction
     st.markdown("""
-    ### Your path to smarter stock analysis
+    ### Ready Styles. Bulk Orders. Tailored For You.
     
-    This tool helps you analyze stocks with real-time data from Yahoo Finance.
-    Follow our guided process to get the most out of this application.
+    Our platform helps you browse ready-made styles, customize them to your needs, and place bulk orders
+    for your business. Follow our guided process to get the most out of this application.
     """)
     
     # Step 1
-    with st.expander("Step 1: Search for Stocks", expanded=True):
+    with st.expander("Step 1: Browse Product Categories", expanded=True):
         st.markdown("""
-        Begin by searching for stocks using their ticker symbols (e.g., AAPL for Apple, MSFT for Microsoft).
+        Start by browsing our extensive catalog of menswear products:
         
-        Our tool will fetch the latest financial data and show you key metrics to help you understand the company's performance.
+        - **Tops:** Shirts, T-shirts, Knit tops
+        - **Bottoms:** Jeans, Chinos, Joggers
+        
+        Each category offers various fabrics, styles, and customization options.
         """)
-        st.image("https://cdn.jsdelivr.net/gh/feathericons/feather@master/icons/search.svg", width=50)
+        st.image("https://cdn.jsdelivr.net/gh/feathericons/feather@master/icons/grid.svg", width=50)
     
     # Step 2
-    with st.expander("Step 2: Analyze Interactive Charts", expanded=True):
+    with st.expander("Step 2: Customize Your Selection", expanded=True):
         st.markdown("""
-        Explore interactive charts showing historical stock price trends.
+        Customize your selected products with options like:
         
-        You can zoom, pan, and hover over data points to get detailed information.
-        Compare performance over different time periods to spot trends.
+        - Fabric type and composition
+        - Wash/finish options
+        - Branding and labeling preferences
+        - Size distribution and quantities
+        
+        Our platform allows for detailed customization to meet your exact requirements.
         """)
-        st.image("https://cdn.jsdelivr.net/gh/feathericons/feather@master/icons/bar-chart-2.svg", width=50)
+        st.image("https://cdn.jsdelivr.net/gh/feathericons/feather@master/icons/edit-2.svg", width=50)
     
     # Step 3
-    with st.expander("Step 3: Review Financial Indicators", expanded=True):
+    with st.expander("Step 3: Place Your Bulk Order", expanded=True):
         st.markdown("""
-        Dive deeper into financial indicators like:
-        - Price-to-Earnings Ratio
-        - Earnings Per Share
-        - Market Capitalization
-        - Volume
+        Submit your order with all necessary details:
         
-        These metrics help you make more informed investment decisions.
+        - Company information
+        - Delivery preferences
+        - Payment terms
+        - Special instructions
+        
+        We'll confirm your order and keep you updated on production status.
         """)
-        st.image("https://cdn.jsdelivr.net/gh/feathericons/feather@master/icons/activity.svg", width=50)
+        st.image("https://cdn.jsdelivr.net/gh/feathericons/feather@master/icons/shopping-bag.svg", width=50)
     
     # Ready to start
     st.markdown("---")
-    st.markdown("### Ready to explore?")
+    st.markdown("### Ready to explore our catalog?")
     
     if st.button("Let's Get Started!", use_container_width=True):
         st.session_state.completed_onboarding = True
-        st.session_state.page = 'stock_analysis'
+        st.session_state.page = 'product_catalog'
         st.rerun()

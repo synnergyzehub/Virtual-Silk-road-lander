@@ -1,0 +1,9 @@
+Task Category,Task Description,Frequency,Responsible,Status,Remarks/Notes
+Order Intake Verification,Verify client orders received via Buying House portal,Order Event,Buying House Ops,Pending,
+Unit Costing Finalization,Finalize costing per unit for each order,Order Event,Buying House Finance + CA,Pending,
+Vendor PO Issuance,Issue POs to approved vendors with finalized costing,Order Event,Buying House Ops,Pending,
+Production Monitoring,Monitor production status and update ERP,Daily/Weekly,Buying House Ops,Pending,
+Dispatch & Delivery Coordination,Coordinate delivery schedules and logistics,Order Event,Buying House Logistics,Pending,
+Payment & Invoice Tracking,"Track vendor payments, invoice statuses, and updates",Weekly,Buying House Finance,Pending,
+Vendor Compliance Check,Ensure all vendors have completed compliance requirements,Onboarding Event/Quarterly,Buying House Compliance,Pending,
+Monthly Reporting to CA,"Submit monthly order, production, and financial summary to CA",Monthly,Buying House Finance,Pending,

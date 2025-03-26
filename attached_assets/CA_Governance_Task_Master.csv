@@ -1,0 +1,9 @@
+Task Category,Task Description,Frequency,Responsible,Status,Remarks/Notes
+License Fee Governance,Verify new entity onboarding & apply correct license fee as per service/module selected,Onboarding Event,CA,Pending,
+Unit/Piece Cost Validation,Approve per-unit costing for Buying House transactions,Monthly/Per PO,CA + Buying House Team,Pending,
+Sales-Based Fee Monitoring,Monitor sales data from Marketplace & ensure correct % fee applied,Weekly/Monthly,CA + Marketplace Team,Pending,
+Financial Reconciliation,"Generate monthly reconciliation reports for all entities, verify payments & split payouts",Monthly,CA + Finance Dept,Pending,
+Compliance Dossier Generation,Compile compliance & tax filing documents per entity,Quarterly/Annual,CA + Compliance Team,Pending,
+Discrepancy Alerts Review,"Monitor dashboard alerts for overdue payments, license fee discrepancies, compliance issues",Daily/Real-time,CA,Pending,
+Vendor/Buyer Onboarding Checks,Review compliance docs & financial info of newly onboarded vendors/buyers,Onboarding Event,CA + Ops Team,Pending,
+Dashboard Audit & Report Submission,Final audit of financial dashboards and submission to management & tax authorities,Monthly/Quarterly,CA,Pending,

@@ -1,0 +1,9 @@
+Task Category,Task Description,Frequency,Responsible,Status,Remarks/Notes
+Retailer Onboarding Verification,Verify onboarding documents and financial details of retailers,Onboarding Event,Marketplace Ops + CA,Pending,
+Product Listing Review,Review and approve product listings by sellers,Listing Event,Marketplace Quality,Pending,
+Sales Transaction Monitoring,Monitor daily sales and transactions through the marketplace,Daily,Marketplace Ops,Pending,
+Returns & Refunds Handling,"Handle return requests, refunds, and disputes",As Required,Marketplace Customer Support,Pending,
+Commission Fee Calculation,Calculate applicable commission fees from sales,Weekly/Monthly,Marketplace Finance + CA,Pending,
+Retailer Compliance Checks,Ensure retailers meet compliance and documentation requirements,Onboarding Event/Quarterly,Marketplace Compliance,Pending,
+Customer Complaint Resolution,Resolve customer complaints and escalate major issues,As Required,Marketplace Customer Support,Pending,
+Monthly Sales Reporting to CA,"Submit monthly sales, commissions, and revenue report to CA",Monthly,Marketplace Finance,Pending,
