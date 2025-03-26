@@ -1,86 +1,302 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
+import numpy as np
 
 def show_product_catalog():
     """Display the product catalog page"""
     
     st.title("Product Catalog")
     
+    # Interactive filters section with enhanced UI
     st.markdown("""
-    Browse our catalog of ready-made styles for bulk ordering. Select a category and product type to explore options.
-    All products can be customized to meet your specific requirements.
-    """)
+    <div style="background-color: #2E2E2E; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+    <h3 style="color: #1E88E5;">Browse Our Catalog</h3>
+    <p>Explore our extensive range of ready-made styles for bulk ordering. Use the filters below to find exactly what you need.</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Category filter
-    category = st.radio(
-        "Select Category:",
-        ["Tops", "Bottoms"],
-        horizontal=True
-    )
+    # Main filters in a visually appealing layout
+    filter_col1, filter_col2 = st.columns([2, 3])
     
-    # Sub-category based on main category
-    if category == "Tops":
-        subcategories = ["Denims", "Non-Denims", "Knits"]
-    else:  # Bottoms
-        subcategories = ["Denims", "Non-Denims", "Knits"]
+    with filter_col1:
+        # Category selection with custom styling
+        st.markdown("### Select Product Category")
+        
+        # Interactive category buttons with icons
+        category_col1, category_col2 = st.columns(2)
+        with category_col1:
+            tops_selected = st.button(
+                "👕 Tops", 
+                help="Shirts, T-shirts, and other upper body garments",
+                use_container_width=True,
+                key="tops_button"
+            )
+        with category_col2:
+            bottoms_selected = st.button(
+                "👖 Bottoms", 
+                help="Jeans, Trousers, Shorts and other lower body garments",
+                use_container_width=True,
+                key="bottoms_button"
+            )
+        
+        # Set category based on button selection
+        if 'catalog_category' not in st.session_state:
+            st.session_state.catalog_category = "Tops"  # Default
+        
+        if tops_selected:
+            st.session_state.catalog_category = "Tops"
+        elif bottoms_selected:
+            st.session_state.catalog_category = "Bottoms"
+        
+        category = st.session_state.catalog_category
+        
+        # Highlight selected category
+        st.markdown(f"**Selected Category:** {category}")
+        
+        # Sub-category based on main category with more visually appealing UI
+        st.markdown("### Select Sub-Category")
+        
+        if category == "Tops":
+            subcategories = ["Denims", "Non-Denims", "Knits"]
+        else:  # Bottoms
+            subcategories = ["Denims", "Non-Denims", "Knits"]
+        
+        # Radio buttons with better spacing and styling
+        subcategory = st.radio(
+            "Filter by Material Type",
+            subcategories,
+            horizontal=True,
+            label_visibility="collapsed"
+        )
     
-    subcategory = st.selectbox("Select Sub-Category:", subcategories)
+    with filter_col2:
+        # Visual guide for what types of products are in each category
+        st.markdown("### Product Guide")
+        
+        # Create a categorical color map
+        if category == "Tops":
+            guide_data = {
+                "Type": ["Shirts", "T-Shirts", "Jackets", "Polos", "Henleys"],
+                "Sub-Category": ["Non-Denims", "Knits", "Denims", "Knits", "Knits"],
+                "Value": [30, 40, 20, 25, 15]  # For sizing circles
+            }
+            title = "Top Types by Sub-Category"
+        else:  # Bottoms
+            guide_data = {
+                "Type": ["Jeans", "Chinos", "Shorts", "Joggers", "Cargo"],
+                "Sub-Category": ["Denims", "Non-Denims", "Denims", "Knits", "Non-Denims"],
+                "Value": [35, 25, 20, 30, 15]  # For sizing circles
+            }
+            title = "Bottom Types by Sub-Category"
+        
+        # Create interactive bubble chart
+        fig = px.scatter(
+            guide_data,
+            x="Type",
+            y="Sub-Category",
+            size="Value",
+            color="Sub-Category",
+            color_discrete_map={"Denims": "#1976D2", "Non-Denims": "#43A047", "Knits": "#E53935"},
+            size_max=50,
+            hover_name="Type",
+            title=title
+        )
+        
+        fig.update_layout(
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            height=250,
+            margin=dict(l=10, r=10, t=40, b=20),
+            font=dict(size=12),
+            xaxis=dict(showgrid=False),
+            yaxis=dict(showgrid=False)
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
     
-    # Product type based on category and subcategory
+    # Get product types based on filters
     product_types = get_product_types(category, subcategory)
     
+    # Create a metrics section to show available products
+    metric_cols = st.columns(4)
+    with metric_cols[0]:
+        st.metric(label="Available Products", value=len(product_types))
+    with metric_cols[1]:
+        avg_moq = int(np.mean([p["moq"] for p in product_types]))
+        st.metric(label="Average MOQ", value=f"{avg_moq} pcs")
+    with metric_cols[2]:
+        delivery_time = "30-45 days"
+        st.metric(label="Avg. Production Time", value=delivery_time)
+    with metric_cols[3]:
+        st.metric(label="Customization Options", value="100%")
+    
     # Create grid layout for products
+    st.markdown("---")
     st.subheader(f"{category} - {subcategory}")
     
-    # Display products in a grid (3 columns)
-    cols = st.columns(3)
+    # Enhanced product display with more interactive elements
+    for i in range(0, len(product_types), 3):
+        cols = st.columns(3)
+        for j in range(3):
+            if i + j < len(product_types):
+                product = product_types[i + j]
+                with cols[j]:
+                    # Create a card-like element
+                    st.markdown(f"""
+                    <div style="background-color: #1E1E1E; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+                        <h3 style="color: #1E88E5;">{product['name']}</h3>
+                        <p>ID: {product['id']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Use better images with proper sizing
+                    st.image(product['image'], use_container_width=True)
+                    
+                    # More detailed product info with better formatting
+                    st.markdown(f"""
+                    <div style="background-color: #2E2E2E; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <p><b>Base Fabric:</b> {product['fabric']}</p>
+                        <p><b>MOQ:</b> {product['moq']} pcs</p>
+                        <p><b>Price Range:</b> {product['price_range']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Quick preview of options
+                    if 'wash_options' in product:
+                        options = product['wash_options']
+                        option_type = "Wash Options"
+                    elif 'color_options' in product:
+                        options = product['color_options']
+                        option_type = "Color Options"
+                    else:
+                        options = []
+                        option_type = ""
+                    
+                    if options:
+                        st.markdown(f"**{option_type}:**")
+                        option_cols = st.columns(len(options[:4]))  # Show up to 4 options
+                        for k, option in enumerate(options[:4]):
+                            option_cols[k].markdown(f"<div style='text-align: center; padding: 5px; background-color: #333; border-radius: 5px;'>{option}</div>", unsafe_allow_html=True)
+                    
+                    # Interactive buttons
+                    button_cols = st.columns(2)
+                    with button_cols[0]:
+                        if st.button(f"🔍 View Details", key=f"view_{i+j}"):
+                            st.session_state.selected_product = product
+                            st.session_state.page = 'product_detail'
+                            st.rerun()
+                    
+                    with button_cols[1]:
+                        st.button(f"❤️ Save", key=f"save_{i+j}", help="Save this item to your favorites")
     
-    for i, product in enumerate(product_types):
-        with cols[i % 3]:
-            st.write(f"### {product['name']}")
-            st.image(product['image'], use_column_width=True)
-            st.write(f"**Base Fabric:** {product['fabric']}")
-            st.write(f"**MOQ:** {product['moq']} pcs")
-            
-            if st.button(f"View Details", key=f"view_{i}"):
-                st.session_state.selected_product = product
-                st.session_state.page = 'product_detail'
-                st.rerun()
-            
-            st.markdown("---")
-
-    # Quick filters
-    with st.expander("Advanced Filters"):
-        col1, col2 = st.columns(2)
+    # Advanced filtering options with more interactivity
+    st.markdown("---")
+    st.markdown("## Advanced Search & Filters")
+    
+    with st.expander("Show Advanced Filters", expanded=False):
+        filter_cols = st.columns(3)
         
-        with col1:
-            st.multiselect(
+        with filter_cols[0]:
+            st.markdown("### Fabric & Materials")
+            
+            fabric_types = st.multiselect(
                 "Fabric Types:",
-                ["Cotton", "Polyester", "Cotton-Poly Blend", "Denim", "Twill", "Jersey"]
+                ["Cotton", "Polyester", "Cotton-Poly Blend", "Denim", "Twill", "Jersey", 
+                 "Linen", "Canvas", "French Terry", "Fleece"],
+                help="Select multiple fabric types to filter products"
             )
             
-            st.slider(
-                "Price Range (per piece):",
+            st.markdown("### Price Range")
+            price_range = st.slider(
+                "Price per piece (USD):",
                 min_value=5,
                 max_value=50,
                 value=(10, 30),
-                step=5
+                step=5,
+                help="Filter products by price range"
             )
         
-        with col2:
-            st.multiselect(
+        with filter_cols[1]:
+            st.markdown("### Production Specs")
+            
+            finish_types = st.multiselect(
                 "Available Finishes:",
-                ["Stone Wash", "Enzyme Wash", "Garment Dye", "Pigment Dye", "Raw/Unwashed"]
+                ["Stone Wash", "Enzyme Wash", "Garment Dye", "Pigment Dye", "Raw/Unwashed",
+                 "Acid Wash", "Bleach Wash", "Vintage Wash", "Distressed"],
+                help="Select finishing options available for products"
             )
             
-            st.slider(
-                "MOQ Range:",
+            moq_range = st.slider(
+                "MOQ Range (pieces):",
                 min_value=100,
                 max_value=1000,
                 value=(100, 500),
-                step=100
+                step=50,
+                help="Filter by minimum order quantity requirements"
             )
+        
+        with filter_cols[2]:
+            st.markdown("### Additional Options")
+            
+            st.selectbox(
+                "Sort By:",
+                ["Popularity", "Price: Low to High", "Price: High to Low", "MOQ: Low to High", "Newest First"],
+                help="Choose how to sort the product listing"
+            )
+            
+            st.selectbox(
+                "Customization Level:",
+                ["All", "Basic", "Standard", "Premium", "Full Custom"],
+                help="Filter by level of customization available"
+            )
+            
+            st.checkbox("Only show in-stock fabrics", help="Show only products with immediately available fabrics")
+            st.checkbox("Show eco-friendly options", help="Display only environmentally friendly product options")
+    
+    # Market trends section for added value
+    st.markdown("---")
+    st.subheader("Market Trends & Popular Choices")
+    
+    # Create a simple market trends visualization
+    trend_data = {
+        "Month": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        "Denim": [100, 120, 140, 150, 170, 190],
+        "Knits": [150, 140, 160, 170, 180, 200],
+        "Non-Denim": [80, 100, 110, 120, 130, 135]
+    }
+    
+    df_trends = pd.DataFrame(trend_data)
+    df_trends_melted = pd.melt(
+        df_trends, 
+        id_vars=["Month"],
+        value_vars=["Denim", "Knits", "Non-Denim"],
+        var_name="Category",
+        value_name="Orders"
+    )
+    
+    fig = px.line(
+        df_trends_melted,
+        x="Month",
+        y="Orders",
+        color="Category",
+        title="Product Category Trends (Last 6 Months)",
+        color_discrete_map={"Denim": "#1976D2", "Knits": "#E53935", "Non-Denim": "#43A047"}
+    )
+    
+    fig.update_layout(
+        height=300,
+        template="plotly_dark",
+        xaxis_title="",
+        yaxis_title="Order Volume (Normalized)",
+        legend_title=""
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Calendar hint for seasonal planning
+    st.info("💡 **Seasonal Planning Tip:** Now is the perfect time to place orders for the Summer/Fall collection to ensure timely delivery.")
     
 def get_product_types(category, subcategory):
     """Get product types based on category and subcategory"""
