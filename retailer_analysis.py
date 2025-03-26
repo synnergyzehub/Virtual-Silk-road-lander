@@ -8,15 +8,15 @@ from datetime import datetime, timedelta
 from visualization import calculate_moving_averages, calculate_rsi, create_candlestick_chart, create_technical_chart, create_rsi_chart
 
 def show_retailer_analysis():
-    """Display the retailer stock analysis page for major clothing retailers"""
+    """Display the ECG Market Health Check for major clothing retailers"""
     
-    st.title("Retailer Market Analysis")
+    st.title("ECG Market Health Check")
     
     st.markdown("""
     <div style="background-color: #2E2E2E; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-    <h3 style="color: #1E88E5;">Market Intelligence for Buying Decisions</h3>
-    <p>Track and analyze major clothing retailers to inform your production and sales strategies. 
-    Understanding market trends and retailer performance can help optimize your ordering and production decisions.</p>
+    <h3 style="color: #1E88E5;">ECG's Proprietary Market Intelligence</h3>
+    <p>Access ECG's exclusive market health analysis of major clothing retailers to inform your strategic decisions. 
+    Our proprietary insights into market trends and retailer performance help optimize your sourcing, production, and sales strategies.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -37,7 +37,7 @@ def show_retailer_analysis():
     
     # Market insights
     st.markdown("---")
-    st.subheader("Market Insights for Buying Decisions")
+    st.subheader("ECG's Strategic Market Insights")
     
     st.info("""
     **Strategic Considerations:**
@@ -82,52 +82,77 @@ def show_jcpenney_analysis():
         
         # Get historical data
         if start_date < end_date:
-            with st.spinner("Fetching historical JCP data..."):
+            with st.spinner("Checking JC Penney data availability..."):
+                # Show information about JC Penney's current status
+                st.warning("JC Penney (JCP) is no longer publicly traded since their bankruptcy reorganization in 2020.")
+                
+                st.info("""
+                **JC Penney Current Status:**
+                
+                - JC Penney was acquired by Simon Property Group and Brookfield Asset Management in late 2020
+                - The company is now privately held and no longer trades on public markets
+                - For current insights, we recommend analyzing the parent companies (Simon Property Group - SPG) 
+                  and related department store retailers
+                """)
+                
+                # Show key historical events anyway
+                st.subheader("Key Historical Events")
+                events = [
+                    {"date": "2016-01-01", "event": "JC Penney completes sale-leaseback of home office campus in Plano, Texas"},
+                    {"date": "2017-02-24", "event": "Announces plan to close 130-140 stores"},
+                    {"date": "2018-05-17", "event": "CEO Marvin Ellison resigns"},
+                    {"date": "2018-10-29", "event": "JC Penney names Jill Soltau as new CEO"},
+                    {"date": "2019-02-28", "event": "Announces closure of additional 27 stores"},
+                    {"date": "2020-05-15", "event": "JC Penney files for Chapter 11 bankruptcy protection"},
+                    {"date": "2020-12-07", "event": "Simon Property Group and Brookfield Asset Management complete acquisition of JC Penney"},
+                    {"date": "2021-03-02", "event": "JC Penney announces focus on omnichannel retail strategy"},
+                    {"date": "2022-05-10", "event": "JC Penney launches new brand identity and store designs"}
+                ]
+                
+                events_df = pd.DataFrame(events)
+                events_df['date'] = pd.to_datetime(events_df['date'])
+                events_df.set_index('date', inplace=True)
+                
+                # Display events that are within the selected date range
+                filtered_events = events_df.loc[start_date:end_date]
+                if not filtered_events.empty:
+                    for idx, row in filtered_events.iterrows():
+                        st.markdown(f"**{idx.strftime('%Y-%m-%d')}:** {row['event']}")
+                else:
+                    st.info("No major events in the selected date range.")
+                
+                # Suggest alternatives
+                st.subheader("Suggested Alternatives")
+                st.markdown("""
+                Since JC Penney is no longer publicly traded, we recommend analyzing:
+                
+                1. **Simon Property Group (SPG)** - One of JC Penney's owners (select in the tab above)
+                2. **Comparable department stores** - Use the "Retailer Comparison" tab to analyze Macy's, Kohl's, etc.
+                3. **Industry trends** - View broader retail industry metrics in the "Industry Trends" tab
+                """)
+                
+                # Try to get SPG data as a preview
                 try:
-                    # Get historical JCP data
-                    jcp_data = yf.download("JCP", start=start_date, end=end_date)
+                    st.subheader("Simon Property Group (SPG) Preview")
+                    st.markdown("**Quick look at JC Penney's parent company performance:**")
                     
-                    if not jcp_data.empty:
-                        # Display basic info
-                        display_stock_info(jcp_data, "JCP")
-                        
-                        # Create technical analysis charts
-                        jcp_data_ma = calculate_moving_averages(jcp_data)
-                        jcp_data_ma['RSI'] = calculate_rsi(jcp_data)
-                        
-                        # Display charts
-                        st.subheader("Technical Analysis")
-                        st.plotly_chart(create_candlestick_chart(jcp_data, "JC Penney Historical Price (JCP)"), use_container_width=True)
-                        st.plotly_chart(create_technical_chart(jcp_data_ma, "JC Penney with Moving Averages"), use_container_width=True)
-                        st.plotly_chart(create_rsi_chart(jcp_data_ma, "JC Penney RSI"), use_container_width=True)
-                        
-                        # Show key events
-                        st.subheader("Key Historical Events")
-                        events = [
-                            {"date": "2016-01-01", "event": "JC Penney completes sale-leaseback of home office campus in Plano, Texas"},
-                            {"date": "2017-02-24", "event": "Announces plan to close 130-140 stores"},
-                            {"date": "2018-05-17", "event": "CEO Marvin Ellison resigns"},
-                            {"date": "2018-10-29", "event": "JC Penney names Jill Soltau as new CEO"},
-                            {"date": "2019-02-28", "event": "Announces closure of additional 27 stores"},
-                            {"date": "2020-05-15", "event": "JC Penney files for Chapter 11 bankruptcy protection"}
-                        ]
-                        
-                        events_df = pd.DataFrame(events)
-                        events_df['date'] = pd.to_datetime(events_df['date'])
-                        events_df.set_index('date', inplace=True)
-                        
-                        # Display events that are within the selected date range
-                        filtered_events = events_df.loc[start_date:end_date]
-                        if not filtered_events.empty:
-                            for idx, row in filtered_events.iterrows():
-                                st.markdown(f"**{idx.strftime('%Y-%m-%d')}:** {row['event']}")
-                        else:
-                            st.info("No major events in the selected date range.")
-                    else:
-                        st.warning("No data available for JCP in the selected date range.")
-                except Exception as e:
-                    st.error(f"Error fetching JCP data: {e}")
-                    st.info("JC Penney stock may not be available for the selected dates. They filed for bankruptcy in May 2020.")
+                    # Get recent SPG data
+                    recent_date = min(end_date, datetime.now().date())
+                    start_preview = (datetime.strptime(str(recent_date), "%Y-%m-%d") - timedelta(days=30)).date()
+                    
+                    spg_preview = yf.download("SPG", start=start_preview, end=recent_date)
+                    if not spg_preview.empty:
+                        # Create a simple preview chart
+                        fig = px.line(
+                            spg_preview['Adj Close'], 
+                            title="Simon Property Group (SPG) - Recent Performance",
+                            labels={"value": "Price ($)", "variable": ""},
+                            template="plotly_dark"
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+                        st.caption("Click 'Simon Property Group (SPG) Analysis' above for detailed analysis")
+                except:
+                    pass
         else:
             st.error("End date must be after start date.")
     
