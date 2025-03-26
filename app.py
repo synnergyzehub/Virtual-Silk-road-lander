@@ -20,10 +20,10 @@ st.set_page_config(
 
 # Initialize session state for app flow
 if 'page' not in st.session_state:
-    st.session_state.page = 'onboarding'
+    st.session_state.page = 'retailer_analysis'  # Start directly on retailer analysis page for testing
 
 if 'completed_onboarding' not in st.session_state:
-    st.session_state.completed_onboarding = False
+    st.session_state.completed_onboarding = True  # Skip onboarding for testing
 
 if 'selected_product' not in st.session_state:
     st.session_state.selected_product = None
