@@ -8,10 +8,16 @@ import datetime
 # Get the database connection URL from environment variable
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if not DATABASE_URL:
-    raise ValueError("No DATABASE_URL environment variable found")
+    # Fallback to SQLite for development
+    DATABASE_URL = "sqlite:///voi_jeans.db"
 
-# Create the SQLAlchemy engine
-engine = create_engine(DATABASE_URL)
+# Create the SQLAlchemy engine with connection pooling settings
+engine = create_engine(
+    DATABASE_URL, 
+    pool_pre_ping=True,
+    pool_recycle=3600,
+    connect_args={"connect_timeout": 15}
+)
 
 # Create a base class for declarative models
 Base = declarative_base()
