@@ -740,29 +740,54 @@ def show_data_flow_visualization():
         st.subheader("Access Permission Framework")
         st.markdown("This shows how system access permissions are assigned based on company types and business relationships:")
     
-    # Create sample license flow data
-    license_data = {
-        "Business Type": ["Brand", "Brand", "Manufacturer", "Manufacturer", "Retailer", "Retailer"],
-        "Business Model": ["House Brand", "Private Label", "CMP", "FOB", "SOR", "Marketplace"],
-        "License Template": ["TEMPLATE-HOUSE-001", "TEMPLATE-PL-001", "TEMPLATE-CMP-001", "TEMPLATE-FOB-001", "TEMPLATE-SOR-001", "TEMPLATE-MKT-001"],
-        "Entity Example": ["Voi Jeans", "Killer Jeans", "Scotts Garments", "Export Partner", "Department Store", "Online Marketplace"]
-    }
+    # Create sample license/permission flow data
+    admin_mode = st.session_state.get('admin_mode', False)
+    
+    if admin_mode:
+        # Empire OS terminology for administrators
+        license_data = {
+            "Business Type": ["Brand", "Brand", "Manufacturer", "Manufacturer", "Retailer", "Retailer"],
+            "Business Model": ["House Brand", "Private Label", "CMP", "FOB", "SOR", "Marketplace"],
+            "License Template": ["TEMPLATE-HOUSE-001", "TEMPLATE-PL-001", "TEMPLATE-CMP-001", "TEMPLATE-FOB-001", "TEMPLATE-SOR-001", "TEMPLATE-MKT-001"],
+            "Entity Example": ["Voi Jeans", "Killer Jeans", "Scotts Garments", "Export Partner", "Department Store", "Online Marketplace"]
+        }
+    else:
+        # Industry-standard terminology for regular users
+        license_data = {
+            "Company Type": ["Brand", "Brand", "Manufacturer", "Manufacturer", "Retailer", "Retailer"],
+            "Business Relationship": ["House Brand", "Private Label", "CMP", "FOB", "SOR", "Marketplace"],
+            "Access Level": ["Full Access", "Limited Access", "Production Access", "Export Access", "Retail Access", "Marketplace Access"],
+            "Partner Example": ["Voi Jeans", "Killer Jeans", "Scotts Garments", "Export Partner", "Department Store", "Online Marketplace"]
+        }
     
     df_license = pd.DataFrame(license_data)
     st.dataframe(df_license, use_container_width=True)
     
-    # Add sankey diagram to visualize the license flow
-    labels = list(set(license_data["Business Type"] + license_data["Business Model"] + license_data["License Template"]))
+    # Add sankey diagram to visualize the license/permission flow
+    admin_mode = st.session_state.get('admin_mode', False)
+    
+    if admin_mode:
+        # Empire OS terminology for administrators
+        type_col = "Business Type"
+        model_col = "Business Model" 
+        template_col = "License Template"
+    else:
+        # Industry-standard terminology for regular users
+        type_col = "Company Type"
+        model_col = "Business Relationship"
+        template_col = "Access Level"
+    
+    labels = list(set(license_data[type_col] + license_data[model_col] + license_data[template_col]))
     
     # Create source, target, value arrays for the Sankey diagram
     source = []
     target = []
     value = []
     
-    # Business Type to Business Model
-    for i, bt in enumerate(license_data["Business Type"]):
-        bm = license_data["Business Model"][i]
-        lt = license_data["License Template"][i]
+    # Map company type to business relationship to access level
+    for i, bt in enumerate(license_data[type_col]):
+        bm = license_data[model_col][i]
+        lt = license_data[template_col][i]
         
         source.append(labels.index(bt))
         target.append(labels.index(bm))
@@ -779,8 +804,8 @@ def show_data_flow_visualization():
             thickness = 20,
             line = dict(color = "black", width = 0.5),
             label = labels,
-            color = ["#1E3A8A" if label in license_data["Business Type"] else 
-                    "#047857" if label in license_data["Business Model"] else
+            color = ["#1E3A8A" if label in license_data[type_col] else 
+                    "#047857" if label in license_data[model_col] else
                     "#7C3AED" for label in labels]
         ),
         link = dict(

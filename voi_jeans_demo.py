@@ -13,6 +13,117 @@ def show_voi_jeans_demo():
     
     st.title("🧥 Voi Jeans Organization & Synergyze Implementation")
     
+    # Add department login system in the sidebar
+    with st.sidebar:
+        st.divider()
+        st.subheader("Department Access")
+        
+        # Initialize session states if not exist
+        if 'logged_in' not in st.session_state:
+            st.session_state.logged_in = False
+            st.session_state.department = None
+            st.session_state.user_role = None
+            st.session_state.access_level = None
+        
+        # Create department login credentials
+        departments = {
+            "Design Team": {
+                "username": "design",
+                "password": "voi2025",
+                "role": "Design Manager",
+                "access": ["Woven Supply", "Limited"]
+            },
+            "Production Planning": {
+                "username": "production",
+                "password": "voi2025",
+                "role": "Production Manager",
+                "access": ["Woven Supply", "Full"]
+            },
+            "Scotts Garments": {
+                "username": "scotts",
+                "password": "cmp2025",
+                "role": "Factory Manager",
+                "access": ["Woven Supply", "Limited"]
+            },
+            "Retail Operations": {
+                "username": "retail",
+                "password": "voi2025",
+                "role": "Retail Manager",
+                "access": ["Commune Connect", "Full"]
+            },
+            "E-commerce": {
+                "username": "ecom",
+                "password": "voi2025",
+                "role": "Digital Manager",
+                "access": ["Commune Connect", "Full"]
+            },
+            "Finance": {
+                "username": "finance",
+                "password": "voi2025",
+                "role": "Finance Manager",
+                "access": ["Synergyze Hub", "Full"]
+            },
+            "CEO Office": {
+                "username": "admin",
+                "password": "admin2025",
+                "role": "CEO",
+                "access": ["All Networks", "Full"]
+            }
+        }
+        
+        # Login form
+        if not st.session_state.logged_in:
+            username = st.text_input("Username")
+            password = st.text_input("Password", type="password")
+            login_button = st.button("Login")
+            
+            if login_button:
+                # Check credentials
+                for dept, creds in departments.items():
+                    if username == creds["username"] and password == creds["password"]:
+                        st.session_state.logged_in = True
+                        st.session_state.department = dept
+                        st.session_state.user_role = creds["role"]
+                        st.session_state.access_level = creds["access"]
+                        st.rerun()
+                
+                if not st.session_state.logged_in:
+                    st.error("Invalid username or password")
+            
+            # Show demo credentials
+            with st.expander("Demo Credentials"):
+                st.markdown("""
+                **Design Team**: design / voi2025  
+                **Production**: production / voi2025  
+                **Scotts Garments**: scotts / cmp2025  
+                **Retail**: retail / voi2025  
+                **E-commerce**: ecom / voi2025  
+                **Finance**: finance / voi2025  
+                **CEO**: admin / admin2025
+                """)
+        
+        # Show logged in user info and logout button
+        else:
+            st.success(f"Logged in as {st.session_state.department}")
+            st.info(f"Role: {st.session_state.user_role}")
+            st.info(f"Network: {st.session_state.access_level[0]}")
+            st.info(f"Access: {st.session_state.access_level[1]}")
+            
+            if st.button("Logout"):
+                st.session_state.logged_in = False
+                st.session_state.department = None
+                st.session_state.user_role = None
+                st.session_state.access_level = None
+                st.rerun()
+            
+            # Admin can toggle Empire OS visibility
+            if st.session_state.department == "CEO Office":
+                st.divider()
+                admin_toggle = st.toggle("Show Empire OS Terminology", value=st.session_state.get('admin_mode', False))
+                if admin_toggle != st.session_state.get('admin_mode', False):
+                    st.session_state['admin_mode'] = admin_toggle
+                    st.rerun()
+    
     # Create tabs for different views
     tab1, tab2, tab3 = st.tabs(["🏢 Organizational Structure", "🔄 Department Workflows", "📊 Integration Demo"])
     
@@ -466,12 +577,29 @@ def show_integration_demo():
     
     st.subheader("Voi Jeans Integration Demonstration")
     
-    st.markdown("""
-    ### Cross-Departmental Integration via Synergyze
-    
-    The true power of the Synergyze platform is in how it connects all departments and external partners
-    within the Voi Jeans ecosystem. This demonstration shows the data flow and integration points.
-    """)
+    # Show different content based on login status
+    if not st.session_state.get('logged_in', False):
+        st.warning("Please login to a department account to view detailed integration features.")
+        
+        st.markdown("""
+        ### Cross-Departmental Integration via Synergyze
+        
+        The true power of the Synergyze platform is in how it connects all departments and external partners
+        within the Voi Jeans ecosystem. This demonstration shows the data flow and integration points.
+        
+        **Login to a department account to see department-specific integration features.**
+        """)
+    else:
+        # Show department-specific header
+        st.markdown(f"""
+        ### Cross-Departmental Integration via {get_platform_name()}
+        
+        Welcome to your department dashboard, {st.session_state.user_role}. 
+        Here's how your department connects with others through the {get_platform_name()} platform.
+        """)
+        
+        # Show department-specific integration information
+        show_department_specific_content()
     
     # Create a network graph showing integration
     G = nx.DiGraph()
@@ -677,6 +805,174 @@ def show_integration_demo():
     From design approval through production at Scotts Garments to inventory receipt at Voi Jeans stores 
     and finally to sales, all data is connected in a unified platform with appropriate time lags between stages.
     """)
+
+def get_platform_name():
+    """Return the appropriate platform name based on admin mode"""
+    admin_mode = st.session_state.get('admin_mode', False)
+    return "Empire OS" if admin_mode else "Synergyze"
+
+def get_network_name(network):
+    """Convert between admin and user-friendly network names"""
+    admin_mode = st.session_state.get('admin_mode', False)
+    
+    if admin_mode:
+        # Convert to Empire OS terminology
+        mapping = {
+            "Woven Supply": "Woven Supply",
+            "Commune Connect": "Commune Connect",
+            "Synergyze Hub": "Empire Hub",
+            "All Networks": "Empire OS"
+        }
+    else:
+        # Convert to user-friendly terminology
+        mapping = {
+            "Woven Supply": "Manufacturing Network",
+            "Commune Connect": "Retail Network",
+            "Synergyze Hub": "Management Hub",
+            "All Networks": "Full Platform"
+        }
+    
+    return mapping.get(network, network)
+
+def show_department_specific_content():
+    """Show content specific to the logged-in department"""
+    department = st.session_state.get('department')
+    
+    if not department:
+        return
+    
+    # Get network access
+    network = st.session_state.get('access_level', ['Unknown', 'Limited'])[0]
+    access_level = st.session_state.get('access_level', ['Unknown', 'Limited'])[1]
+    
+    # Display department-specific KPIs and data
+    st.subheader(f"{department} Dashboard")
+    
+    # Design Team Content
+    if department == "Design Team":
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Current Collection", "SS25", help="Spring/Summer 2025")
+            st.metric("Styles in Development", "42", "+8")
+            st.metric("Styles in Production", "28", "-2")
+        with col2:
+            st.metric("Tech Packs Created", "35", "+5")
+            st.metric("Sample Approvals Pending", "7", "-3")
+            st.metric("Best Seller Previous Season", "VOI-DEN-2022", "+18%")
+        
+        st.info("📋 Design Team has access to style performance data from retail to inform new designs.")
+    
+    # Production Planning Content  
+    elif department == "Production Planning":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Active Production Orders", "12", "+2")
+            st.metric("Styles in Production", "28", "-2")
+        with col2:
+            st.metric("Average Production Efficiency", "87%", "+3%")
+            st.metric("On-time Production Rate", "92%", "+5%")
+        with col3:
+            st.metric("QA Pass Rate", "94.8%", "-0.7%")
+            st.metric("Material Availability", "96%", "+1%")
+        
+        st.info("🏭 Production Planning team can schedule and track production at Scotts Garments in real-time.")
+    
+    # Scotts Garments Content
+    elif department == "Scotts Garments":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Active Production Orders", "12", "+2")
+            st.metric("Production Rate (pieces/day)", "3,780", "+120")
+        with col2:
+            st.metric("Line Efficiency", "84.5%", "+1.2%")
+            st.metric("QA Pass Rate", "94.8%", "-0.7%")
+        with col3:
+            st.metric("On-time Completion", "92%", "+5%")
+            st.metric("Material Utilization", "97.2%", "+0.5%")
+        
+        st.info("🧵 As a CMP partner, Scotts Garments receives digital tech packs and production orders directly through the platform.")
+    
+    # Retail Operations Content
+    elif department == "Retail Operations":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Active Stores", "20", "")
+            st.metric("Total Sales (MTD)", "₹32.7M", "+12%")
+        with col2:
+            st.metric("Best Performing Store", "Mumbai Linking Road", "+18%")
+            st.metric("Sell-through Rate", "72%", "+4%")
+        with col3:
+            st.metric("Stock Turn Rate", "3.8", "+0.2")
+            st.metric("Customer Conversion", "28%", "+2%")
+        
+        st.info("🏬 Retail Operations team can view real-time sales data across all 20 Voi Jeans stores.")
+    
+    # E-commerce Content
+    elif department == "E-commerce":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Online Sales (MTD)", "₹8.2M", "+22%")
+            st.metric("Web Traffic", "128K visitors", "+15%")
+        with col2:
+            st.metric("Conversion Rate", "3.2%", "+0.4%")
+            st.metric("Average Order Value", "₹2,850", "+₹120")
+        with col3:
+            st.metric("Return Rate", "12%", "-2%")
+            st.metric("Stock Availability", "94%", "-1%")
+        
+        st.info("🌐 E-commerce team manages the online store with integrated inventory and sales data.")
+    
+    # Finance Content
+    elif department == "Finance":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Total Revenue (MTD)", "₹40.9M", "+14%")
+            st.metric("Gross Margin", "42.8%", "+1.2%")
+        with col2:
+            st.metric("CMP Cost per Unit", "₹580", "-₹20")
+            st.metric("COGS as % of Revenue", "57.2%", "-1.2%")
+        with col3:
+            st.metric("Operating Profit", "15.2%", "+0.8%")
+            st.metric("Working Capital", "₹86.4M", "-₹2.5M")
+        
+        st.info("💰 Finance team has access to all financial data with real-time visibility into costs and margins.")
+    
+    # CEO Office Content
+    elif department == "CEO Office":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Total Revenue (MTD)", "₹40.9M", "+14%")
+            st.metric("Market Share", "12.4%", "+0.8%")
+        with col2:
+            st.metric("Operating Profit", "15.2%", "+0.8%")
+            st.metric("Store Count", "20", "+0")
+        with col3:
+            st.metric("Employee Count", "382", "+12")
+            st.metric("Brand Sentiment", "82%", "+4%")
+        
+        # Add admin-specific information if admin mode is enabled
+        if st.session_state.get('admin_mode', False):
+            st.success("🔐 Empire OS Administrator Mode Enabled - Full system access granted")
+            
+            st.subheader("Empire OS Governance Metrics")
+            gov_col1, gov_col2 = st.columns(2)
+            
+            with gov_col1:
+                st.metric("River Transactions (24h)", "12,458", "+8%")
+                st.metric("Active EIP Entities", "24", "+1")
+                st.metric("Data Sharing Agreements", "18", "+0")
+            
+            with gov_col2:
+                st.metric("License Compliance", "100%", "+0%")
+                st.metric("Divine Constitution Adherence", "97.8%", "+0.4%")
+                st.metric("System Security Score", "96%", "+1%")
+        
+        st.info("⚙️ CEO Office has full visibility across all departments and networks.")
+    
+    # Security
+    st.divider()
+    st.caption(f"Access Level: {get_network_name(network)} | Permission: {access_level} Access")
+    st.caption(f"Authenticated as: {st.session_state.user_role} | Session Valid")
 
 if __name__ == "__main__":
     show_voi_jeans_demo()

@@ -24,6 +24,9 @@ from supply_chain_visualization import show_supply_chain_visualization
 from synergy_visualization import show_synergy_visualization
 from voi_jeans_demo import show_voi_jeans_demo
 
+# Import notification service
+from notification_service import show_notification_settings, check_twilio_credentials
+
 # Configure the page
 st.set_page_config(
     page_title="ECG Manufacturing Portal",
@@ -32,15 +35,41 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Initialize session state for app flow
+if 'page' not in st.session_state:
+    st.session_state.page = 'notification_settings'  # Temporarily starting with notification settings for testing
+
 # Initialize database with sample data if needed
 if 'db_initialized' not in st.session_state:
     # Try to initialize database
     initialize_database()
     st.session_state.db_initialized = True
 
-# Initialize session state for app flow
-if 'page' not in st.session_state:
-    st.session_state.page = 'manufacturing_dashboard'  # Start directly on manufacturing dashboard page
+# Check for missing Twilio credentials when accessing notification features
+if 'check_twilio_keys' not in st.session_state:
+    st.session_state.check_twilio_keys = False
+    
+if st.session_state.page == 'notification_settings' and not check_twilio_credentials() and not st.session_state.check_twilio_keys:
+    st.session_state.check_twilio_keys = True
+    st.info("Twilio credentials required for SMS notifications. Please use the button below to set them up.")
+    
+    # Create a button for the user to initiate the secrets request process
+    if st.button("Set Up Twilio Credentials"):
+        # Use ask_secrets tool to get the secrets
+        from ask_secrets import ask_secrets
+        ask_secrets(
+            secret_keys=["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_PHONE_NUMBER"],
+            user_message="""
+            To enable SMS notifications for department alerts, please provide your Twilio credentials:
+            
+            1. **TWILIO_ACCOUNT_SID**: Your Twilio account SID 
+            2. **TWILIO_AUTH_TOKEN**: Your Twilio auth token
+            3. **TWILIO_PHONE_NUMBER**: Your Twilio phone number (must be purchased from Twilio)
+            
+            These credentials will be stored securely as environment variables and used only for sending 
+            SMS notifications to the configured department contacts.
+            """
+        )
 
 if 'completed_onboarding' not in st.session_state:
     st.session_state.completed_onboarding = True  # Skip onboarding for testing
@@ -264,6 +293,17 @@ with st.sidebar:
         if st.button("📱 Mobile App Administration", use_container_width=True, key="user_categorization"):
             st.session_state.page = 'line_plan'
             
+        # Check Twilio credentials
+        has_twilio = check_twilio_credentials()
+        
+        if st.button(
+            f"🔔 Notification Settings {'' if has_twilio else '⚠️'}", 
+            use_container_width=True, 
+            key="notification_settings",
+            help="Configure SMS notifications for departments and events"
+        ):
+            st.session_state.page = 'notification_settings'
+            
         # Business Intelligence section
         st.markdown("#### Business Intelligence")
         if st.button("📈 Executive Dashboard", use_container_width=True, key="executive_dashboard"):
@@ -350,6 +390,8 @@ elif st.session_state.page == 'synergy_visualization':
     show_synergy_visualization()
 elif st.session_state.page == 'voi_jeans_demo':
     show_voi_jeans_demo()
+elif st.session_state.page == 'notification_settings':
+    show_notification_settings()
 
 # Footer
 st.markdown("---")
