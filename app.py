@@ -51,31 +51,31 @@ if 'order_submitted' not in st.session_state:
 
 # Sidebar navigation
 with st.sidebar:
-    st.title("ECG Management Portal")
+    st.title("Voi Jeans Management Portal")
     st.markdown("---")
     
-    # Create two sections for navigation
-    tab1, tab2, tab3 = st.tabs(["🏭 Woven Supply", "🛒 Commune Connect", "🔑 Synergyze Hub"])
+    # Create three sections for navigation
+    tab1, tab2, tab3 = st.tabs(["🏭 Manufacturing (Scotts)", "🏬 Retail Distribution", "⚙️ Management Hub"])
     
     with tab1:
-        # Woven Supply Portal Navigation
-        st.markdown("### Woven Supply (Factory/Vendor Network)")
+        # Manufacturing Portal Navigation
+        st.markdown("### Manufacturing (Scotts Garments - CMP)")
         
         # Procurement System section
-        st.markdown("#### Procurement System")
-        if st.button("🔍 Raw Material Sourcing", use_container_width=True, key="material_tracker"):
+        st.markdown("#### Denim Procurement")
+        if st.button("👖 SS25 Denim Styles", use_container_width=True, key="material_tracker"):
             st.session_state.page = 'material_tracker'
             
-        if st.button("👨‍💼 Vendor Management Dashboard", use_container_width=True, key="order_style_mgmt"):
+        if st.button("🏭 Scotts Garments Management", use_container_width=True, key="order_style_mgmt"):
             st.session_state.page = 'order_style_management'
             
-        if st.button("💰 Price Negotiation Interface", use_container_width=True, key="reports"):
+        if st.button("💰 CMP Cost Calculation", use_container_width=True, key="reports"):
             st.session_state.page = 'reports'
             
-        if st.button("📝 Order Placement Workflow", use_container_width=True, key="order_placement"):
+        if st.button("📝 Production Order Placement", use_container_width=True, key="order_placement"):
             st.session_state.page = 'order_style_management'
             
-        if st.button("📦 Material Tracking", use_container_width=True, key="material_tracking"):
+        if st.button("📦 Denim Fabric Tracking", use_container_width=True, key="material_tracking"):
             st.session_state.page = 'material_tracker'
             
         # Manufacturing Management section
@@ -144,29 +144,48 @@ with st.sidebar:
     
     with tab2:
         # Commune Connect Portal Navigation
-        st.markdown("### Commune Connect (Digital Retail)")
+        st.markdown("### Voi Jeans Retail Distribution")
         
-        # Main navigation items with icons for better UI
-        if st.button("🛍️ Browse Products", use_container_width=True, key="browse_products"):
+        # Store Management
+        st.markdown("#### Store Management")
+        if st.button("🏬 Retail Store Network", use_container_width=True, key="browse_products"):
             st.session_state.page = 'product_catalog'
         
-        if st.session_state.selected_product is not None:
-            if st.button("📋 Product Details", use_container_width=True, key="product_details"):
-                st.session_state.page = 'product_detail'
-        
-        if st.session_state.cart:
-            if st.button("🛒 View Order", use_container_width=True, key="view_order"):
-                st.session_state.page = 'order_booking'
-        
-        # Market Intelligence Section
-        st.markdown("### Market Intelligence")
-        
-        # Add ECG Market Health Check button
-        if st.button("📊 ECG Market Health Check", use_container_width=True, key="market_health"):
+        if st.button("📊 Daily Sales vs Target", use_container_width=True, key="daily_sales"):
             st.session_state.page = 'retailer_analysis'
         
-        # Add a hint about the ECG Market Health Check
-        st.info("Access ECG's proprietary market health analysis on major retailers to inform your strategic decisions.")
+        if st.button("🔖 E-Wards Loyalty Program", use_container_width=True, key="loyalty_program"):
+            st.session_state.page = 'product_detail'
+        
+        if st.button("📦 Store Inventory Management", use_container_width=True, key="view_order"):
+            st.session_state.page = 'order_booking'
+        
+        # Product Management
+        st.markdown("#### Product Management")
+        
+        if st.button("👖 Denim Collection", use_container_width=True, key="denim_collection"):
+            st.session_state.page = 'product_catalog'
+            
+        if st.button("🎯 SS25 Collection Planning", use_container_width=True, key="ss25_planning"):
+            st.session_state.page = 'order_style_management'
+            
+        if st.button("🔍 Style Performance Analysis", use_container_width=True, key="style_performance"):
+            st.session_state.page = 'retailer_analysis'
+        
+        # Market Intelligence Section
+        st.markdown("#### Retail Analytics")
+        
+        if st.button("📈 Sales Performance Dashboard", use_container_width=True, key="market_health"):
+            st.session_state.page = 'retailer_analysis'
+        
+        if st.button("📱 Online vs In-Store Analysis", use_container_width=True, key="online_vs_store"):
+            st.session_state.page = 'manufacturing_dashboard'
+            
+        if st.button("🏙️ Regional Market Insights", use_container_width=True, key="regional_insights"):
+            st.session_state.page = 'reports'
+        
+        # Add a hint about the retail analytics
+        st.info("Access real-time sales analytics and performance metrics across all Voi Jeans retail locations.")
         
         # Add access to the merchandiser agent
         st.markdown("### Your Support Team")
@@ -190,42 +209,53 @@ with st.sidebar:
             st.info("Connect with your dedicated merchandising agent for personalized support throughout your order process.")
     
     with tab3:
-        # Synergyze Hub Navigation
-        st.markdown("### Synergyze Hub")
+        # Voi Jeans Management Hub
+        st.markdown("### Voi Jeans Management Hub")
         
-        # License Engine section
-        st.markdown("#### License Engine")
-        if st.button("📄 License Application Pages", use_container_width=True, key="license_application"):
+        # Finance & Governance section
+        st.markdown("#### Finance & Governance")
+        if st.button("💰 CMP Cost Management", use_container_width=True, key="license_application"):
             st.session_state.page = 'manufacturing_dashboard'
         
-        if st.button("📝 Application Review Workflow", use_container_width=True, key="application_review"):
+        if st.button("📊 Financial Performance", use_container_width=True, key="application_review"):
             st.session_state.page = 'order_style_management'
         
-        if st.button("💰 Payment Processing (Razorpay)", use_container_width=True, key="payment_processing"):
+        if st.button("💵 Vendor Payment Processing", use_container_width=True, key="payment_processing"):
             st.session_state.page = 'reports'
         
-        if st.button("✅ License Approval/Rejection Interface", use_container_width=True, key="license_approval"):
+        if st.button("📑 Compliance Documentation", use_container_width=True, key="license_approval"):
             st.session_state.page = 'line_plan'
         
-        if st.button("🔄 License Renewal Management", use_container_width=True, key="license_renewal"):
+        if st.button("🔄 Monthly Reconciliation", use_container_width=True, key="license_renewal"):
             st.session_state.page = 'production_timeline'
         
-        if st.button("🛑 License Suspension Controls", use_container_width=True, key="license_suspension"):
-            st.session_state.page = 'material_tracker'
-        
-        # User Role Management section
-        st.markdown("#### User Role Management")
-        if st.button("👤 Role Definition Interface", use_container_width=True, key="role_definition"):
+        # Administration section
+        st.markdown("#### Administration")
+        if st.button("👤 User Account Management", use_container_width=True, key="role_definition"):
             st.session_state.page = 'manufacturing_dashboard'
         
-        if st.button("🔑 Permission Assignment", use_container_width=True, key="permission_assignment"):
+        if st.button("🔐 Access Control Settings", use_container_width=True, key="permission_assignment"):
             st.session_state.page = 'reports'
         
-        if st.button("👥 Internal/External User Classification", use_container_width=True, key="user_classification"):
+        if st.button("🏢 Department Configuration", use_container_width=True, key="user_classification"):
             st.session_state.page = 'order_style_management'
         
-        if st.button("🔍 Segment-based User Categorization", use_container_width=True, key="user_categorization"):
+        if st.button("📱 Mobile App Administration", use_container_width=True, key="user_categorization"):
             st.session_state.page = 'line_plan'
+            
+        # Business Intelligence section
+        st.markdown("#### Business Intelligence")
+        if st.button("📈 Executive Dashboard", use_container_width=True, key="executive_dashboard"):
+            st.session_state.page = 'manufacturing_dashboard'
+        
+        if st.button("📊 SS25 Performance Metrics", use_container_width=True, key="ss25_metrics"):
+            st.session_state.page = 'retailer_analysis'
+        
+        if st.button("📉 Competitor Analysis", use_container_width=True, key="competitor_analysis"):
+            st.session_state.page = 'reports'
+        
+        if st.button("🌐 Market Trend Analysis", use_container_width=True, key="license_suspension"):
+            st.session_state.page = 'material_tracker'
     
     # Additional resources
     st.markdown("### Resources")
@@ -285,4 +315,4 @@ elif st.session_state.page == 'db_initialization':
 
 # Footer
 st.markdown("---")
-st.caption("ECG Management Portal | Streamlined Manufacturing. Tailored Solutions. Global Excellence.")
+st.caption("Voi Jeans Retail India Pvt Ltd | Denim Excellence. CMP Manufacturing. Retail Distribution.")
