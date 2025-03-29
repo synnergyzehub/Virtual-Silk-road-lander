@@ -55,29 +55,87 @@ with st.sidebar:
     st.markdown("---")
     
     # Create two sections for navigation
-    tab1, tab2 = st.tabs(["🏭 Manufacturing", "👕 Buying House"])
+    tab1, tab2, tab3 = st.tabs(["🏭 Woven Supply", "🛒 Commune Connect", "🔑 Synergyze Hub"])
     
     with tab1:
-        # Manufacturing Portal Navigation
-        st.markdown("### Manufacturing Portal")
+        # Woven Supply Portal Navigation
+        st.markdown("### Woven Supply (Factory/Vendor Network)")
         
-        if st.button("🏭 Dashboard Overview", use_container_width=True, key="mfg_dashboard"):
-            st.session_state.page = 'manufacturing_dashboard'
-        
-        if st.button("📋 Order & Style Management", use_container_width=True, key="order_style_mgmt"):
-            st.session_state.page = 'order_style_management'
-        
-        if st.button("🧶 Material Tracker", use_container_width=True, key="material_tracker"):
+        # Procurement System section
+        st.markdown("#### Procurement System")
+        if st.button("🔍 Raw Material Sourcing", use_container_width=True, key="material_tracker"):
             st.session_state.page = 'material_tracker'
-        
-        if st.button("⏱ Production Timeline", use_container_width=True, key="production_timeline"):
-            st.session_state.page = 'production_timeline'
-        
-        if st.button("📅 Line Plan Interface", use_container_width=True, key="line_plan"):
-            st.session_state.page = 'line_plan'
-        
-        if st.button("📊 Reports & Export", use_container_width=True, key="reports"):
+            
+        if st.button("👨‍💼 Vendor Management Dashboard", use_container_width=True, key="order_style_mgmt"):
+            st.session_state.page = 'order_style_management'
+            
+        if st.button("💰 Price Negotiation Interface", use_container_width=True, key="reports"):
             st.session_state.page = 'reports'
+            
+        if st.button("📝 Order Placement Workflow", use_container_width=True, key="order_placement"):
+            st.session_state.page = 'order_style_management'
+            
+        if st.button("📦 Material Tracking", use_container_width=True, key="material_tracking"):
+            st.session_state.page = 'material_tracker'
+            
+        # Manufacturing Management section
+        st.markdown("#### Manufacturing Management")
+        if st.button("📋 Production Planning", use_container_width=True, key="line_plan"):
+            st.session_state.page = 'line_plan'
+            
+        if st.button("📅 Production Scheduling", use_container_width=True, key="production_timeline"):
+            st.session_state.page = 'production_timeline'
+            
+        if st.button("⚙️ Quality Control Tracking", use_container_width=True, key="quality_control"):
+            st.session_state.page = 'production_timeline'
+            
+        if st.button("📊 Capacity Management", use_container_width=True, key="capacity_mgmt"):
+            st.session_state.page = 'manufacturing_dashboard'
+            
+        if st.button("📈 Production Reporting", use_container_width=True, key="prod_reporting"):
+            st.session_state.page = 'reports'
+            
+        # Fabric and Vendor Synchronization section
+        st.markdown("#### Fabric and Vendor Synchronization")
+        if st.button("📚 Material Library", use_container_width=True, key="material_library"):
+            st.session_state.page = 'material_tracker'
+            
+        if st.button("📊 Vendor Capability Matrix", use_container_width=True, key="vendor_capability"):
+            st.session_state.page = 'reports'
+            
+        if st.button("🔄 Material-vendor Matching", use_container_width=True, key="material_vendor_matching"):
+            st.session_state.page = 'order_style_management'
+            
+        if st.button("📈 Performance Tracking", use_container_width=True, key="vendor_performance"):
+            st.session_state.page = 'manufacturing_dashboard'
+            
+        # Factory Operations Dashboard section
+        st.markdown("#### Factory Operations Dashboard")
+        if st.button("👚 Factory Merchandiser View", use_container_width=True, key="factory_merchandiser"):
+            st.session_state.page = 'merchandiser_agent'
+            
+        if st.button("⏱ Production Tracking Timeline", use_container_width=True, key="prod_tracking_timeline"):
+            st.session_state.page = 'production_timeline'
+            
+        if st.button("🚚 Delivery Scheduling", use_container_width=True, key="delivery_scheduling"):
+            st.session_state.page = 'line_plan'
+            
+        if st.button("📋 Compliance Tracking", use_container_width=True, key="compliance_tracking"):
+            st.session_state.page = 'reports'
+            
+        # HSN-Based Forecasting section
+        st.markdown("#### HSN-Based Forecasting")
+        if st.button("📡 Demand Signal Integration", use_container_width=True, key="demand_signal"):
+            st.session_state.page = 'manufacturing_dashboard'
+            
+        if st.button("📊 Supply Requirement Projections", use_container_width=True, key="supply_projections"):
+            st.session_state.page = 'reports'
+            
+        if st.button("⏳ Timeline Forecasting", use_container_width=True, key="timeline_forecasting"):
+            st.session_state.page = 'line_plan'
+            
+        if st.button("📉 Raw Material Demand Prediction", use_container_width=True, key="raw_material_prediction"):
+            st.session_state.page = 'material_tracker'
         
         # Database initialization (hidden in an expander to not clutter the UI)
         with st.expander("⚙️ Database Management"):
@@ -85,8 +143,8 @@ with st.sidebar:
                 st.session_state.page = 'db_initialization'
     
     with tab2:
-        # Buying House Portal Navigation
-        st.markdown("### Buying House Portal")
+        # Commune Connect Portal Navigation
+        st.markdown("### Commune Connect (Digital Retail)")
         
         # Main navigation items with icons for better UI
         if st.button("🛍️ Browse Products", use_container_width=True, key="browse_products"):
@@ -130,6 +188,44 @@ with st.sidebar:
         else:
             # Show a teaser about having a merchandiser
             st.info("Connect with your dedicated merchandising agent for personalized support throughout your order process.")
+    
+    with tab3:
+        # Synergyze Hub Navigation
+        st.markdown("### Synergyze Hub")
+        
+        # License Engine section
+        st.markdown("#### License Engine")
+        if st.button("📄 License Application Pages", use_container_width=True, key="license_application"):
+            st.session_state.page = 'manufacturing_dashboard'
+        
+        if st.button("📝 Application Review Workflow", use_container_width=True, key="application_review"):
+            st.session_state.page = 'order_style_management'
+        
+        if st.button("💰 Payment Processing (Razorpay)", use_container_width=True, key="payment_processing"):
+            st.session_state.page = 'reports'
+        
+        if st.button("✅ License Approval/Rejection Interface", use_container_width=True, key="license_approval"):
+            st.session_state.page = 'line_plan'
+        
+        if st.button("🔄 License Renewal Management", use_container_width=True, key="license_renewal"):
+            st.session_state.page = 'production_timeline'
+        
+        if st.button("🛑 License Suspension Controls", use_container_width=True, key="license_suspension"):
+            st.session_state.page = 'material_tracker'
+        
+        # User Role Management section
+        st.markdown("#### User Role Management")
+        if st.button("👤 Role Definition Interface", use_container_width=True, key="role_definition"):
+            st.session_state.page = 'manufacturing_dashboard'
+        
+        if st.button("🔑 Permission Assignment", use_container_width=True, key="permission_assignment"):
+            st.session_state.page = 'reports'
+        
+        if st.button("👥 Internal/External User Classification", use_container_width=True, key="user_classification"):
+            st.session_state.page = 'order_style_management'
+        
+        if st.button("🔍 Segment-based User Categorization", use_container_width=True, key="user_categorization"):
+            st.session_state.page = 'line_plan'
     
     # Additional resources
     st.markdown("### Resources")
