@@ -14,14 +14,25 @@ def show_synergy_visualization():
     """Display the Synergyze ecosystem visualization showcasing the relationships between modules"""
     st.title("🔄 Synergyze Ecosystem Visualization")
     
+    # Check if user has a license to view Empire OS features
+    if 'has_empire_license' not in st.session_state:
+        st.session_state.has_empire_license = False
+    
     # Create tabs for different visualization views
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "📊 Ecosystem Overview", 
-        "🔗 Network Visualization", 
-        "📑 License Management",
-        "🔄 Data Sharing",
-        "⚙️ Empire OS Governance"
-    ])
+    if st.session_state.has_empire_license:
+        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+            "📊 Ecosystem Overview", 
+            "🔗 Network Visualization", 
+            "📑 License Management",
+            "🔄 Data Sharing",
+            "⚙️ Empire OS Governance"
+        ])
+    else:
+        tab1, tab2, tab3 = st.tabs([
+            "📊 Ecosystem Overview", 
+            "🔗 Network Visualization", 
+            "📑 License Management"
+        ])
     
     with tab1:
         show_ecosystem_overview()
@@ -31,12 +42,13 @@ def show_synergy_visualization():
     
     with tab3:
         show_license_management()
-        
-    with tab4:
-        show_data_sharing()
-        
-    with tab5:
-        show_empire_os_governance()
+    
+    if st.session_state.has_empire_license:
+        with tab4:
+            show_data_sharing()
+            
+        with tab5:
+            show_empire_os_governance()
 
 def show_ecosystem_overview():
     """Display the Synergyze ecosystem overview with its three main components"""
@@ -585,6 +597,415 @@ def show_license_management():
     This tailored approach ensures each company receives a Synergyze license that precisely 
     matches their operational requirements and enables them to fully leverage the platform's capabilities.
     """)
+    
+    # Enable Empire OS governance access for demo
+    if not st.session_state.has_empire_license:
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.warning("You don't currently have access to Empire OS Governance features.")
+        with col2:
+            if st.button("Request Empire OS Access", type="primary"):
+                st.session_state.has_empire_license = True
+                st.success("Empire OS Governance access granted for demonstration purposes!")
+                st.info("Please reload the page to access Empire OS features.")
+    else:
+        st.success("You have Empire OS Governance access. You can view additional tabs for Data Sharing and Empire OS Governance.")
+        # Revoke Empire OS access
+        if st.button("Revoke Empire OS Access", type="secondary"):
+            st.session_state.has_empire_license = False
+            st.warning("Empire OS Governance access revoked.")
+            st.info("Please reload the page to apply changes.")
+
+def show_empire_os_governance():
+    """Display the Empire OS governance interface"""
+    
+    st.subheader("⚙️ Empire OS Governance")
+    
+    st.markdown("""
+    Empire OS provides the governance and compliance layer for the entire Synergyze ecosystem.
+    As a license holder with signed data sharing agreements, you have access to this protected section.
+    """)
+    
+    # Create tabs for different governance features
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "EIP Registry", 
+        "License Templates", 
+        "River Transaction Logs",
+        "ECG Compliance"
+    ])
+    
+    with tab1:
+        show_eip_registry()
+    
+    with tab2:
+        show_license_templates()
+    
+    with tab3:
+        show_river_logs()
+    
+    with tab4:
+        show_ecg_compliance()
+
+def show_eip_registry():
+    """Display the Empire Identity Protocol (EIP) registry"""
+    
+    st.markdown("### Empire Identity Protocol (EIP) Registry")
+    
+    st.markdown("""
+    The EIP Registry is the central repository of all registered entities in the Empire OS ecosystem.
+    Each entity is assigned a unique EIP identifier and registered with its business type.
+    """)
+    
+    # Sample EIP registry data
+    eip_data = {
+        "Name": ["Voi Jeans", "Killer Jeans", "Scotts Garments", "Fabric Mills Ltd.", "Fashion Retail Co."],
+        "EIP ID": ["EIP_00243", "EIP_00244", "EIP_00245", "EIP_00246", "EIP_00247"],
+        "Type": ["Brand", "Brand", "Manufacturer", "Manufacturer", "Retailer"],
+        "Status": ["Active", "Active", "Pending", "Active", "Rejected"]
+    }
+    
+    # Apply status styling
+    def highlight_status(val):
+        if val == "Active":
+            return "background-color: #90EE90"  # Light green
+        elif val == "Pending":
+            return "background-color: #FFFFE0"  # Light yellow
+        elif val == "Rejected":
+            return "background-color: #FFC0CB"  # Light red
+        return ""
+    
+    df_eip = pd.DataFrame(eip_data)
+    styled_df = df_eip.style.applymap(highlight_status, subset=["Status"])
+    
+    st.dataframe(styled_df, use_container_width=True)
+    
+    # Entity registration form
+    st.markdown("### Register New EIP Identity")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        entity_type = st.selectbox("Entity Type", ["Company", "Individual", "Organization"])
+        business_type = st.selectbox("Business Type", ["Manufacturer", "Retailer", "Brand", "Service Provider"])
+    
+    with col2:
+        country = st.selectbox("Country", ["India (IN)", "United States (US)", "United Kingdom (UK)", "Other"])
+        registration_id = st.text_input("Registration ID (GST/PAN/CIN)")
+    
+    entity_name = st.text_input("Entity Name")
+    
+    if st.button("Register Entity", key="register_entity"):
+        if entity_name:
+            st.success(f"Entity '{entity_name}' registered successfully with EIP ID: EIP_{datetime.datetime.now().strftime('%Y%m%d%H%M')}")
+        else:
+            st.error("Entity name is required")
+
+def show_license_templates():
+    """Display the license templates for different business types and models"""
+    
+    st.markdown("### License Templates")
+    
+    st.markdown("""
+    License templates define the standard terms, conditions, and access levels for different
+    business types and models in the Empire OS ecosystem.
+    """)
+    
+    # Sample license template data
+    license_data = {
+        "Template ID": ["TEMPLATE-CMP-001", "TEMPLATE-FOB-001", "TEMPLATE-WLBL-001", "TEMPLATE-MKT-001", 
+                      "TEMPLATE-SOR-001", "TEMPLATE-LFR-001", "TEMPLATE-HOUSE-001", "TEMPLATE-PL-001"],
+        "Name": ["CMP Manufacturer", "FOB Manufacturer", "White-Label Manufacturer", "Marketplace Retailer",
+               "SOR Retailer", "Large Format Retailer", "House Brand", "Private Label Brand"],
+        "Business Type": ["Manufacturer", "Manufacturer", "Manufacturer", "Retailer", 
+                        "Retailer", "Retailer", "Brand", "Brand"],
+        "Business Model": ["CMP", "FOB", "White-Label", "Marketplace", 
+                         "SOR", "Large Format Retail", "House Brand", "Private Label"],
+        "Data Access Level": ["Limited", "Standard", "Standard", "Limited", 
+                            "Standard", "Standard", "Full", "Full"],
+        "Validity (days)": [365, 365, 365, 365, 365, 365, 730, 730]
+    }
+    
+    df_license = pd.DataFrame(license_data)
+    st.dataframe(df_license, use_container_width=True)
+    
+    # License template matrix visualization
+    st.markdown("### License Template Matrix")
+    
+    # Create a heatmap showing the relationship between business types and models
+    matrix_data = pd.crosstab(
+        df_license["Business Type"], 
+        df_license["Business Model"],
+        values=df_license["Template ID"],
+        aggfunc=lambda x: x.iloc[0] if len(x) > 0 else ""
+    )
+    
+    # Display matrix
+    st.dataframe(matrix_data, use_container_width=True)
+    
+    # Show a visualization of the license template association
+    st.markdown("### Template Association Flow")
+    
+    # Create data for a sankey diagram
+    labels = list(set(df_license["Business Type"].tolist() + df_license["Business Model"].tolist() + df_license["Template ID"].tolist()))
+    
+    # Create source, target, value arrays for the Sankey diagram
+    source = []
+    target = []
+    value = []
+    
+    for i, row in df_license.iterrows():
+        source.append(labels.index(row["Business Type"]))
+        target.append(labels.index(row["Business Model"]))
+        value.append(1)
+        
+        source.append(labels.index(row["Business Model"]))
+        target.append(labels.index(row["Template ID"]))
+        value.append(1)
+    
+    # Create the Sankey diagram
+    fig = go.Figure(data=[go.Sankey(
+        node = dict(
+            pad = 15,
+            thickness = 20,
+            line = dict(color = "black", width = 0.5),
+            label = labels,
+            color = ["#1E3A8A" if label in df_license["Business Type"].unique() else 
+                    "#047857" if label in df_license["Business Model"].unique() else
+                    "#7C3AED" for label in labels]
+        ),
+        link = dict(
+            source = source,
+            target = target,
+            value = value
+        ))])
+    
+    fig.update_layout(title_text="Business Type → Model → License Template Flow", font_size=10, height=500)
+    st.plotly_chart(fig, use_container_width=True)
+
+def show_river_logs():
+    """Display the River transaction logs for data access auditing"""
+    
+    st.markdown("### River Transaction Logs")
+    
+    st.markdown("""
+    River is the Empire OS transaction logging system that records all data access, sharing, and license operations.
+    All transactions are immutable and provide an audit trail for governance and compliance.
+    """)
+    
+    # Sample transaction data
+    now = datetime.datetime.now()
+    transaction_data = {
+        "Transaction ID": [f"TXN-{now.strftime('%Y%m%d')}-{i+1:03d}" for i in range(7)],
+        "Entity": ["Voi Jeans", "Scotts Garments", "Voi Jeans", "Fabric Mills Ltd.", "Voi Jeans", 
+                 "Scotts Garments", "Voi Jeans"],
+        "Type": ["Data Access", "Data Access", "Data Access", "Data Access", "License Update", 
+               "Agreement Signature", "Data Sharing"],
+        "Resource": ["Order: PO-2025-001", "Style: ST-2025-001", "Material: FAB-DENIM-001", 
+                   "Material: FAB-DENIM-001", "License: LIC-VOI-2025-001", 
+                   "Agreement: DSA-SCOTTS-2025-001", "Style: ST-2025-002"],
+        "Timestamp": [now - datetime.timedelta(hours=i) for i in range(1, 8)],
+        "Access Level": ["Read", "Read", "Read", "Write", "Write", "Write", "Full"],
+        "Status": ["Success", "Success", "Success", "Success", "Success", "Success", "Success"]
+    }
+    
+    df_txn = pd.DataFrame(transaction_data)
+    
+    # Add filters
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        entity_filter = st.selectbox("Filter by Entity", ["All"] + list(set(df_txn["Entity"])))
+    with col2:
+        type_filter = st.selectbox("Filter by Type", ["All"] + list(set(df_txn["Type"])))
+    with col3:
+        status_filter = st.selectbox("Filter by Status", ["All", "Success", "Failed", "Pending"])
+    
+    # Apply filters
+    filtered_df = df_txn
+    if entity_filter != "All":
+        filtered_df = filtered_df[filtered_df["Entity"] == entity_filter]
+    if type_filter != "All":
+        filtered_df = filtered_df[filtered_df["Type"] == type_filter]
+    if status_filter != "All":
+        filtered_df = filtered_df[filtered_df["Status"] == status_filter]
+    
+    # Format timestamps
+    filtered_df["Timestamp"] = filtered_df["Timestamp"].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S"))
+    
+    st.dataframe(filtered_df, use_container_width=True)
+    
+    # Transaction volume visualization
+    st.markdown("### Transaction Volume")
+    
+    # Create sample transaction volume data
+    dates = [now - datetime.timedelta(days=i) for i in range(7)]
+    volumes = [124, 98, 145, 132, 156, 87, 115]
+    volume_data = pd.DataFrame({
+        "Date": dates,
+        "Volume": volumes
+    })
+    
+    # Create bar chart
+    fig = px.bar(
+        volume_data, 
+        x="Date", 
+        y="Volume", 
+        title="Daily Transaction Volume",
+        labels={"Date": "Date", "Volume": "Transaction Count"}
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+def show_ecg_compliance():
+    """Display the ECG compliance monitoring dashboard"""
+    
+    st.markdown("### ECG Compliance Monitoring")
+    
+    st.markdown("""
+    Empire Commune Global (ECG) provides oversight and compliance monitoring for all entities
+    in the Empire OS ecosystem. This dashboard shows the current compliance status for your organization.
+    """)
+    
+    # Compliance status
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric(label="Overall Compliance Score", value="92%", delta="+3%")
+    
+    with col2:
+        st.metric(label="Audit Status", value="Approved", delta="Last: 2025-02-15")
+    
+    with col3:
+        st.metric(label="Data Sharing Compliance", value="98%", delta="+2%")
+    
+    # Compliance details
+    st.markdown("### Compliance Details")
+    
+    compliance_data = {
+        "Category": ["Data Protection", "Financial Reporting", "Industry Standards", "User Access Control", 
+                   "Data Retention", "Third-party Sharing"],
+        "Status": ["Compliant", "Compliant", "Compliant", "Compliant", "Warning", "Compliant"],
+        "Score": [95, 90, 94, 98, 82, 93],
+        "Last Check": ["2025-03-25", "2025-03-20", "2025-03-15", "2025-03-25", "2025-03-25", "2025-03-20"]
+    }
+    
+    # Apply color based on status
+    def color_status(val):
+        if val == "Compliant":
+            return "background-color: #90EE90"  # Light green
+        elif val == "Warning":
+            return "background-color: #FFFFE0"  # Light yellow
+        elif val == "Non-compliant":
+            return "background-color: #FFC0CB"  # Light red
+        return ""
+    
+    # Apply color based on score
+    def color_score(val):
+        if val >= 90:
+            return "color: green"
+        elif val >= 80:
+            return "color: orange"
+        else:
+            return "color: red"
+    
+    df_compliance = pd.DataFrame(compliance_data)
+    styled_df = df_compliance.style.applymap(color_status, subset=["Status"]).applymap(color_score, subset=["Score"])
+    
+    st.dataframe(styled_df, use_container_width=True)
+    
+    # Compliance history visualization
+    st.markdown("### Compliance History")
+    
+    # Create sample history data
+    history_data = {
+        "Date": [datetime.datetime(2025, month, 1) for month in range(1, 4)],
+        "Data Protection": [90, 92, 95],
+        "Financial Reporting": [85, 87, 90],
+        "Industry Standards": [88, 90, 94],
+        "User Access Control": [95, 96, 98],
+        "Data Retention": [75, 80, 82],
+        "Third-party Sharing": [88, 90, 93]
+    }
+    
+    df_history = pd.DataFrame(history_data)
+    
+    # Melt the dataframe for easier plotting
+    df_melted = pd.melt(df_history, id_vars=["Date"], var_name="Category", value_name="Score")
+    
+    # Create line chart
+    fig = px.line(
+        df_melted, 
+        x="Date", 
+        y="Score", 
+        color="Category",
+        title="Compliance Score Trends",
+        labels={"Date": "Date", "Score": "Compliance Score (%)"}
+    )
+    
+    fig.update_layout(yaxis_range=[70, 100])
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # ECG recommendations
+    st.markdown("### ECG Recommendations")
+    
+    with st.expander("Data Retention Policy Enhancement"):
+        st.markdown("""
+        **Status: Recommended Action Required**
+        
+        Your organization's data retention policy needs updating to comply with the latest ECG guidelines:
+        
+        1. Implement automated data purging for records older than 24 months
+        2. Add documentation for retention exception cases
+        3. Update user notification templates for data deletion events
+        
+        **Deadline for implementation: April 15, 2025**
+        """)
+    
+    with st.expander("Financial Health Check"):
+        st.markdown("""
+        **Status: Compliant**
+        
+        Your organization's financial health indicators meet all ECG requirements:
+        
+        - Liquidity ratio: 2.8 (above required 1.5)
+        - Debt-to-equity ratio: 0.4 (below maximum 0.6)
+        - Operating margin: 18% (above required 10%)
+        
+        Continue maintaining current financial governance practices.
+        """)
+    
+    with st.expander("Industry Compliance Update"):
+        st.markdown("""
+        **Status: Compliant**
+        
+        Your organization has successfully implemented the latest textile industry compliance requirements:
+        
+        - Sustainable sourcing documentation complete
+        - Supply chain transparency reporting implemented
+        - Carbon footprint calculation methodology approved
+        
+        Next audit scheduled for: August 15, 2025
+        """)
+        
+    # Premium services notice
+    st.info("""
+    **Note:** Premium charges apply for the governance and compliance checking services provided by ECG.
+    These services ensure your organization maintains the highest standards of data governance and regulatory compliance.
+    """)
+    
+    # Compliance documentation
+    with st.expander("Required Compliance Documentation"):
+        st.markdown("""
+        ### Required Documentation
+        
+        The following documents must be maintained and updated to maintain ECG compliance:
+        
+        1. Data Sharing Agreement (Review annually)
+        2. Data Protection Impact Assessment (Review bi-annually)
+        3. Industry-specific Compliance Certificates (Renew as required)
+        4. Financial Health Documentation (Update quarterly)
+        5. User Access Control Audit Logs (Maintain continuously)
+        
+        All documentation must be accessible for ECG audits with 72-hour notice.
+        """)
 
 if __name__ == "__main__":
     show_synergy_visualization()
