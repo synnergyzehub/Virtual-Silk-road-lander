@@ -1,9 +1,10 @@
 import os
 import sqlalchemy as sa
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text, Date
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text, Date, JSON, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 import datetime
+import json
 
 # Get the database connection URL from environment variable
 DATABASE_URL = os.environ.get('DATABASE_URL')
@@ -168,6 +169,177 @@ class ProductionEntry(Base):
 # Create all tables in the database
 def create_tables():
     Base.metadata.create_all(engine)
+
+# Empire OS Models for Data Sharing and License Management
+class EmpireEntity(Base):
+    __tablename__ = 'empire_entities'
+    
+    id = Column(Integer, primary_key=True)
+    eip_id = Column(String(50), unique=True, nullable=False)  # EIP = Empire Identity Protocol
+    name = Column(String(100), nullable=False)
+    entity_type = Column(String(50))  # Company, Individual, etc.
+    business_type = Column(String(50))  # Manufacturer, Retailer, Brand
+    country = Column(String(50))
+    registration_id = Column(String(100))  # GST/PAN/CIN
+    mobile_number = Column(String(20))
+    status = Column(String(20), default='Pending')  # Pending, Active, Rejected
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    
+    # Relationships
+    business_models = relationship("EntityBusinessModel", back_populates="entity")
+    data_sharing_agreements = relationship("DataSharingAgreement", back_populates="entity")
+    license_grants = relationship("LicenseGrant", back_populates="entity")
+    
+    def __repr__(self):
+        return f"<EmpireEntity(name='{self.name}', eip_id='{self.eip_id}', business_type='{self.business_type}')>"
+
+class BusinessModelMaster(Base):
+    __tablename__ = 'business_model_master'
+    
+    id = Column(Integer, primary_key=True)
+    code = Column(String(20), unique=True, nullable=False)  # CMP, FOB, SOR, etc.
+    name = Column(String(100), nullable=False)
+    description = Column(Text)
+    business_type = Column(String(50), nullable=False)  # Manufacturer, Retailer, Brand
+    network = Column(String(50))  # Woven Supply, Commune Connect, Both
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    
+    # Relationships
+    entity_models = relationship("EntityBusinessModel", back_populates="business_model")
+    modules = relationship("BusinessModelModule", back_populates="business_model")
+    
+    def __repr__(self):
+        return f"<BusinessModelMaster(code='{self.code}', name='{self.name}')>"
+
+class ModuleMaster(Base):
+    __tablename__ = 'module_master'
+    
+    id = Column(Integer, primary_key=True)
+    code = Column(String(20), unique=True, nullable=False)
+    name = Column(String(100), nullable=False)
+    description = Column(Text)
+    category = Column(String(50))  # Production, Retail, Analytics, etc.
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    
+    # Relationships
+    business_model_modules = relationship("BusinessModelModule", back_populates="module")
+    
+    def __repr__(self):
+        return f"<ModuleMaster(code='{self.code}', name='{self.name}')>"
+
+class BusinessModelModule(Base):
+    __tablename__ = 'business_model_modules'
+    
+    id = Column(Integer, primary_key=True)
+    business_model_id = Column(Integer, ForeignKey('business_model_master.id'))
+    module_id = Column(Integer, ForeignKey('module_master.id'))
+    is_required = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    
+    # Relationships
+    business_model = relationship("BusinessModelMaster", back_populates="modules")
+    module = relationship("ModuleMaster", back_populates="business_model_modules")
+    
+    def __repr__(self):
+        return f"<BusinessModelModule(business_model='{self.business_model.code}', module='{self.module.code}')>"
+
+class EntityBusinessModel(Base):
+    __tablename__ = 'entity_business_models'
+    
+    id = Column(Integer, primary_key=True)
+    entity_id = Column(Integer, ForeignKey('empire_entities.id'))
+    business_model_id = Column(Integer, ForeignKey('business_model_master.id'))
+    status = Column(String(20), default='Active')  # Active, Inactive, Suspended
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, onupdate=datetime.datetime.utcnow)
+    
+    # Relationships
+    entity = relationship("EmpireEntity", back_populates="business_models")
+    business_model = relationship("BusinessModelMaster", back_populates="entity_models")
+    
+    def __repr__(self):
+        return f"<EntityBusinessModel(entity='{self.entity.name}', business_model='{self.business_model.code}')>"
+
+class LicenseTemplate(Base):
+    __tablename__ = 'license_templates'
+    
+    id = Column(Integer, primary_key=True)
+    template_id = Column(String(50), unique=True, nullable=False)  # e.g., TEMPLATE-CMP-001
+    name = Column(String(100), nullable=False)
+    business_type = Column(String(50), nullable=False)  # Manufacturer, Retailer, Brand
+    business_model_code = Column(String(20), nullable=False)  # CMP, FOB, SOR, etc.
+    description = Column(Text)
+    terms = Column(Text)  # Terms and conditions
+    data_access_level = Column(String(20))  # Full, Limited, Restricted
+    validity_days = Column(Integer, default=365)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    
+    # Relationships
+    license_grants = relationship("LicenseGrant", back_populates="license_template")
+    
+    def __repr__(self):
+        return f"<LicenseTemplate(template_id='{self.template_id}', name='{self.name}')>"
+
+class LicenseGrant(Base):
+    __tablename__ = 'license_grants'
+    
+    id = Column(Integer, primary_key=True)
+    entity_id = Column(Integer, ForeignKey('empire_entities.id'))
+    license_template_id = Column(Integer, ForeignKey('license_templates.id'))
+    license_key = Column(String(100), unique=True, nullable=False)
+    granted_date = Column(DateTime, default=datetime.datetime.utcnow)
+    expiry_date = Column(DateTime)
+    status = Column(String(20), default='Active')  # Active, Expired, Revoked, Suspended
+    notes = Column(Text)
+    
+    # Relationships
+    entity = relationship("EmpireEntity", back_populates="license_grants")
+    license_template = relationship("LicenseTemplate", back_populates="license_grants")
+    
+    def __repr__(self):
+        return f"<LicenseGrant(entity='{self.entity.name}', license_key='{self.license_key}', status='{self.status}')>"
+
+class DataSharingAgreement(Base):
+    __tablename__ = 'data_sharing_agreements'
+    
+    id = Column(Integer, primary_key=True)
+    entity_id = Column(Integer, ForeignKey('empire_entities.id'))
+    agreement_ref = Column(String(50), unique=True, nullable=False)
+    title = Column(String(200), nullable=False)
+    version = Column(String(20), default='1.0')
+    signed_date = Column(DateTime)
+    effective_date = Column(DateTime)
+    expiry_date = Column(DateTime)
+    status = Column(String(20), default='Draft')  # Draft, Active, Expired, Terminated
+    agreement_text = Column(Text)
+    sharing_scope = Column(JSON)  # JSON object defining data sharing scope
+    restrictions = Column(JSON)  # JSON object defining usage restrictions
+    governance_rules = Column(JSON)  # JSON object defining governance rules
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, onupdate=datetime.datetime.utcnow)
+    
+    # Relationships
+    entity = relationship("EmpireEntity", back_populates="data_sharing_agreements")
+    
+    def __repr__(self):
+        return f"<DataSharingAgreement(entity='{self.entity.name}', agreement_ref='{self.agreement_ref}', status='{self.status}')>"
+
+class RiverTransaction(Base):
+    __tablename__ = 'river_transactions'
+    
+    id = Column(Integer, primary_key=True)
+    transaction_id = Column(String(100), unique=True, nullable=False)
+    entity_id = Column(Integer, ForeignKey('empire_entities.id'))
+    transaction_type = Column(String(50))  # Data Access, License Grant, Data Sharing, etc.
+    resource_type = Column(String(50))  # Order, Style, Material, etc.
+    resource_id = Column(String(50))
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    access_level = Column(String(20))  # Read, Write, Full
+    status = Column(String(20))  # Success, Failed, Pending
+    details = Column(JSON)  # Additional transaction details
+    
+    def __repr__(self):
+        return f"<RiverTransaction(transaction_id='{self.transaction_id}', transaction_type='{self.transaction_type}')>"
 
 # Create a session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
