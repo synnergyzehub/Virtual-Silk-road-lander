@@ -1,6 +1,8 @@
 import pandas as pd
 import json
 from datetime import datetime, timedelta
+from sqlalchemy import func
+import sqlalchemy.orm
 from database import (
     get_db_session, Buyer, Order, Style, Material, 
     ProductionLine, LineAllocation, ProductionEntry
@@ -41,7 +43,8 @@ def get_all_orders():
     """Get all orders from the database with buyer information"""
     db = get_db_session()
     try:
-        orders = db.query(Order).all()
+        # Use join to eagerly load the buyer information with the orders
+        orders = db.query(Order).options(sqlalchemy.orm.joinedload(Order.buyer)).all()
         return orders
     finally:
         db.close()
@@ -50,7 +53,8 @@ def get_orders_by_buyer(buyer_id):
     """Get all orders for a specific buyer"""
     db = get_db_session()
     try:
-        orders = db.query(Order).filter(Order.buyer_id == buyer_id).all()
+        # Eagerly load buyer relationship to avoid detached instance error
+        orders = db.query(Order).filter(Order.buyer_id == buyer_id).options(sqlalchemy.orm.joinedload(Order.buyer)).all()
         return orders
     finally:
         db.close()
@@ -59,7 +63,8 @@ def get_order_by_po(po_number):
     """Get an order by PO number"""
     db = get_db_session()
     try:
-        order = db.query(Order).filter(Order.po_number == po_number).first()
+        # Eagerly load buyer relationship
+        order = db.query(Order).filter(Order.po_number == po_number).options(sqlalchemy.orm.joinedload(Order.buyer)).first()
         return order
     finally:
         db.close()
@@ -289,8 +294,9 @@ def get_dashboard_data():
         # Total orders
         total_orders = db.query(Order).count()
         
-        # Orders by status
-        orders_by_status = db.query(Order.status, db.func.count(Order.id)).group_by(Order.status).all()
+        # Orders by status - using sqlalchemy.func directly
+        from sqlalchemy import func
+        orders_by_status = db.query(Order.status, func.count(Order.id)).group_by(Order.status).all()
         orders_by_status_dict = {status: count for status, count in orders_by_status}
         
         # Production data for the last 30 days
@@ -333,8 +339,8 @@ def get_dashboard_data():
             else:
                 line_efficiency[line.name] = 0
         
-        # Material status
-        material_status_counts = db.query(Material.status, db.func.count(Material.id)).group_by(Material.status).all()
+        # Material status - using same func import from above
+        material_status_counts = db.query(Material.status, func.count(Material.id)).group_by(Material.status).all()
         material_status_dict = {status: count for status, count in material_status_counts}
         
         return {

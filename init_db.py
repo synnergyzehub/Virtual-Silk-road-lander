@@ -22,141 +22,141 @@ def initialize_database():
         if buyers_count > 0:
             return False
         
-        # Add sample buyers
-        ecg_buyer = Buyer(
-            name="ECG Commune",
-            contact_person="John Smith",
-            email="john.smith@ecgcommune.com",
-            phone="123-456-7890"
+        # Add sample buyers for Voi Jeans
+        voi_buyer = Buyer(
+            name="Voi Jeans Retail India Pvt Ltd",
+            contact_person="Ravi Sharma",
+            email="ravi.sharma@voijeans.com",
+            phone="981-234-5678"
         )
-        db.add(ecg_buyer)
+        db.add(voi_buyer)
         
-        synergy_buyer = Buyer(
-            name="Synergyze Retail",
-            contact_person="Sarah Johnson",
-            email="sarah.johnson@synergyze.com",
-            phone="456-789-0123"
+        scotts_buyer = Buyer(
+            name="Scotts Garments (CMP)",
+            contact_person="Anjali Patel",
+            email="anjali.patel@scottsgarments.com",
+            phone="892-567-3456"
         )
-        db.add(synergy_buyer)
+        db.add(scotts_buyer)
         
-        woven_buyer = Buyer(
-            name="Woven Apparel",
-            contact_person="Michael Chang",
-            email="michael.chang@wovenapparel.com",
-            phone="789-012-3456"
+        denim_buyer = Buyer(
+            name="Voi Jeans Flagship Store",
+            contact_person="Vikram Mehta",
+            email="vikram.mehta@voijeans.com",
+            phone="765-432-1098"
         )
-        db.add(woven_buyer)
+        db.add(denim_buyer)
         
         db.flush()  # Get IDs for the buyers
         
         # Add sample orders
         today = datetime.now().date()
         
-        # ECG Order
-        ecg_order = Order(
-            po_number="ECG-PO-2025-001",
-            buyer_id=ecg_buyer.id,
+        # Voi Jeans SS25 Order
+        voi_order = Order(
+            po_number="VOI-SS25-001",
+            buyer_id=voi_buyer.id,
             order_date=today - timedelta(days=15),
             delivery_date=today + timedelta(days=45),
             status="In Progress",
             total_quantity=2000
         )
-        db.add(ecg_order)
+        db.add(voi_order)
         
-        # Synergyze Order
-        synergy_order = Order(
-            po_number="SYN-PO-2025-005",
-            buyer_id=synergy_buyer.id,
+        # Scotts Garments Order
+        scotts_order = Order(
+            po_number="SCOTTS-CMP-2025-005",
+            buyer_id=scotts_buyer.id,
             order_date=today - timedelta(days=7),
             delivery_date=today + timedelta(days=53),
             status="New",
             total_quantity=1500
         )
-        db.add(synergy_order)
+        db.add(scotts_order)
         
-        # Woven Apparel Order
-        woven_order = Order(
-            po_number="WA-PO-2025-010",
-            buyer_id=woven_buyer.id,
+        # Voi Flagship Store Order
+        flagship_order = Order(
+            po_number="VOI-FS-2025-010",
+            buyer_id=denim_buyer.id,
             order_date=today - timedelta(days=30),
             delivery_date=today + timedelta(days=15),
             status="In Progress",
             total_quantity=3000
         )
-        db.add(woven_order)
+        db.add(flagship_order)
         
         db.flush()  # Get IDs for the orders
         
         # Add sample styles
-        # ECG Styles
-        ecg_style1 = Style(
-            order_id=ecg_order.id,
-            style_number="ECG-ST-001",
-            description="Men's Crew Neck T-Shirt",
-            category="T-shirt",
-            color="Navy Blue",
-            size_breakdown=json.dumps({"S": 200, "M": 300, "L": 300, "XL": 200}),
+        # Voi Jeans Styles
+        voi_style1 = Style(
+            order_id=voi_order.id,
+            style_number="VOI-DENIM-001",
+            description="Men's Slim Fit Denim Jeans",
+            category="Denim",
+            color="Indigo Blue",
+            size_breakdown=json.dumps({"30": 200, "32": 300, "34": 300, "36": 200}),
             quantity=1000,
             status="In Progress"
         )
-        db.add(ecg_style1)
+        db.add(voi_style1)
         
-        ecg_style2 = Style(
-            order_id=ecg_order.id,
-            style_number="ECG-ST-002",
-            description="Women's V-Neck T-Shirt",
-            category="T-shirt",
-            color="White",
-            size_breakdown=json.dumps({"XS": 200, "S": 300, "M": 300, "L": 200}),
+        voi_style2 = Style(
+            order_id=voi_order.id,
+            style_number="VOI-DENIM-002",
+            description="Women's Straight Leg Denim",
+            category="Denim",
+            color="Dark Wash",
+            size_breakdown=json.dumps({"28": 200, "30": 300, "32": 300, "34": 200}),
             quantity=1000,
             status="In Progress"
         )
-        db.add(ecg_style2)
+        db.add(voi_style2)
         
-        # Synergyze Styles
-        synergy_style = Style(
-            order_id=synergy_order.id,
-            style_number="SYN-ST-005",
-            description="Men's Polo Shirt",
-            category="Polo",
-            color="Black",
-            size_breakdown=json.dumps({"S": 300, "M": 400, "L": 500, "XL": 300}),
+        # Scotts Garments Styles
+        scotts_style = Style(
+            order_id=scotts_order.id,
+            style_number="SCOTTS-SS25-001",
+            description="Men's Bootcut Jeans",
+            category="Denim",
+            color="Vintage Wash",
+            size_breakdown=json.dumps({"30": 300, "32": 400, "34": 500, "36": 300}),
             quantity=1500,
             status="New"
         )
-        db.add(synergy_style)
+        db.add(scotts_style)
         
-        # Woven Apparel Styles
-        woven_style1 = Style(
-            order_id=woven_order.id,
-            style_number="WA-ST-010",
-            description="Men's Casual Shirt",
-            category="Shirt",
+        # Flagship Store Styles
+        flagship_style1 = Style(
+            order_id=flagship_order.id,
+            style_number="VOI-FS-010",
+            description="Men's Denim Jacket",
+            category="Outerwear",
             color="Light Blue",
             size_breakdown=json.dumps({"S": 300, "M": 400, "L": 300, "XL": 200, "XXL": 100}),
             quantity=1300,
             status="In Progress"
         )
-        db.add(woven_style1)
+        db.add(flagship_style1)
         
-        woven_style2 = Style(
-            order_id=woven_order.id,
-            style_number="WA-ST-011",
-            description="Women's Blouse",
-            category="Shirt",
-            color="Peach",
+        flagship_style2 = Style(
+            order_id=flagship_order.id,
+            style_number="VOI-FS-011",
+            description="Women's Denim Skirt",
+            category="Skirt",
+            color="Stonewash",
             size_breakdown=json.dumps({"XS": 200, "S": 400, "M": 600, "L": 400, "XL": 100}),
             quantity=1700,
             status="New"
         )
-        db.add(woven_style2)
+        db.add(flagship_style2)
         
         db.flush()  # Get IDs for the styles
         
-        # Add production lines
-        line1 = ProductionLine(name="Line 1", capacity=300, supervisor="Robert Chen")
-        line2 = ProductionLine(name="Line 2", capacity=350, supervisor="Lisa Wong")
-        line3 = ProductionLine(name="Line 3", capacity=400, supervisor="David Park")
+        # Add production lines for Scotts Garments
+        line1 = ProductionLine(name="Scotts Line 1", capacity=300, supervisor="Rajesh Kumar")
+        line2 = ProductionLine(name="Scotts Line 2", capacity=350, supervisor="Priya Patel")
+        line3 = ProductionLine(name="Scotts Line 3", capacity=400, supervisor="Amit Singh")
         
         db.add(line1)
         db.add(line2)
@@ -165,25 +165,25 @@ def initialize_database():
         db.flush()  # Get IDs for the lines
         
         # Add line allocations
-        # Allocate ECG Style 1 to Line 1
+        # Allocate Voi Style 1 to Line 1
         allocation1 = LineAllocation(
             line_id=line1.id,
-            style_id=ecg_style1.id,
+            style_id=voi_style1.id,
             start_date=today - timedelta(days=5),
             end_date=today + timedelta(days=5),
             planned_quantity=1000,
-            remarks="Priority order for ECG"
+            remarks="Priority order for SS25 Collection"
         )
         db.add(allocation1)
         
-        # Allocate Woven Style 1 to Line 2
+        # Allocate Flagship Style 1 to Line 2
         allocation2 = LineAllocation(
             line_id=line2.id,
-            style_id=woven_style1.id,
+            style_id=flagship_style1.id,
             start_date=today - timedelta(days=10),
             end_date=today + timedelta(days=0),
             planned_quantity=1300,
-            remarks="Expedite for early delivery"
+            remarks="Expedite for early delivery to flagship store"
         )
         db.add(allocation2)
         

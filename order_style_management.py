@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import os
 import tempfile
+import sqlalchemy.orm
 
 from database import get_db_session, Buyer, Order, Style
 from db_operations import (
@@ -166,6 +167,8 @@ def show_order_overview():
         with col2:
             # Bar chart for delivery timeline
             delivery_df = df.copy()
+            # Convert to datetime first if not already
+            delivery_df["Delivery Date"] = pd.to_datetime(delivery_df["Delivery Date"])
             delivery_df["Delivery Month"] = delivery_df["Delivery Date"].dt.strftime("%Y-%m")
             month_counts = delivery_df["Delivery Month"].value_counts().reset_index()
             month_counts.columns = ["Month", "Count"]
@@ -560,7 +563,8 @@ def get_order_by_id(order_id):
     """Get an order by ID"""
     db = get_db_session()
     try:
-        order = db.query(Order).filter(Order.id == order_id).first()
+        # Eagerly load buyer relationship to avoid detached instance error
+        order = db.query(Order).filter(Order.id == order_id).options(sqlalchemy.orm.joinedload(Order.buyer)).first()
         return order
     finally:
         db.close()

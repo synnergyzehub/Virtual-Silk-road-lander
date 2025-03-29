@@ -16,4 +16,6 @@ dependencies = [
     "matplotlib>=3.10.1",
     "sqlalchemy>=2.0.40",
     "psycopg2-binary>=2.9.10",
+    "twilio>=9.5.1",
+    "networkx>=3.4.2",
 ]

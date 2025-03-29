@@ -19,6 +19,11 @@ from line_plan import show_line_plan
 from reports import show_reports
 from init_db import show_db_initialization, initialize_database
 
+# Import visualization modules
+from supply_chain_visualization import show_supply_chain_visualization
+from synergy_visualization import show_synergy_visualization
+from voi_jeans_demo import show_voi_jeans_demo
+
 # Configure the page
 st.set_page_config(
     page_title="ECG Manufacturing Portal",
@@ -52,6 +57,19 @@ if 'order_submitted' not in st.session_state:
 # Sidebar navigation
 with st.sidebar:
     st.title("Voi Jeans Management Portal")
+    
+    # Demo button with a prominent style
+    st.markdown(
+        """
+        <div style='background-color: #1E3A8A; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 15px;'>
+            <p style='margin: 0; font-weight: bold; color: white;'>✨ NEW!</p>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+    if st.button("🧥 VOI JEANS DEMO", use_container_width=True, type="primary"):
+        st.session_state.page = 'voi_jeans_demo'
+    
     st.markdown("---")
     
     # Create three sections for navigation
@@ -122,6 +140,9 @@ with st.sidebar:
             
         if st.button("📋 Compliance Tracking", use_container_width=True, key="compliance_tracking"):
             st.session_state.page = 'reports'
+            
+        if st.button("🔄 Supply Chain Visualization", use_container_width=True, key="supply_chain_viz"):
+            st.session_state.page = 'supply_chain_visualization'
             
         # HSN-Based Forecasting section
         st.markdown("#### HSN-Based Forecasting")
@@ -195,13 +216,13 @@ with st.sidebar:
             st.session_state.page = 'merchandiser_agent'
         
         # Show a hint about the merchandiser
-        if 'merchandiser' in st.session_state:
-            # Display merchandiser info if already assigned
+        if 'merchandiser' in st.session_state and isinstance(st.session_state.merchandiser, dict):
+            # Display merchandiser info if already assigned and valid
             st.markdown(f"""
             <div style='background-color: #1E3A8A; padding: 10px; border-radius: 5px; margin-top: 10px;'>
                 <p style='margin: 0; font-size: 0.9em;'>You're working with:</p>
-                <p style='margin: 0; font-weight: bold;'>{st.session_state.merchandiser['name']}</p>
-                <p style='margin: 0; font-size: 0.8em;'>{st.session_state.merchandiser['specialization']}</p>
+                <p style='margin: 0; font-weight: bold;'>{st.session_state.merchandiser.get('name', 'Your Merchandiser')}</p>
+                <p style='margin: 0; font-size: 0.8em;'>{st.session_state.merchandiser.get('specialization', 'Denim Expert')}</p>
             </div>
             """, unsafe_allow_html=True)
         else:
@@ -256,6 +277,17 @@ with st.sidebar:
         
         if st.button("🌐 Market Trend Analysis", use_container_width=True, key="license_suspension"):
             st.session_state.page = 'material_tracker'
+            
+        # Synergyze Visualization section
+        st.markdown("#### Synergyze Ecosystem")
+        if st.button("🔄 Synergyze Ecosystem Visualization", use_container_width=True, key="synergy_viz"):
+            st.session_state.page = 'synergy_visualization'
+            
+        if st.button("⚖️ License Management", use_container_width=True, key="license_management"):
+            st.session_state.page = 'synergy_visualization'
+            
+        if st.button("🔗 Supply & Retail Integration", use_container_width=True, key="woven_commune_integration"):
+            st.session_state.page = 'synergy_visualization'
     
     # Additional resources
     st.markdown("### Resources")
@@ -312,6 +344,12 @@ elif st.session_state.page == 'reports':
     show_reports()
 elif st.session_state.page == 'db_initialization':
     show_db_initialization()
+elif st.session_state.page == 'supply_chain_visualization':
+    show_supply_chain_visualization()
+elif st.session_state.page == 'synergy_visualization':
+    show_synergy_visualization()
+elif st.session_state.page == 'voi_jeans_demo':
+    show_voi_jeans_demo()
 
 # Footer
 st.markdown("---")
