@@ -13,7 +13,15 @@ def show_data_sharing():
     """Display the data sharing agreement management interface"""
     st.title("Data Sharing Agreements")
     
-    tabs = st.tabs(["Agreements Overview", "Create Agreement", "River Transactions", "Data Flow Visualization"])
+    # Check if admin mode is enabled (for viewing Empire OS terminology)
+    admin_mode = st.session_state.get('admin_mode', False)
+    
+    if admin_mode:
+        # Show tabs with Empire OS terminology for administrators
+        tabs = st.tabs(["Agreements Overview", "Create Agreement", "River Transactions", "Data Flow Visualization"])
+    else:
+        # Show tabs with industry-standard terminology for regular users
+        tabs = st.tabs(["Agreements Overview", "Create Agreement", "Transaction Logs", "Supply Chain Network"])
     
     with tabs[0]:
         show_agreements_overview()
@@ -26,6 +34,15 @@ def show_data_sharing():
     
     with tabs[3]:
         show_data_flow_visualization()
+        
+    # Toggle for admin mode (only visible to authorized users)
+    with st.sidebar:
+        if st.session_state.get('is_license_holder', False):
+            st.divider()
+            admin_toggle = st.toggle("Show Empire OS Terminology", value=admin_mode)
+            if admin_toggle != admin_mode:
+                st.session_state['admin_mode'] = admin_toggle
+                st.rerun()
 
 def show_agreements_overview():
     """Display an overview of all data sharing agreements"""
@@ -407,11 +424,22 @@ def show_create_agreement():
 
 def show_river_transactions():
     """Display River transaction logs"""
-    st.header("River Transaction Logs")
-    st.markdown("""
-    River is the Empire OS transaction logging system that records all data access, sharing, and license operations.
-    All transactions are immutable and provide an audit trail for governance and compliance.
-    """)
+    admin_mode = st.session_state.get('admin_mode', False)
+    
+    if admin_mode:
+        # Empire OS terminology for administrators
+        st.header("River Transaction Logs")
+        st.markdown("""
+        River is the Empire OS transaction logging system that records all data access, sharing, and license operations.
+        All transactions are immutable and provide an audit trail for governance and compliance.
+        """)
+    else:
+        # Industry-standard terminology for regular users
+        st.header("System Transaction Logs")
+        st.markdown("""
+        The system maintains comprehensive logs of all data access, sharing, and license operations.
+        All transactions are securely recorded and provide an audit trail for compliance and monitoring purposes.
+        """)
     
     # Filter options
     col1, col2, col3 = st.columns(3)
@@ -555,11 +583,22 @@ def show_sample_transactions():
 
 def show_data_flow_visualization():
     """Display visualization of data flows between entities"""
-    st.header("Data Flow Visualization")
-    st.markdown("""
-    This visualization shows how data flows between different entities in the ecosystem
-    based on their data sharing agreements and license templates.
-    """)
+    admin_mode = st.session_state.get('admin_mode', False)
+    
+    if admin_mode:
+        # Empire OS terminology for administrators
+        st.header("Data Flow Visualization")
+        st.markdown("""
+        This visualization shows how data flows between different entities in the ecosystem
+        based on their data sharing agreements and license templates.
+        """)
+    else:
+        # Industry-standard terminology for regular users
+        st.header("Supply Chain Network Visualization")
+        st.markdown("""
+        This visualization shows how information flows between different partners in the supply chain network
+        based on their data sharing agreements and access permissions.
+        """)
     
     # Create a network graph
     G = nx.DiGraph()
@@ -640,9 +679,11 @@ def show_data_flow_visualization():
     )
     
     # Create the figure
+    admin_mode = st.session_state.get('admin_mode', False)
+    
     fig = go.Figure(data=edge_traces + [node_trace],
                     layout=go.Layout(
-                        title='Data Sharing Network',
+                        title='Data Sharing Network' if admin_mode else 'Supply Chain Network',
                         titlefont_size=16,
                         showlegend=False,
                         hovermode='closest',
@@ -658,21 +699,46 @@ def show_data_flow_visualization():
     st.plotly_chart(fig, use_container_width=True)
     
     # Add explanation of the visualization
-    st.subheader("Understanding the Data Flow")
-    st.markdown("""
-    - **Voi Jeans** (Brand) is at the center of the ecosystem, interacting with both manufacturing and retail networks
-    - **Scotts Garments** (Manufacturer) receives orders and styles from Voi Jeans and sends back production updates
-    - **Fabric Mills Ltd.** (Material Supplier) provides material details to Scotts Garments
-    - **Retail Stores** receive product data from Voi Jeans and send back sales data
-    - **Synergyze Hub** serves as the governance layer, managing licenses for all entities
-    - **ECG** (Empire Commune Global) provides compliance oversight and approvals for the ecosystem
+    admin_mode = st.session_state.get('admin_mode', False)
     
-    All data flows are governed by data sharing agreements and license templates configured in the Empire OS.
-    """)
+    if admin_mode:
+        # Empire OS terminology for administrators
+        st.subheader("Understanding the Data Flow")
+        st.markdown("""
+        - **Voi Jeans** (Brand) is at the center of the ecosystem, interacting with both manufacturing and retail networks
+        - **Scotts Garments** (Manufacturer) receives orders and styles from Voi Jeans and sends back production updates
+        - **Fabric Mills Ltd.** (Material Supplier) provides material details to Scotts Garments
+        - **Retail Stores** receive product data from Voi Jeans and send back sales data
+        - **Synergyze Hub** serves as the governance layer, managing licenses for all entities
+        - **ECG** (Empire Commune Global) provides compliance oversight and approvals for the ecosystem
+        
+        All data flows are governed by data sharing agreements and license templates configured in the Empire OS.
+        """)
+    else:
+        # Industry-standard terminology for regular users
+        st.subheader("Understanding the Supply Chain Network")
+        st.markdown("""
+        - **Voi Jeans** (Brand) is at the center of the supply chain, coordinating with manufacturing partners and retail channels
+        - **Scotts Garments** (Manufacturer) receives style information and production orders from Voi Jeans and provides production status updates
+        - **Fabric Mills Ltd.** (Material Supplier) provides fabric specifications and availability to manufacturing partners
+        - **Retail Stores** receive product information from Voi Jeans and share sales performance data
+        - **Management Hub** provides centralized governance and compliance monitoring for all partners
+        - **Compliance Team** ensures all operations meet industry standards and regulatory requirements
+        
+        All information sharing is governed by formal data sharing agreements that protect each partner's sensitive information.
+        """)
     
     # Add license flow visualization
-    st.subheader("License Template Flow")
-    st.markdown("This shows how license templates are assigned based on entity types and business models:")
+    admin_mode = st.session_state.get('admin_mode', False)
+    
+    if admin_mode:
+        # Empire OS terminology for administrators
+        st.subheader("License Template Flow")
+        st.markdown("This shows how license templates are assigned based on entity types and business models:")
+    else:
+        # Industry-standard terminology for regular users
+        st.subheader("Access Permission Framework")
+        st.markdown("This shows how system access permissions are assigned based on company types and business relationships:")
     
     # Create sample license flow data
     license_data = {
@@ -723,7 +789,12 @@ def show_data_flow_visualization():
             value = value
         ))])
     
-    fig.update_layout(title_text="License Template Flow", font_size=10, height=500)
+    admin_mode = st.session_state.get('admin_mode', False)
+    fig.update_layout(
+        title_text="License Template Flow" if admin_mode else "Access Permission Framework", 
+        font_size=10, 
+        height=500
+    )
     st.plotly_chart(fig, use_container_width=True)
 
 def create_license_template_matrix():
