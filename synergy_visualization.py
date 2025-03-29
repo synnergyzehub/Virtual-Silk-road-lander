@@ -7,13 +7,21 @@ import networkx as nx
 from PIL import Image
 import io
 import base64
+import datetime
+from data_sharing import show_data_sharing
 
 def show_synergy_visualization():
     """Display the Synergyze ecosystem visualization showcasing the relationships between modules"""
     st.title("🔄 Synergyze Ecosystem Visualization")
     
     # Create tabs for different visualization views
-    tab1, tab2, tab3 = st.tabs(["📊 Ecosystem Overview", "🔗 Network Visualization", "📑 License Management"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "📊 Ecosystem Overview", 
+        "🔗 Network Visualization", 
+        "📑 License Management",
+        "🔄 Data Sharing",
+        "⚙️ Empire OS Governance"
+    ])
     
     with tab1:
         show_ecosystem_overview()
@@ -23,6 +31,12 @@ def show_synergy_visualization():
     
     with tab3:
         show_license_management()
+        
+    with tab4:
+        show_data_sharing()
+        
+    with tab5:
+        show_empire_os_governance()
 
 def show_ecosystem_overview():
     """Display the Synergyze ecosystem overview with its three main components"""
