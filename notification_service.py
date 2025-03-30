@@ -152,7 +152,7 @@ def show_notification_settings():
         """)
     
     # Initialize notification settings in session state if not exists
-    if 'notification_settings' not in st.session_state:
+    if 'notification_settings' not in st.session_state or not isinstance(st.session_state.notification_settings, dict):
         st.session_state.notification_settings = {
             "Design Team": {
                 "enabled": True,
