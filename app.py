@@ -26,6 +26,7 @@ from voi_jeans_demo import show_voi_jeans_demo
 
 # Import notification service
 from notification_service import show_notification_settings, check_twilio_credentials
+from retail_distribution import show_retail_distribution
 
 # Configure the page
 st.set_page_config(
@@ -37,7 +38,7 @@ st.set_page_config(
 
 # Initialize session state for app flow
 if 'page' not in st.session_state:
-    st.session_state.page = 'notification_settings'  # Temporarily starting with notification settings for testing
+    st.session_state.page = 'manufacturing_dashboard'  # Start with manufacturing dashboard page
 
 # Initialize database with sample data if needed
 if 'db_initialized' not in st.session_state:
@@ -196,46 +197,39 @@ with st.sidebar:
         # Commune Connect Portal Navigation
         st.markdown("### Voi Jeans Retail Distribution")
         
-        # Store Management
-        st.markdown("#### Store Management")
-        if st.button("🏬 Retail Store Network", use_container_width=True, key="browse_products"):
-            st.session_state.page = 'product_catalog'
+        # Integrated Retail Distribution Dashboard
+        if st.button("🏬 Retail Distribution Dashboard", use_container_width=True, type="primary", key="retail_distribution"):
+            st.session_state.page = 'retail_distribution'
         
-        if st.button("📊 Daily Sales vs Target", use_container_width=True, key="daily_sales"):
-            st.session_state.page = 'retailer_analysis'
+        # Main retail sections
+        st.markdown("#### Store Management")
+        if st.button("🏬 Store Network", use_container_width=True, key="store_network"):
+            st.session_state.page = 'retail_distribution'
+        
+        if st.button("📊 Sales Performance", use_container_width=True, key="sales_performance"):
+            st.session_state.page = 'retail_distribution'
         
         if st.button("🔖 E-Wards Loyalty Program", use_container_width=True, key="loyalty_program"):
-            st.session_state.page = 'product_detail'
+            st.session_state.page = 'retail_distribution'
         
-        if st.button("📦 Store Inventory Management", use_container_width=True, key="view_order"):
-            st.session_state.page = 'order_booking'
+        # Consumer Analytics
+        st.markdown("#### Consumer Insights")
+        if st.button("👤 Consumer Behavior Analysis", use_container_width=True, key="consumer_analysis"):
+            st.session_state.page = 'retail_distribution'
+            
+        if st.button("🔍 Retail Fashion Trends", use_container_width=True, key="fashion_trends"):
+            st.session_state.page = 'retail_distribution'
+            
+        if st.button("📊 Marketing Effectiveness", use_container_width=True, key="marketing_analytics"):
+            st.session_state.page = 'retail_distribution'
         
-        # Product Management
-        st.markdown("#### Product Management")
-        
-        if st.button("👖 Denim Collection", use_container_width=True, key="denim_collection"):
+        # Product Catalog Access
+        st.markdown("#### Product Catalog")
+        if st.button("👖 Product Collection", use_container_width=True, key="product_collection"):
             st.session_state.page = 'product_catalog'
-            
-        if st.button("🎯 SS25 Collection Planning", use_container_width=True, key="ss25_planning"):
-            st.session_state.page = 'order_style_management'
-            
-        if st.button("🔍 Style Performance Analysis", use_container_width=True, key="style_performance"):
-            st.session_state.page = 'retailer_analysis'
-        
-        # Market Intelligence Section
-        st.markdown("#### Retail Analytics")
-        
-        if st.button("📈 Sales Performance Dashboard", use_container_width=True, key="market_health"):
-            st.session_state.page = 'retailer_analysis'
-        
-        if st.button("📱 Online vs In-Store Analysis", use_container_width=True, key="online_vs_store"):
-            st.session_state.page = 'manufacturing_dashboard'
-            
-        if st.button("🏙️ Regional Market Insights", use_container_width=True, key="regional_insights"):
-            st.session_state.page = 'reports'
         
         # Add a hint about the retail analytics
-        st.info("Access real-time sales analytics and performance metrics across all Voi Jeans retail locations.")
+        st.info("The Retail Distribution Dashboard provides a comprehensive view of store performance, consumer behavior, and loyalty program metrics.")
         
         # Add access to the merchandiser agent
         st.markdown("### Your Support Team")
@@ -256,7 +250,7 @@ with st.sidebar:
             """, unsafe_allow_html=True)
         else:
             # Show a teaser about having a merchandiser
-            st.info("Connect with your dedicated merchandising agent for personalized support throughout your order process.")
+            st.info("Connect with your dedicated merchandising agent for personalized support.")
     
     with tab3:
         # Voi Jeans Management Hub
@@ -392,6 +386,8 @@ elif st.session_state.page == 'voi_jeans_demo':
     show_voi_jeans_demo()
 elif st.session_state.page == 'notification_settings':
     show_notification_settings()
+elif st.session_state.page == 'retail_distribution':
+    show_retail_distribution()
 
 # Footer
 st.markdown("---")
