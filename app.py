@@ -32,6 +32,9 @@ from retail_distribution import show_retail_distribution
 from hsn_tax_mapping import show_hsn_tax_mapping
 from trade_show_order_engine import show_trade_show_order_engine
 
+# Import Investment Milestone Passport feature
+from investment_milestone_passport import show_investment_milestone_passport
+
 # Configure the page
 st.set_page_config(
     page_title="ECG Manufacturing Portal",
@@ -321,6 +324,11 @@ with st.sidebar:
         ):
             st.session_state.page = 'notification_settings'
             
+        # Investment Milestones section
+        st.markdown("#### Investment Milestones")
+        if st.button("🪪 Investment Milestone Passport", use_container_width=True, key="milestone_passport", help="Collect digital badges for financial milestones and achievements"):
+            st.session_state.page = 'investment_milestone_passport'
+        
         # Business Intelligence section
         st.markdown("#### Business Intelligence")
         if st.button("📈 Executive Dashboard", use_container_width=True, key="executive_dashboard"):
@@ -418,6 +426,8 @@ elif st.session_state.page == 'hsn_tax_mapping':
     show_hsn_tax_mapping()
 elif st.session_state.page == 'trade_show_order_engine':
     show_trade_show_order_engine()
+elif st.session_state.page == 'investment_milestone_passport':
+    show_investment_milestone_passport()
 
 # Footer
 st.markdown("---")
