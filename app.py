@@ -1,4 +1,13 @@
 import streamlit as st
+
+# Configure the page (must be the first Streamlit command)
+st.set_page_config(
+    page_title="ECG Manufacturing Portal",
+    page_icon="👕",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -35,17 +44,12 @@ from trade_show_order_engine import show_trade_show_order_engine
 # Import Investment Milestone Passport feature
 from investment_milestone_passport import show_investment_milestone_passport
 
-# Configure the page
-st.set_page_config(
-    page_title="ECG Manufacturing Portal",
-    page_icon="👕",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Import Data Integration module for centralized data management
+from data_integration import show_data_integration
 
 # Initialize session state for app flow
 if 'page' not in st.session_state:
-    st.session_state.page = 'synergy_visualization'  # Start with a visual overview of the platform
+    st.session_state.page = 'data_integration'  # Start with the data integration hub
 
 # Initialize database with sample data if needed
 if 'db_initialized' not in st.session_state:
@@ -329,6 +333,11 @@ with st.sidebar:
         if st.button("🪪 Investment Milestone Passport", use_container_width=True, key="milestone_passport", help="Collect digital badges for financial milestones and achievements"):
             st.session_state.page = 'investment_milestone_passport'
         
+        # Data Integration Hub section
+        st.markdown("#### Data Integration Hub")
+        if st.button("📊 Empire OS Data Integration", use_container_width=True, key="data_integration_hub", help="Centralized data upload, processing and visualization from various sources"):
+            st.session_state.page = 'data_integration'
+        
         # Business Intelligence section
         st.markdown("#### Business Intelligence")
         if st.button("📈 Executive Dashboard", use_container_width=True, key="executive_dashboard"):
@@ -428,6 +437,8 @@ elif st.session_state.page == 'trade_show_order_engine':
     show_trade_show_order_engine()
 elif st.session_state.page == 'investment_milestone_passport':
     show_investment_milestone_passport()
+elif st.session_state.page == 'data_integration':
+    show_data_integration()
 
 # Footer
 st.markdown("---")
