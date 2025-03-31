@@ -47,6 +47,9 @@ from investment_milestone_passport import show_investment_milestone_passport
 # Import Data Integration module for centralized data management
 from data_integration import show_data_integration
 
+# Import Stock Inventory Health Radar module
+from stock_analysis import show_stock_analysis
+
 # Initialize session state for app flow
 if 'page' not in st.session_state:
     st.session_state.page = 'data_integration'  # Start with the data integration hub
@@ -348,6 +351,9 @@ with st.sidebar:
         
         if st.button("📉 Competitor Analysis", use_container_width=True, key="competitor_analysis"):
             st.session_state.page = 'reports'
+            
+        if st.button("📊 Stock Inventory Health Radar", use_container_width=True, key="stock_inventory_radar", help="Visual inventory stock level tracking and analysis", type="primary"):
+            st.session_state.page = 'stock_analysis'
         
         if st.button("🌐 Market Trend Analysis", use_container_width=True, key="license_suspension"):
             st.session_state.page = 'material_tracker'
@@ -439,6 +445,8 @@ elif st.session_state.page == 'investment_milestone_passport':
     show_investment_milestone_passport()
 elif st.session_state.page == 'data_integration':
     show_data_integration()
+elif st.session_state.page == 'stock_analysis':
+    show_stock_analysis()
 
 # Footer
 st.markdown("---")
