@@ -16,7 +16,7 @@ def show_synergy_visualization():
     
     # Check if user has a license to view Empire OS features
     if 'has_empire_license' not in st.session_state:
-        st.session_state.has_empire_license = False
+        st.session_state.has_empire_license = True  # Enable for demo purposes
     
     # Create tabs for different visualization views
     if st.session_state.has_empire_license:
@@ -53,117 +53,244 @@ def show_synergy_visualization():
 def show_ecosystem_overview():
     """Display the Synergyze ecosystem overview with its three main components"""
     
-    st.subheader("Synergyze Ecosystem Structure")
+    st.subheader("Voi Jeans Empire OS Synergyze Platform")
+    
+    # Modern intro banner with stats
+    st.markdown("""
+    <div style="background: linear-gradient(to right, #1E3A8A, #4A5568); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: white; margin-top: 0;">Voi Jeans Retail India Pvt Ltd</h3>
+        <p>Powered by Synergyze - A Premium Enterprise License Platform</p>
+        <div style="display: flex; justify-content: space-between; margin-top: 15px; text-align: center;">
+            <div>
+                <h4 style="margin: 0; color: #90CDF4;">20+</h4>
+                <p style="margin: 0; font-size: 0.8em;">Retail Stores</p>
+            </div>
+            <div>
+                <h4 style="margin: 0; color: #90CDF4;">₹3.24 Cr</h4>
+                <p style="margin: 0; font-size: 0.8em;">Monthly Sales</p>
+            </div>
+            <div>
+                <h4 style="margin: 0; color: #90CDF4;">24,850+</h4>
+                <p style="margin: 0; font-size: 0.8em;">Loyalty Members</p>
+            </div>
+            <div>
+                <h4 style="margin: 0; color: #90CDF4;">SS25</h4>
+                <p style="margin: 0; font-size: 0.8em;">Collection Active</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
-    The Synergyze platform consists of three core components, each tailored to specific business needs:
+    The Synergyze platform integrates three powerful components, providing Voi Jeans with a seamless digital ecosystem:
     """)
     
-    col1, col2, col3 = st.columns(3)
+    # Create a more visually appealing three-panel display
+    eco_col1, eco_col2, eco_col3 = st.columns(3)
     
-    with col1:
+    with eco_col1:
         st.markdown("""
-        ### 🏭 Woven Supply
-        **Manufacturing Side**
-        
-        - Raw Material Procurement
-        - Vendor Management
-        - Production Planning
-        - Quality Control
-        - Factory Operations
-        - Material Tracking
-        
-        *Streamlines the supply chain from sourcing to production*
-        """)
+        <div style="background-color: #EBF4FF; border-left: 5px solid #3182CE; padding: 15px; border-radius: 5px;">
+            <h3 style="color: #2C5282;">🏭 Woven Supply</h3>
+            <p style="font-weight: bold; color: #4A5568;">Manufacturing Excellence</p>
+            
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>✓ Smart Material Procurement</li>
+                <li>✓ Scotts Garments CMP Integration</li>
+                <li>✓ SS25 Production Planning</li>
+                <li>✓ Quality Assurance System</li>
+                <li>✓ Factory Operations Dashboard</li>
+                <li>✓ Real-time Material Tracking</li>
+            </ul>
+            
+            <p><em>Premium manufacturing visibility from fabric to finished product</em></p>
+        </div>
+        """, unsafe_allow_html=True)
     
-    with col2:
+    with eco_col2:
         st.markdown("""
-        ### 🏬 Commune Connect
-        **Retail Side**
-        
-        - Store Management
-        - Product Catalog
-        - Inventory Control
-        - Sales Tracking
-        - Customer Engagement
-        - E-commerce Integration
-        
-        *Connects retail operations with customer-facing channels*
-        """)
+        <div style="background-color: #F0FFF4; border-left: 5px solid #38A169; padding: 15px; border-radius: 5px;">
+            <h3 style="color: #276749;">🏬 Commune Connect</h3>
+            <p style="font-weight: bold; color: #4A5568;">Retail Excellence</p>
+            
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>✓ 20-Store Network Management</li>
+                <li>✓ Digital Product Catalog</li>
+                <li>✓ Real-time Inventory Control</li>
+                <li>✓ Daily Sales Tracking</li>
+                <li>✓ E-Wards Loyalty Program</li>
+                <li>✓ Integrated Consumer Analytics</li>
+            </ul>
+            
+            <p><em>Sophisticated retail management with consumer insights</em></p>
+        </div>
+        """, unsafe_allow_html=True)
     
-    with col3:
+    with eco_col3:
         st.markdown("""
-        ### ⚙️ Synergyze Hub
-        **Governance Layer**
-        
-        - License Management
-        - Role-Based Access
-        - Data Integration
-        - Analytics & Reporting
-        - Compliance Management
-        - Performance Monitoring
-        
-        *Centralized governance and controls for the entire ecosystem*
-        """)
+        <div style="background-color: #F3E8FF; border-left: 5px solid #805AD5; padding: 15px; border-radius: 5px;">
+            <h3 style="color: #553C9A;">⚙️ Synergyze Hub</h3>
+            <p style="font-weight: bold; color: #4A5568;">Strategic Governance</p>
+            
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>✓ Enterprise License Control</li>
+                <li>✓ Department-based Access</li>
+                <li>✓ Multi-channel Data Integration</li>
+                <li>✓ Executive Analytics Dashboard</li>
+                <li>✓ Empire OS Compliance</li>
+                <li>✓ Cross-Module KPI Monitoring</li>
+            </ul>
+            
+            <p><em>Centralized governance with powerful business intelligence</em></p>
+        </div>
+        """, unsafe_allow_html=True)
     
-    # Architectural diagram using Plotly
-    st.subheader("Architectural Relationship")
+    # Architectural diagram using Plotly - Enhanced with 3D effect and better design
+    st.subheader("Synergyze Architecture & Data Flow")
     
     # Create the architecture diagram
     fig = go.Figure()
     
-    # Add rectangle shapes for the boxes
+    # Enhanced box styling
+    # Add rectangle shapes for the boxes with gradient-like effect
     fig.add_shape(type="rect", x0=0.05, y0=0.6, x1=0.45, y1=0.9,
-                  line=dict(color="RoyalBlue", width=2),
-                  fillcolor="LightSkyBlue", opacity=0.7)
+                  line=dict(color="#2C5282", width=2),
+                  fillcolor="#2C5282", opacity=0.7)
     
     fig.add_shape(type="rect", x0=0.55, y0=0.6, x1=0.95, y1=0.9,
-                  line=dict(color="MediumSeaGreen", width=2),
-                  fillcolor="LightGreen", opacity=0.7)
+                  line=dict(color="#276749", width=2),
+                  fillcolor="#276749", opacity=0.7)
     
-    fig.add_shape(type="rect", x0=0.3, y0=0.1, x1=0.7, y1=0.4,
-                  line=dict(color="DarkOrchid", width=2),
-                  fillcolor="Plum", opacity=0.7)
+    fig.add_shape(type="rect", x0=0.25, y0=0.1, x1=0.75, y1=0.4,
+                  line=dict(color="#553C9A", width=2),
+                  fillcolor="#553C9A", opacity=0.7)
     
-    # Add arrows connecting the boxes
-    fig.add_annotation(x=0.25, y=0.55, ax=0.25, ay=0.45,
+    # Add data flow connectors (more complex arrows)
+    # Manufacturing to Hub
+    fig.add_annotation(x=0.25, y=0.55, ax=0.40, ay=0.45,
                        xref="paper", yref="paper", axref="paper", ayref="paper",
-                       showarrow=True, arrowhead=3, arrowsize=1.5, arrowwidth=2, arrowcolor="gray")
+                       showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
+                       arrowcolor="#2C5282")
     
-    fig.add_annotation(x=0.75, y=0.55, ax=0.75, ay=0.45,
+    # Hub to Manufacturing
+    fig.add_annotation(x=0.40, y=0.45, ax=0.25, ay=0.55,
                        xref="paper", yref="paper", axref="paper", ayref="paper",
-                       showarrow=True, arrowhead=3, arrowsize=1.5, arrowwidth=2, arrowcolor="gray")
+                       showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
+                       arrowcolor="#553C9A")
     
-    fig.add_annotation(x=0.5, y=0.65, ax=0.5, ay=0.35,
+    # Retail to Hub
+    fig.add_annotation(x=0.75, y=0.55, ax=0.60, ay=0.45,
                        xref="paper", yref="paper", axref="paper", ayref="paper",
-                       showarrow=True, arrowhead=3, arrowsize=1.5, arrowwidth=2, arrowcolor="gray")
+                       showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
+                       arrowcolor="#276749")
     
-    # Add text for the boxes
-    fig.add_annotation(x=0.25, y=0.75, text="Woven Supply<br>(Manufacturing)",
-                       font=dict(size=14, color="black", family="Arial"),
+    # Hub to Retail
+    fig.add_annotation(x=0.60, y=0.45, ax=0.75, ay=0.55,
+                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
+                       arrowcolor="#553C9A")
+    
+    # Manufacturing to Retail
+    fig.add_annotation(x=0.45, y=0.75, ax=0.55, ay=0.75,
+                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
+                       arrowcolor="#4A5568")
+    
+    # Retail to Manufacturing
+    fig.add_annotation(x=0.55, y=0.70, ax=0.45, ay=0.70,
+                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
+                       arrowcolor="#4A5568")
+    
+    # Add text for the boxes with enhanced styling
+    fig.add_annotation(x=0.25, y=0.75, text="Woven Supply<br><span style='font-size:0.8em;'>Manufacturing</span>",
+                       font=dict(size=14, color="white", family="Arial"),
                        showarrow=False, xref="paper", yref="paper")
     
-    fig.add_annotation(x=0.75, y=0.75, text="Commune Connect<br>(Retail)",
-                       font=dict(size=14, color="black", family="Arial"),
+    fig.add_annotation(x=0.75, y=0.75, text="Commune Connect<br><span style='font-size:0.8em;'>Retail</span>",
+                       font=dict(size=14, color="white", family="Arial"),
                        showarrow=False, xref="paper", yref="paper")
     
-    fig.add_annotation(x=0.5, y=0.25, text="Synergyze Hub<br>(Governance)",
-                       font=dict(size=14, color="black", family="Arial"),
+    fig.add_annotation(x=0.50, y=0.25, text="Synergyze Hub<br><span style='font-size:0.8em;'>Governance</span>",
+                       font=dict(size=14, color="white", family="Arial"),
                        showarrow=False, xref="paper", yref="paper")
     
-    # Update layout
+    # Data flow annotations
+    fig.add_annotation(x=0.33, y=0.53, text="Materials & Production",
+                       font=dict(size=10, color="#2C5282", family="Arial"),
+                       showarrow=False, xref="paper", yref="paper")
+                       
+    fig.add_annotation(x=0.33, y=0.47, text="License & Governance",
+                       font=dict(size=10, color="#553C9A", family="Arial"),
+                       showarrow=False, xref="paper", yref="paper")
+                       
+    fig.add_annotation(x=0.67, y=0.53, text="Sales & Inventory",
+                       font=dict(size=10, color="#276749", family="Arial"),
+                       showarrow=False, xref="paper", yref="paper")
+                       
+    fig.add_annotation(x=0.67, y=0.47, text="License & Governance",
+                       font=dict(size=10, color="#553C9A", family="Arial"),
+                       showarrow=False, xref="paper", yref="paper")
+                       
+    fig.add_annotation(x=0.50, y=0.77, text="Finished Goods",
+                       font=dict(size=10, color="#4A5568", family="Arial"),
+                       showarrow=False, xref="paper", yref="paper")
+                       
+    fig.add_annotation(x=0.50, y=0.68, text="Orders & Requirements",
+                       font=dict(size=10, color="#4A5568", family="Arial"),
+                       showarrow=False, xref="paper", yref="paper")
+    
+    # Update layout with better styling
     fig.update_layout(
         height=500,
         margin=dict(l=20, r=20, t=30, b=20),
-        plot_bgcolor="white",
+        plot_bgcolor="#F7FAFC",
+        paper_bgcolor="#F7FAFC",
         showlegend=False,
-        title="Synergyze System Architecture"
+        title=dict(
+            text="Voi Jeans Synergyze System Architecture",
+            font=dict(size=16, color="#2D3748")
+        )
     )
     
     fig.update_xaxes(showgrid=False, zeroline=False, visible=False)
     fig.update_yaxes(showgrid=False, zeroline=False, visible=False)
     
     st.plotly_chart(fig, use_container_width=True)
+    
+    # Add Voi Jeans assets overview
+    st.subheader("Voi Jeans Assets Performance")
+    
+    # Create three metrics columns showing key performance indicators
+    metric_cols = st.columns(4)
+    with metric_cols[0]:
+        st.metric(
+            label="SS25 Collection Performance", 
+            value="₹1.82 Cr", 
+            delta="+14.5%", 
+            help="Revenue generated by SS25 collection across all stores"
+        )
+    with metric_cols[1]:
+        st.metric(
+            label="Manufacturing Efficiency", 
+            value="96.2%", 
+            delta="+3.8%", 
+            help="Manufacturing efficiency score for Scotts Garments CMP production"
+        )
+    with metric_cols[2]:
+        st.metric(
+            label="E-Wards Engagement", 
+            value="62%", 
+            delta="+5%", 
+            help="Percentage of loyalty members actively engaging with the program"
+        )
+    with metric_cols[3]:
+        st.metric(
+            label="Supply Chain SLA", 
+            value="98.4%", 
+            delta="+2.1%", 
+            help="Service Level Agreement performance across the supply chain"
+        )
     
     # Department workflows
     st.subheader("Departmental Workflows")
@@ -264,16 +391,30 @@ def show_ecosystem_overview():
 def show_network_visualization():
     """Display the network visualization of the Synergyze ecosystem"""
     
-    st.subheader("Network Visualization")
+    st.subheader("Voi Jeans Ecosystem Network Visualization")
     
+    # Premium styled intro box
     st.markdown("""
-    This interactive network visualization displays the relationships between different departments, 
-    entities, and stakeholders in the Synergyze ecosystem.
-    
-    - **Woven Supply (Blue)**: Manufacturing side including suppliers, factories, and raw material providers
-    - **Commune Connect (Green)**: Retail side including stores, consumers, and distribution channels
-    - **Synergyze Hub (Purple)**: Governance layer connecting and orchestrating the entire ecosystem
-    """)
+    <div style="background: linear-gradient(to right, #2D3748, #4A5568); color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <h4 style="color: white; margin-top: 0;">Enterprise Network Visualization</h4>
+        <p style="margin-bottom: 5px;">This interactive visualization maps the Voi Jeans enterprise ecosystem, showing real-time connections between entities and data flow across the network.</p>
+        <div style="display: flex; margin-top: 10px;">
+            <div style="margin-right: 15px; display: flex; align-items: center;">
+                <div style="width: 12px; height: 12px; background-color: royalblue; border-radius: 50%; margin-right: 5px;"></div>
+                <span style="font-size: 0.9em;">Manufacturing</span>
+            </div>
+            <div style="margin-right: 15px; display: flex; align-items: center;">
+                <div style="width: 12px; height: 12px; background-color: mediumseagreen; border-radius: 50%; margin-right: 5px;"></div>
+                <span style="font-size: 0.9em;">Retail</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div style="width: 12px; height: 12px; background-color: darkorchid; border-radius: 50%; margin-right: 5px;"></div>
+                <span style="font-size: 0.9em;">Governance</span>
+            </div>
+        </div>
+    </div>
+    """
+    , unsafe_allow_html=True)
     
     # Create a graph using NetworkX
     G = nx.DiGraph()
@@ -455,12 +596,29 @@ def show_network_visualization():
 def show_license_management():
     """Display the license management interface for Synergyze"""
     
-    st.subheader("Synergyze License Management")
+    st.subheader("🔑 Voi Jeans Enterprise License Platform")
+    
+    # Premium license banner with styling
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #1A365D 0%, #2D3748 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4 style="color: white; margin-top: 0;">Premium Enterprise License</h4>
+                <p style="margin-bottom: 5px;">Tailored specifically for Voi Jeans Retail India Pvt Ltd</p>
+                <p style="margin-bottom: 0; font-size: 0.9em; color: #90CDF4;">License ID: VJ-SYN-2025-PREMIUM-001</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="color: #68D391; margin: 0; font-weight: bold;">ACTIVE</p>
+                <p style="font-size: 0.8em; margin: 0;">Valid until: March 30, 2026</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
-    ECG provides each company with a customized Synergyze license based on their specific needs. 
-    This license system determines what modules, features, and capabilities are available to each entity 
-    within the ecosystem.
+    Voi Jeans maintains an exclusive Premium Enterprise License that provides access to the full suite of Synergyze 
+    capabilities across manufacturing, retail, and governance. This license enables seamless integration of all business 
+    operations and provides advanced analytics and monitoring tools.
     """)
     
     # License roles table
@@ -550,34 +708,134 @@ def show_license_management():
     # License visualization
     st.subheader("Voi Jeans License Structure")
     
-    # Create a sunburst chart for license visualization
+    # Create a more detailed and impressive sunburst chart for license visualization
     labels = [
-        "Synergyze", 
+        "Synergyze Premium", 
         "Woven Supply", "Commune Connect", "Synergyze Hub",
         "Manufacturing", "Material", "Factory", "Logistics",
         "Retail", "E-commerce", "Distribution", "Marketing",
-        "Admin", "Finance", "Executive"
+        "Admin", "Finance", "Executive",
+        "SS25 Planning", "QC Tracking", "Factory Dashboard",
+        "Denim Sourcing", "Trim Management", "Shipment Tracking",
+        "Store Network", "E-Wards Loyalty", "Store Inventory", "Sales Analytics",
+        "Marketplace", "Online Catalog", "Campaign Manager",
+        "User Access", "System Config", "Compliance",
+        "Budgeting", "CMP Costing", "Financial Reporting",
+        "KPI Dashboard", "Supply Chain Vis", "Business Intelligence"
     ]
     
     parents = [
         "", 
-        "Synergyze", "Synergyze", "Synergyze",
+        "Synergyze Premium", "Synergyze Premium", "Synergyze Premium",
+        
         "Woven Supply", "Woven Supply", "Woven Supply", "Woven Supply",
         "Commune Connect", "Commune Connect", "Commune Connect", "Commune Connect",
-        "Synergyze Hub", "Synergyze Hub", "Synergyze Hub"
+        "Synergyze Hub", "Synergyze Hub", "Synergyze Hub",
+        
+        "Manufacturing", "Manufacturing", "Manufacturing",
+        "Material", "Material", "Logistics",
+        "Retail", "Retail", "Retail", "Retail", 
+        "E-commerce", "E-commerce", "Marketing",
+        "Admin", "Admin", "Admin",
+        "Finance", "Finance", "Finance",
+        "Executive", "Executive", "Executive"
     ]
     
-    values = [100, 30, 30, 40, 10, 5, 10, 5, 10, 5, 10, 5, 10, 15, 15]
+    values = [
+        100, 
+        30, 30, 40,
+        
+        10, 5, 10, 5,
+        10, 5, 10, 5,
+        10, 15, 15,
+        
+        4, 3, 3,
+        2, 2, 5,
+        3, 3, 2, 2,
+        2, 2, 5,
+        3, 3, 4,
+        5, 5, 5,
+        5, 5, 5
+    ]
+    
+    # Custom hover information with module descriptions
+    module_descriptions = {
+        "SS25 Planning": "Create and manage production plans for SS25 collection",
+        "QC Tracking": "Track quality control metrics and defect rates",
+        "Factory Dashboard": "Monitor factory operations and efficiency",
+        "Denim Sourcing": "Manage denim fabric vendors and procurement",
+        "Trim Management": "Inventory and sourcing for buttons, zippers and other trims",
+        "Shipment Tracking": "Real-time tracking of shipments and logistics",
+        "Store Network": "Manage 20+ Voi Jeans retail locations",
+        "E-Wards Loyalty": "Manage customer loyalty program with 24,850+ members",
+        "Store Inventory": "Track and manage in-store inventory levels",
+        "Sales Analytics": "Analyze sales performance across locations",
+        "Marketplace": "Manage marketplace integrations and sales channels",
+        "Online Catalog": "Digital product catalog management",
+        "Campaign Manager": "Plan and execute marketing campaigns",
+        "User Access": "Control user permissions and access levels",
+        "System Config": "Configure system settings and preferences",
+        "Compliance": "Monitor regulatory and policy compliance",
+        "Budgeting": "Budget planning and allocation tools",
+        "CMP Costing": "Calculate and analyze CMP manufacturing costs",
+        "Financial Reporting": "Generate financial reports and statements",
+        "KPI Dashboard": "Executive key performance indicator dashboard",
+        "Supply Chain Vis": "End-to-end supply chain visualization",
+        "Business Intelligence": "Advanced analytics and reporting tools"
+    }
+    
+    hover_data = []
+    for label in labels:
+        if label in module_descriptions:
+            hover_data.append(f"{label}: {module_descriptions[label]}")
+        else:
+            hover_data.append(label)
+    
+    # Create a custom color scheme
+    custom_colors = [
+        "#1A365D",  # Root
+        
+        "#2C5282", "#276749", "#553C9A",  # Main categories
+        
+        "#3182CE", "#63B3ED", "#4299E1", "#2B6CB0",  # Manufacturing modules
+        "#38A169", "#68D391", "#48BB78", "#2F855A",  # Retail modules
+        "#805AD5", "#9F7AEA", "#6B46C1",  # Governance modules
+        
+        # Detailed modules
+        "#4299E1", "#3182CE", "#2B6CB0",  # Manufacturing sub-modules
+        "#90CDF4", "#63B3ED", "#2C5282",  # Material sub-modules
+        "#48BB78", "#38A169", "#2F855A", "#276749",  # Retail sub-modules
+        "#68D391", "#9AE6B4", "#C6F6D5",  # E-commerce sub-modules
+        "#805AD5", "#9F7AEA", "#6B46C1",  # Admin sub-modules
+        "#B794F4", "#D6BCFA", "#E9D8FD",  # Finance sub-modules
+        "#553C9A", "#6B46C1", "#805AD5"   # Executive sub-modules
+    ]
     
     fig = px.sunburst(
         names=labels,
         parents=parents,
         values=values,
-        title="Voi Jeans License Structure - Module Distribution",
-        color_discrete_sequence=px.colors.qualitative.Plotly
+        color=labels,
+        color_discrete_sequence=custom_colors,
+        title="Voi Jeans Premium License - Module Structure",
+        hover_data=[hover_data]
     )
     
-    fig.update_layout(margin=dict(t=60, l=0, r=0, b=0), height=600)
+    fig.update_layout(
+        margin=dict(t=60, l=0, r=0, b=0), 
+        height=700,
+        title=dict(
+            text="Voi Jeans Premium License - Module Structure",
+            font=dict(size=18, color="#2D3748")
+        ),
+        template="plotly_dark"
+    )
+    
+    # Add custom styling
+    fig.update_traces(
+        hovertemplate='<b>%{label}</b><br>Allocation: %{value}%<br>%{customdata[0]}<extra></extra>',
+        textfont=dict(size=14, family="Arial, sans-serif")
+    )
     
     st.plotly_chart(fig, use_container_width=True)
     
@@ -619,11 +877,56 @@ def show_license_management():
 def show_empire_os_governance():
     """Display the Empire OS governance interface"""
     
-    st.subheader("⚙️ Empire OS Governance")
+    st.subheader("⚙️ Empire OS Governance & Compliance")
     
+    # Premium styled governance banner
     st.markdown("""
-    Empire OS provides the governance and compliance layer for the entire Synergyze ecosystem.
-    As a license holder with signed data sharing agreements, you have access to this protected section.
+    <div style="background: linear-gradient(90deg, #44337A 0%, #553C9A 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4 style="color: white; margin-top: 0;">Divine Constitution Governance</h4>
+                <p style="margin-bottom: 0;">Empire OS provides white-labeled governance following Divine Constitution principles</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="color: #D6BCFA; margin: 0; font-weight: bold;">SUPREME LICENSE ACTIVE</p>
+                <p style="font-size: 0.8em; margin: 0;">Governed by ECG Protocols</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Show constitutional principles
+    principles_col1, principles_col2 = st.columns(2)
+    
+    with principles_col1:
+        st.markdown("""
+        <div style="background-color: #F3E8FF; padding: 15px; border-radius: 5px; height: 100%;">
+            <h4 style="color: #553C9A; margin-top: 0;">Divine Constitution Principles</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>✓ Stewardship Over Ownership</li>
+                <li>✓ Truth and Transparency</li>
+                <li>✓ Divine Fairness in Trade</li>
+                <li>✓ No Wastage/Excess</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with principles_col2:
+        st.markdown("""
+        <div style="background-color: #F3E8FF; padding: 15px; border-radius: 5px; height: 100%;">
+            <h4 style="color: #553C9A; margin-top: 0;">Governance Principles</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>✓ Justice by Design</li>
+                <li>✓ Quiet Governance</li>
+                <li>✓ Right to Build/Withdraw</li>
+                <li>✓ No False Representation</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    st.markdown("""
+    As a premium license holder with signed data sharing agreements, Voi Jeans has exclusive access to Empire OS Governance features, 
+    enabling complete visibility and control over data flows, license management, and compliance monitoring.
     """)
     
     # Create tabs for different governance features

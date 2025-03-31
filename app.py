@@ -38,7 +38,7 @@ st.set_page_config(
 
 # Initialize session state for app flow
 if 'page' not in st.session_state:
-    st.session_state.page = 'manufacturing_dashboard'  # Start with manufacturing dashboard page
+    st.session_state.page = 'synergy_visualization'  # Start with synergy visualization to show improvements
 
 # Initialize database with sample data if needed
 if 'db_initialized' not in st.session_state:
