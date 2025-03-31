@@ -42,7 +42,7 @@ st.set_page_config(
 
 # Initialize session state for app flow
 if 'page' not in st.session_state:
-    st.session_state.page = 'hsn_tax_mapping'  # Show HSN tax mapping feature for demonstration
+    st.session_state.page = 'synergy_visualization'  # Start with a visual overview of the platform
 
 # Initialize database with sample data if needed
 if 'db_initialized' not in st.session_state:
