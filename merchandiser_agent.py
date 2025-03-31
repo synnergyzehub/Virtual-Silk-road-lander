@@ -135,6 +135,24 @@ def show_merchandiser_agent():
 def show_agent_dashboard():
     """Display the merchandiser dashboard with key information"""
     
+    # Ensure merchandiser is properly initialized and is a dict
+    if 'merchandiser' not in st.session_state or not isinstance(st.session_state.merchandiser, dict):
+        # Initialize with default data if missing or not a dict
+        st.session_state.merchandiser = {
+            "id": "MER001",
+            "name": "Alex Chen",
+            "avatar": "https://cdn.jsdelivr.net/gh/feathericons/feather@master/icons/user.svg",
+            "specialization": "Denim Specialist",
+            "experience": "7 years",
+            "languages": ["English", "Mandarin", "Spanish"],
+            "expertise": ["Sustainable Sourcing", "Quality Control", "Technical Design"],
+            "email": "alex.chen@buyinghouse.com",
+            "phone": "+1 (555) 123-4567",
+            "time_zone": "GMT+8",
+            "availability": "Mon-Fri, 9am-5pm GMT+8",
+            "last_active": "Just now"
+        }
+    
     merchandiser = st.session_state.merchandiser
     
     # Profile section with merchandiser details
