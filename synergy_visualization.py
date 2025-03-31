@@ -168,37 +168,37 @@ def show_ecosystem_overview():
     # Add data flow connectors (more complex arrows)
     # Manufacturing to Hub
     fig.add_annotation(x=0.25, y=0.55, ax=0.40, ay=0.45,
-                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       xref="paper", yref="paper",
                        showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
                        arrowcolor="#2C5282")
     
     # Hub to Manufacturing
     fig.add_annotation(x=0.40, y=0.45, ax=0.25, ay=0.55,
-                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       xref="paper", yref="paper",
                        showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
                        arrowcolor="#553C9A")
     
     # Retail to Hub
     fig.add_annotation(x=0.75, y=0.55, ax=0.60, ay=0.45,
-                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       xref="paper", yref="paper",
                        showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
                        arrowcolor="#276749")
     
     # Hub to Retail
     fig.add_annotation(x=0.60, y=0.45, ax=0.75, ay=0.55,
-                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       xref="paper", yref="paper",
                        showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
                        arrowcolor="#553C9A")
     
     # Manufacturing to Retail
     fig.add_annotation(x=0.45, y=0.75, ax=0.55, ay=0.75,
-                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       xref="paper", yref="paper",
                        showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
                        arrowcolor="#4A5568")
     
     # Retail to Manufacturing
     fig.add_annotation(x=0.55, y=0.70, ax=0.45, ay=0.70,
-                       xref="paper", yref="paper", axref="paper", ayref="paper",
+                       xref="paper", yref="paper",
                        showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=2, 
                        arrowcolor="#4A5568")
     
