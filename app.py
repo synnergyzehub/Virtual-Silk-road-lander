@@ -19,6 +19,7 @@ from order_confirmation import show_order_confirmation
 from merchandiser_agent import show_merchandiser_agent
 from retailer_analysis import show_retailer_analysis
 from location_inventory_tracker import show_location_inventory_tracker
+from inventory_story_generator import show_inventory_story_generator
 
 # Import manufacturing portal modules
 from manufacturing_dashboard import show_manufacturing_dashboard
@@ -358,6 +359,9 @@ with st.sidebar:
             
         if st.button("📍 Location Inventory Tracker", use_container_width=True, key="location_inventory", help="Track inventory across all locations (factories, warehouses, stores)", type="primary"):
             st.session_state.page = 'location_inventory'
+            
+        if st.button("📖 Inventory Movement Story", use_container_width=True, key="inventory_story", help="Generate narrative insights from inventory movement patterns", type="primary"):
+            st.session_state.page = 'inventory_story'
         
         if st.button("🌐 Market Trend Analysis", use_container_width=True, key="license_suspension"):
             st.session_state.page = 'material_tracker'
@@ -453,6 +457,8 @@ elif st.session_state.page == 'stock_analysis':
     show_stock_analysis()
 elif st.session_state.page == 'location_inventory':
     show_location_inventory_tracker()
+elif st.session_state.page == 'inventory_story':
+    show_inventory_story_generator()
 
 # Footer
 st.markdown("---")
