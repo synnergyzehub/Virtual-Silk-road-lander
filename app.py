@@ -28,6 +28,10 @@ from voi_jeans_demo import show_voi_jeans_demo
 from notification_service import show_notification_settings, check_twilio_credentials
 from retail_distribution import show_retail_distribution
 
+# Import new modules for HSN code tax mapping and trade show order engine
+from hsn_tax_mapping import show_hsn_tax_mapping
+from trade_show_order_engine import show_trade_show_order_engine
+
 # Configure the page
 st.set_page_config(
     page_title="ECG Manufacturing Portal",
@@ -188,6 +192,20 @@ with st.sidebar:
         if st.button("📉 Raw Material Demand Prediction", use_container_width=True, key="raw_material_prediction"):
             st.session_state.page = 'material_tracker'
         
+        if st.button("💲 HSN Code Tax Mapping", use_container_width=True, key="hsn_tax_mapping", help="Map and analyze transaction types based on HSN codes for taxation"):
+            st.session_state.page = 'hsn_tax_mapping'
+            
+        # Trade Show Order Engine section
+        st.markdown("#### Trade Show & Procurement")
+        if st.button("🏙️ Trade Show Order Engine", use_container_width=True, key="trade_show_order", help="Manage orders, samples, and procurement for trade shows"):
+            st.session_state.page = 'trade_show_order_engine'
+            
+        if st.button("📊 Sample Management", use_container_width=True, key="sample_management", help="Track and manage product samples for trade shows and buyers"):
+            st.session_state.page = 'trade_show_order_engine'
+            
+        if st.button("📆 Trade Show Calendar", use_container_width=True, key="trade_show_calendar", help="View upcoming trade shows and manage participation"):
+            st.session_state.page = 'trade_show_order_engine'
+        
         # Database initialization (hidden in an expander to not clutter the UI)
         with st.expander("⚙️ Database Management"):
             if st.button("Database Setup", use_container_width=True, key="db_init"):
@@ -227,6 +245,11 @@ with st.sidebar:
         st.markdown("#### Product Catalog")
         if st.button("👖 Product Collection", use_container_width=True, key="product_collection"):
             st.session_state.page = 'product_catalog'
+            
+        # Trade Show Access
+        st.markdown("#### Trade Show Management")
+        if st.button("🏙️ Trade Show Orders", use_container_width=True, key="retail_trade_show", help="Manage trade show orders and samples"):
+            st.session_state.page = 'trade_show_order_engine'
         
         # Add a hint about the retail analytics
         st.info("The Retail Distribution Dashboard provides a comprehensive view of store performance, consumer behavior, and loyalty program metrics.")
@@ -312,6 +335,9 @@ with st.sidebar:
         if st.button("🌐 Market Trend Analysis", use_container_width=True, key="license_suspension"):
             st.session_state.page = 'material_tracker'
             
+        if st.button("💲 HSN Code Tax Analysis", use_container_width=True, key="hsn_tax_analysis", help="Map and analyze transaction types based on HSN codes for tax reporting"):
+            st.session_state.page = 'hsn_tax_mapping'
+            
         # Synergyze Visualization section
         st.markdown("#### Synergyze Ecosystem")
         if st.button("🔄 Synergyze Ecosystem Visualization", use_container_width=True, key="synergy_viz"):
@@ -388,6 +414,10 @@ elif st.session_state.page == 'notification_settings':
     show_notification_settings()
 elif st.session_state.page == 'retail_distribution':
     show_retail_distribution()
+elif st.session_state.page == 'hsn_tax_mapping':
+    show_hsn_tax_mapping()
+elif st.session_state.page == 'trade_show_order_engine':
+    show_trade_show_order_engine()
 
 # Footer
 st.markdown("---")
