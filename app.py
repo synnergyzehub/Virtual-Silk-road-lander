@@ -291,8 +291,11 @@ with st.sidebar:
         # Voi Jeans Management Hub
         st.markdown("### Voi Jeans Management Hub")
         
-        # Finance & Governance section
-        st.markdown("#### Finance & Governance")
+        # CFO Organization Section
+        st.markdown("#### CFO Organization 💼")
+        
+        # Finance & Governance subsection
+        st.markdown("##### Finance & Governance")
         if st.button("💰 CMP Cost Management", use_container_width=True, key="license_application"):
             st.session_state.page = 'manufacturing_dashboard'
         
@@ -307,6 +310,20 @@ with st.sidebar:
         
         if st.button("🔄 Monthly Reconciliation", use_container_width=True, key="license_renewal"):
             st.session_state.page = 'production_timeline'
+            
+        # Financial Reporting subsection
+        st.markdown("##### Financial Reporting")
+        if st.button("📈 Revenue Analysis", use_container_width=True, key="revenue_analysis"):
+            st.session_state.page = 'reports'
+            
+        if st.button("💲 Cost Structure", use_container_width=True, key="cost_structure"):
+            st.session_state.page = 'reports'
+            
+        if st.button("📊 P&L Statements", use_container_width=True, key="pl_statements"):
+            st.session_state.page = 'reports'
+            
+        if st.button("🧾 Balance Sheet", use_container_width=True, key="balance_sheet"):
+            st.session_state.page = 'reports'
         
         # Administration section
         st.markdown("#### Administration")
@@ -338,13 +355,44 @@ with st.sidebar:
         if st.button("🪪 Investment Milestone Passport", use_container_width=True, key="milestone_passport", help="Collect digital badges for financial milestones and achievements"):
             st.session_state.page = 'investment_milestone_passport'
         
-        # Data Integration Hub section
-        st.markdown("#### Data Integration Hub")
+        # CIO Organization Section
+        st.markdown("#### CIO Organization 🖥️")
+        
+        # Data Integration Hub subsection 
+        st.markdown("##### Data Integration Hub")
         if st.button("📊 Empire OS Data Integration", use_container_width=True, key="data_integration_hub", help="Centralized data upload, processing and visualization from various sources"):
             st.session_state.page = 'data_integration'
+            
+        if st.button("🔄 Data Synchronization", use_container_width=True, key="data_synchronization", help="Synchronize data across platforms and systems"):
+            st.session_state.page = 'data_integration'
+            
+        if st.button("🔍 Data Quality Management", use_container_width=True, key="data_quality", help="Monitor and improve data quality across sources"):
+            st.session_state.page = 'data_integration'
+            
+        # Data Security & Compliance subsection
+        st.markdown("##### Data Security & Compliance")
+        if st.button("🔒 Data Security Controls", use_container_width=True, key="data_security", help="Manage data security controls and policies"):
+            st.session_state.page = 'data_integration'
+            
+        if st.button("📝 Compliance Reporting", use_container_width=True, key="compliance_reporting", help="Generate compliance reports for regulatory requirements"):
+            st.session_state.page = 'reports'
+            
+        if st.button("🔐 Access Management", use_container_width=True, key="data_access_mgmt", help="Control access to sensitive data across the organization"):
+            st.session_state.page = 'reports'
+            
+        # Infrastructure & Systems subsection
+        st.markdown("##### Infrastructure & Systems")
+        if st.button("🖥️ System Monitoring", use_container_width=True, key="system_monitoring", help="Monitor system performance and availability"):
+            st.session_state.page = 'data_integration'
+            
+        if st.button("☁️ Cloud Infrastructure", use_container_width=True, key="cloud_infrastructure", help="Manage cloud resources and services"):
+            st.session_state.page = 'data_integration'
+            
+        if st.button("🔌 Integration Services", use_container_width=True, key="integration_services", help="Manage API connections and data exchange services"):
+            st.session_state.page = 'data_integration'
         
-        # Business Intelligence section
-        st.markdown("#### Business Intelligence")
+        # Business Intelligence subsection
+        st.markdown("##### Business Intelligence")
         if st.button("📈 Executive Dashboard", use_container_width=True, key="executive_dashboard"):
             st.session_state.page = 'manufacturing_dashboard'
         
