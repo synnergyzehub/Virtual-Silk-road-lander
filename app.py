@@ -34,6 +34,7 @@ from init_db import show_db_initialization, initialize_database
 from supply_chain_visualization import show_supply_chain_visualization
 from synergy_visualization import show_synergy_visualization
 from voi_jeans_demo import show_voi_jeans_demo
+from executive_org_charts import show_executive_org_charts
 
 # Import notification service
 from notification_service import show_notification_settings, check_twilio_credentials
@@ -291,6 +292,21 @@ with st.sidebar:
         # Voi Jeans Management Hub
         st.markdown("### Voi Jeans Management Hub")
         
+        # Executive Organization Charts - NEW!
+        st.markdown(
+            """
+            <div style='background-color: #990099; padding: 5px; border-radius: 5px; margin-bottom: 10px;'>
+                <p style='color: white; font-weight: bold; margin: 0;'>✨ NEW! Executive License Governance</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        if st.button("👑 Executive Organization Charts", use_container_width=True, type="primary", key="executive_org_charts", 
+                   help="View CFO and CIO organizations with direct advisory channel to CEO"):
+            st.session_state.page = 'executive_org_charts'
+            
+        st.markdown("---")
+            
         # CFO Organization Section
         st.markdown("#### CFO Organization 💼")
         
@@ -507,6 +523,8 @@ elif st.session_state.page == 'location_inventory':
     show_location_inventory_tracker()
 elif st.session_state.page == 'inventory_story':
     show_inventory_story_generator()
+elif st.session_state.page == 'executive_org_charts':
+    show_executive_org_charts()
 
 # Footer
 st.markdown("---")

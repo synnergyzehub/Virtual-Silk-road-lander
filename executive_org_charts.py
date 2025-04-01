@@ -512,3 +512,318 @@ def show_executive_joint_oversight():
        - Regular joint reviews of license utilization, costs, and performance
        - Coordinated decision-making for upgrades and changes
     """)
+    
+def show_ceo_direct_advisory(enable_secret_view):
+    """Show the direct advisory channel from CFO/CIO to CEO with secret license perspectives"""
+    
+    if not enable_secret_view:
+        st.subheader("Executive Dashboard")
+        st.info("Enable the 'Executive Advisory Channel' toggle at the top of the page to view the private CEO advisory channel.")
+        
+        # Show standard executive dashboard
+        st.markdown("""
+        ### Standard Executive Dashboard
+        
+        This dashboard provides an overview of key metrics and performance indicators 
+        tracked through the standard ECG framework. It shows the consolidated view of
+        license management across all business units.
+        """)
+        
+        # Create sample metrics for demonstration
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("License Utilization", "78%", "+2%")
+        with col2:
+            st.metric("Cost per User", "₹1,240", "-₹120")
+        with col3:
+            st.metric("Active Modules", "14/20", "+2")
+        with col4:
+            st.metric("Compliance Score", "94%", "+5%")
+            
+        # Create sample charts
+        st.subheader("License Utilization by Department")
+        
+        # Sample data for department license utilization
+        dept_util = pd.DataFrame({
+            'Department': ['Design', 'Manufacturing', 'Retail', 'Finance', 'Marketing', 'IT'],
+            'Utilization': [85, 92, 76, 65, 72, 88],
+            'Allocation': [90, 95, 85, 70, 80, 90]
+        })
+        
+        fig = px.bar(dept_util, x='Department', y=['Utilization', 'Allocation'],
+                     title="License Utilization vs Allocation by Department",
+                     barmode='group', height=400)
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        return
+    
+    # Show the secret advisory panel when enabled
+    st.subheader("🔒 CEO Direct Advisory Channel")
+    st.markdown("""
+    <div style='background-color: rgba(255,200,0,0.1); padding: 15px; border-radius: 5px; border-left: 5px solid gold;'>
+    <h3 style='color: #B8860B;'>Private Executive Advisory Channel</h3>
+    <p>This secure channel provides direct, unfiltered advice from the CFO and CIO directly to the CEO, 
+    bypassing normal organizational visibility. It allows executives to share sensitive insights 
+    that might be politically difficult to communicate through normal channels.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Secret license advice tabs
+    cfo_tab, cio_tab, joint_tab = st.tabs(["CFO Secret License", "CIO Secret License", "Joint Advisory"])
+    
+    with cfo_tab:
+        st.subheader("CFO to CEO: Financial Risk Assessment")
+        
+        st.markdown("""
+        ### 🔒 Confidential Financial Perspective
+
+        **Current License Structure Financial Analysis:**
+        
+        Dear CEO,
+        
+        Here's my unfiltered financial assessment of our current license structure that I can share directly with you:
+        
+        * **Cost Optimization Opportunity**: We're currently over-licensed by approximately 22% in the retail division. 
+          This represents a ₹1.8M annual cost that could be reallocated.
+          
+        * **Hidden Cost Exposure**: The Manufacturing module licenses don't account for seasonal scaling.
+          We're paying for peak capacity year-round, creating a 15% premium we could eliminate.
+          
+        * **License ROI Concerns**: The advanced analytics modules show only 40% utilization despite full 
+          deployment costs. Consider phased rollout for future modules instead.
+          
+        * **Competitive Advantage**: Our competitors are using a tiered license model that creates lower per-user 
+          costs. We should renegotiate our enterprise agreement with similar terms.
+          
+        I'm available to discuss these insights privately at your convenience.
+        
+        — CFO
+        """)
+        
+        # ROI Analysis visualization
+        st.subheader("🔒 Module ROI Analysis (Confidential)")
+        
+        # Sample data for module ROI visualization
+        module_roi = pd.DataFrame({
+            'Module': ['Basic ERP', 'Advanced Analytics', 'Mobile Access', 'Inventory Tracking', 
+                      'Supply Chain', 'Customer Portal', 'Integration Layer'],
+            'Implementation Cost': [600, 420, 180, 250, 380, 210, 320],
+            'Annual Value': [950, 175, 240, 380, 410, 130, 290],
+            'Type': ['Essential', 'Premium', 'Add-on', 'Essential', 'Premium', 'Add-on', 'Essential']
+        })
+        
+        module_roi['ROI'] = (module_roi['Annual Value'] - module_roi['Implementation Cost']) / module_roi['Implementation Cost'] * 100
+        
+        fig = px.scatter(module_roi, x='Implementation Cost', y='Annual Value', size='Implementation Cost',
+                        color='Type', hover_name='Module', size_max=50,
+                        labels={'Implementation Cost': 'Implementation Cost (₹000s)', 
+                                'Annual Value': 'Annual Value Generated (₹000s)'},
+                        title="License Module ROI Analysis - Confidential CFO Assessment")
+        
+        # Add ROI reference line (45-degree line where ROI = 0%)
+        max_val = max(module_roi['Implementation Cost'].max(), module_roi['Annual Value'].max())
+        fig.add_shape(type="line", line=dict(dash="dash", width=1, color="gray"),
+                     x0=0, y0=0, x1=max_val, y1=max_val)
+        
+        fig.update_layout(annotations=[
+            dict(x=420, y=175, text="Potential Cut", showarrow=True, arrowhead=1, ax=40, ay=-40),
+            dict(x=600, y=950, text="Strong Performer", showarrow=True, arrowhead=1, ax=0, ay=-40)
+        ])
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with cio_tab:
+        st.subheader("CIO to CEO: Technical Risk Assessment")
+        
+        st.markdown("""
+        ### 🔒 Confidential Technical Perspective
+
+        **Current License Structure Technical Analysis:**
+        
+        Dear CEO,
+        
+        I wanted to share these direct technical insights about our current license implementation:
+        
+        * **Security Vulnerability**: Our current license deployment has an undocumented API access point 
+          that could potentially expose customer data. I need your approval to restrict this immediately.
+          
+        * **Technical Debt Accumulation**: The current vendor release cycle is forcing us to maintain 
+          legacy interfaces that are increasing our maintenance overhead by 30%.
+          
+        * **Scaling Limitation**: Our license tier restricts database connections, which will become a 
+          bottleneck when we expand to the North region next quarter.
+          
+        * **Integration Risk**: The lack of data federation capabilities in our current license tier may 
+          cause data integrity issues when we connect to the new supply chain platform.
+          
+        I can provide more details in our next one-on-one meeting.
+        
+        — CIO
+        """)
+        
+        # Security Risk visualization
+        st.subheader("🔒 Technical Risk Assessment (Confidential)")
+        
+        # Sample data for risk assessment
+        risk_data = pd.DataFrame({
+            'Risk Area': ['Data Security', 'Scalability', 'Integration', 'Performance', 'Vendor Lock-in', 'Compliance'],
+            'Impact': [8, 7, 6, 5, 7, 9],
+            'Probability': [6, 8, 7, 4, 9, 5],
+            'Mitigation Cost': [120, 80, 60, 40, 150, 90],
+            'Category': ['Security', 'Infrastructure', 'Data', 'Infrastructure', 'License', 'Security']
+        })
+        
+        risk_data['Risk Score'] = risk_data['Impact'] * risk_data['Probability'] / 10
+        
+        fig = px.scatter(risk_data, x='Probability', y='Impact', size='Mitigation Cost',
+                        color='Category', hover_name='Risk Area', size_max=50,
+                        labels={'Probability': 'Probability (1-10)', 'Impact': 'Impact (1-10)'},
+                        title="License Technical Risk Assessment - Confidential CIO Analysis")
+        
+        # Add risk zones
+        fig.add_shape(type="rect", x0=0, y0=0, x1=3.3, y1=3.3,
+                    line=dict(color="Green"), fillcolor="rgba(0,255,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=3.3, y0=0, x1=6.6, y1=3.3,
+                    line=dict(color="Yellow"), fillcolor="rgba(255,255,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=6.6, y0=0, x1=10, y1=3.3,
+                    line=dict(color="Orange"), fillcolor="rgba(255,165,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=0, y0=3.3, x1=3.3, y1=6.6,
+                    line=dict(color="Yellow"), fillcolor="rgba(255,255,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=3.3, y0=3.3, x1=6.6, y1=6.6,
+                    line=dict(color="Orange"), fillcolor="rgba(255,165,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=6.6, y0=3.3, x1=10, y1=6.6,
+                    line=dict(color="Red"), fillcolor="rgba(255,0,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=0, y0=6.6, x1=3.3, y1=10,
+                    line=dict(color="Orange"), fillcolor="rgba(255,165,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=3.3, y0=6.6, x1=6.6, y1=10,
+                    line=dict(color="Red"), fillcolor="rgba(255,0,0,0.1)", opacity=0.3)
+        fig.add_shape(type="rect", x0=6.6, y0=6.6, x1=10, y1=10,
+                    line=dict(color="DarkRed"), fillcolor="rgba(139,0,0,0.1)", opacity=0.3)
+        
+        # Add annotations for high-risk items
+        fig.update_layout(annotations=[
+            dict(x=6, y=8, text="Data Security Risk", showarrow=True, arrowhead=1, ax=40, ay=-40),
+            dict(x=9, y=7, text="Vendor Lock-in Risk", showarrow=True, arrowhead=1, ax=-40, ay=20)
+        ])
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with joint_tab:
+        st.subheader("Joint CFO-CIO Executive Advisory")
+        
+        st.markdown("""
+        ### 🔒 Confidential Joint Advisory
+
+        **Strategic License Recommendations:**
+        
+        Dear CEO,
+        
+        After consulting privately, we've identified these key license strategy recommendations 
+        that require your direct attention:
+        
+        1. **License Restructuring Opportunity** *(CFO & CIO)*:  
+           We've identified a way to consolidate our license structure that will save approximately ₹3.2M 
+           annually while expanding technical capabilities. This would require renegotiating our current 
+           enterprise agreement in the next 60 days.
+
+        2. **Competitive Intelligence Alert** *(CFO)*:  
+           Our competitors are moving to consumption-based license models that could give them a 15-20% 
+           cost advantage. We should consider this model for our next renewal.
+
+        3. **Technical Architecture Risk** *(CIO)*:  
+           Our current license structure enforces an architecture that won't support our three-year growth 
+           plan. We need to either upgrade our license tier or explore alternative vendors.
+
+        4. **Internal Political Challenge** *(CFO & CIO)*:  
+           The proposed license optimization will face resistance from the retail division as it would 
+           reduce their apparent budget allocation. We need your direct support to implement this change.
+        
+        We're available to discuss these issues in a closed session at your convenience.
+        
+        — CFO & CIO
+        """)
+        
+        # Decision matrix visualization
+        st.subheader("🔒 Executive Decision Matrix (Confidential)")
+        
+        # Create sample decision matrix data
+        decision_data = pd.DataFrame({
+            'Option': ['Status Quo', 'Tier Upgrade', 'Vendor Switch', 'Hybrid Model', 'Consumption Model'],
+            'Financial Impact': [0, -800, -200, 700, 1200],
+            'Technical Value': [3, 8, 7, 6, 9],
+            'Implementation Risk': [1, 5, 9, 6, 7],
+            'Time to Value': [0, 6, 12, 3, 4]
+        })
+        
+        # Normalize Technical Value to same scale as Financial Impact for visualization
+        max_abs_financial = max(abs(decision_data['Financial Impact'].min()), abs(decision_data['Financial Impact'].max()))
+        decision_data['Technical Value Scaled'] = decision_data['Technical Value'] * max_abs_financial / 10
+        
+        # Create figure with secondary y-axis
+        fig = go.Figure()
+        
+        # Add bars for financial impact
+        fig.add_trace(go.Bar(
+            x=decision_data['Option'],
+            y=decision_data['Financial Impact'],
+            name='Financial Impact (₹000s)',
+            marker_color='blue',
+            opacity=0.7
+        ))
+        
+        # Add bars for technical value
+        fig.add_trace(go.Bar(
+            x=decision_data['Option'],
+            y=decision_data['Technical Value Scaled'],
+            name='Technical Value (Scaled)',
+            marker_color='green',
+            opacity=0.7
+        ))
+        
+        # Create bubble chart overlay for risk and time
+        fig.add_trace(go.Scatter(
+            x=decision_data['Option'],
+            y=[max_abs_financial * 0.7] * len(decision_data),  # Position bubbles above bars
+            mode='markers',
+            marker=dict(
+                size=decision_data['Implementation Risk'] * 5,
+                color=decision_data['Time to Value'],
+                colorscale='Viridis',
+                colorbar=dict(title='Months to Value'),
+                showscale=True,
+                opacity=0.7,
+                line=dict(width=1, color='black')
+            ),
+            name='Risk & Time',
+            text=['Risk: ' + str(r) + ', Time: ' + str(t) + ' months' 
+                  for r, t in zip(decision_data['Implementation Risk'], decision_data['Time to Value'])],
+            hoverinfo='text'
+        ))
+        
+        # Update layout
+        fig.update_layout(
+            title='License Strategy Decision Matrix - Confidential Joint Analysis',
+            xaxis=dict(title='Strategic Options'),
+            yaxis=dict(title='Financial Impact (₹000s)'),
+            barmode='group',
+            legend=dict(x=0.01, y=0.99),
+            annotations=[
+                dict(x='Consumption Model', y=1500, text='Recommended', showarrow=True, 
+                     arrowhead=1, ax=0, ay=-40, font=dict(size=14, color='red'))
+            ]
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Add call to action
+        st.markdown("""
+        ### 🔒 Recommended Next Steps
+        
+        1. **Schedule a closed executive session** to discuss these confidential recommendations
+        2. **Authorize preliminary license assessment** by trusted external consultant
+        3. **Establish official mandate** from CEO office for license optimization initiative
+        4. **Create communication plan** for managing internal political considerations
+        """)
+
+        st.info("This confidential advisory channel provides insights that may not be appropriate for broader organizational visibility. The recommendations here represent the unfiltered perspectives of your executive leadership team.")
