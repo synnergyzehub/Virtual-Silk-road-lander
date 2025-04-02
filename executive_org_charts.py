@@ -12,21 +12,47 @@ def show_executive_org_charts():
     """
     Display interactive organization charts for executives (CFO, CIO) with ECG perspective
     """
-    st.title("Executive Organization Charts")
-    st.subheader("Enterprise Capability Governance (ECG) Lens")
+    # Emperor's governance header
+    st.markdown(
+        """
+        <div style='background-color: #1E3A8A; padding: 15px; border-radius: 5px; text-align: center; margin-bottom: 15px;'>
+            <h1 style='color: white; margin: 0;'>🏛️ Emperor's Governance Council</h1>
+            <p style='color: white; margin: 0;'>Enterprise Capability Governance (ECG) Framework</p>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+    
+    # Empire-OS integration explanation
+    cols = st.columns([1, 3, 1])
+    with cols[1]:
+        st.markdown(
+            """
+            <div style='background-color: rgba(153, 0, 153, 0.1); padding: 15px; border-radius: 5px; border-left: 5px solid #990099;'>
+                <h3 style='color: #990099; margin-top: 0;'>Empire OS Integration</h3>
+                <p>This dashboard connects to <b>Empire OS</b> (<a href="https://empire-os.replit.app/auth" target="_blank">https://empire-os.replit.app/auth</a>), 
+                the central operating system that manages all licenses, data, and governance across the ecosystem. 
+                The Virtual Silk Road provides visualization of all enterprise activities.</p>
+                <p>Synergyze (<a href="https://synnergyze.com/" target="_blank">https://synnergyze.com/</a>) is the SAAS platform 
+                marketed by ECG, providing specialized modules for different business functions.</p>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
     
     # Secret advisory view toggle
-    enable_secret_view = st.toggle("Enable Executive Advisory Channel", value=False, help="Show the direct advisory channel between CFO/CIO and CEO for license oversight")
+    enable_secret_view = st.toggle("Enable Emperor's Advisory Channel", value=False, help="Show the direct advisory channel between CFO/CIO and Emperor (CEO) for license oversight")
     
     if enable_secret_view:
-        st.warning("You are viewing the private executive advisory channel. This perspective provides unfiltered license insights that bypass normal organizational visibility.")
+        st.warning("🔒 You are viewing the private advisory channel to the Emperor. This perspective provides unfiltered insights directly to the Emperor, bypassing normal organizational visibility.")
     
     # Create tabs for different executive views
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "CFO Organization", 
         "CIO Organization", 
         "Joint Oversight",
-        "CEO Direct Advisory" if enable_secret_view else "Executive Dashboard"
+        "Emperor's Advisory" if enable_secret_view else "Executive Dashboard",
+        "Virtual Silk Road"
     ])
     
     with tab1:
@@ -40,6 +66,10 @@ def show_executive_org_charts():
     
     with tab4:
         show_ceo_direct_advisory(enable_secret_view)
+    
+    with tab5:
+        from virtual_silk_road import show_virtual_silk_road
+        show_virtual_silk_road()
 
 def show_cfo_organization():
     """Show CFO organizational structure with license governance view"""

@@ -35,6 +35,7 @@ from supply_chain_visualization import show_supply_chain_visualization
 from synergy_visualization import show_synergy_visualization
 from voi_jeans_demo import show_voi_jeans_demo
 from executive_org_charts import show_executive_org_charts
+from virtual_silk_road import show_virtual_silk_road
 
 # Import notification service
 from notification_service import show_notification_settings, check_twilio_credentials
@@ -304,6 +305,11 @@ with st.sidebar:
         if st.button("👑 Executive Organization Charts", use_container_width=True, type="primary", key="executive_org_charts", 
                    help="View CFO and CIO organizations with direct advisory channel to CEO"):
             st.session_state.page = 'executive_org_charts'
+        
+        # Virtual Silk Road - Emperor's View
+        if st.button("🏙️ Virtual Silk Road", use_container_width=True, type="primary", key="virtual_silk_road", 
+                   help="Access the Emperor's view of the entire ecosystem through the Virtual Silk Road"):
+            st.session_state.page = 'virtual_silk_road'
             
         st.markdown("---")
             
@@ -525,6 +531,8 @@ elif st.session_state.page == 'inventory_story':
     show_inventory_story_generator()
 elif st.session_state.page == 'executive_org_charts':
     show_executive_org_charts()
+elif st.session_state.page == 'virtual_silk_road':
+    show_virtual_silk_road()
 
 # Footer
 st.markdown("---")
