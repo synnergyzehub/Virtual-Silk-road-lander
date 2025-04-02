@@ -15,6 +15,7 @@ from virtual_silk_road import show_virtual_silk_road
 from visualization import show_visualization
 from empire_os_landing import show_empire_os_landing
 from synergyze_landing import show_synergyze_landing
+from hsn_transaction_system import show_hsn_transaction_system
 
 # Configure the page
 st.set_page_config(
@@ -98,6 +99,12 @@ with st.sidebar:
         if st.button("📈 Stock Analysis", use_container_width=True):
             st.session_state.page = 'stock_analysis'
             
+        st.markdown("### Inventory Management")
+        
+        # Add HSN Transaction System button
+        if st.button("🏆 HSN Transaction Suite", use_container_width=True):
+            st.session_state.page = 'hsn_transaction_system'
+            
     else:
         # Licensed user or Emperor view sections - private dashboards
         st.markdown("### Empire Command Center")
@@ -118,6 +125,11 @@ with st.sidebar:
             
         if st.button("📈 Technical Analysis", use_container_width=True):
             st.session_state.page = 'visualization'
+            
+        st.markdown("### Advanced Tools")
+        
+        if st.button("🏆 HSN Transaction Suite", use_container_width=True):
+            st.session_state.page = 'hsn_transaction_system'
     
     # User authentication section
     st.markdown("---")
@@ -197,6 +209,8 @@ elif st.session_state.page == 'stock_analysis':
     show_stock_analysis()
 elif st.session_state.page == 'visualization':
     show_visualization()
+elif st.session_state.page == 'hsn_transaction_system':
+    show_hsn_transaction_system()
 # Empire Ecosystem pages
 elif st.session_state.page == 'empire_os_landing':
     show_empire_os_landing()  # Public marketing page for Empire OS
@@ -217,14 +231,13 @@ elif st.session_state.page == 'virtual_silk_road':
 # Emperor control dashboards - redirect if no access
 elif st.session_state.page in ['empire_os_dashboard', 'license_management']:
     if st.session_state.user_role == 'emperor':
-        st.info("This dashboard is under imperial development. 👑")
-        st.markdown("""
-        <div style='background-color: rgba(75, 0, 130, 0.1); padding: 20px; border-radius: 10px; text-align: center;'>
-            <h2 style='color: #4B0082;'>Coming Soon by Imperial Decree</h2>
-            <p style='font-size: 1.2em;'>The Emperor's engineers are building this advanced control interface.</p>
-            <p style='font-style: italic;'>Return to the Virtual Silk Road dashboard for now.</p>
-        </div>
-        """, unsafe_allow_html=True)
+        # Show the Emperor's dashboard
+        from empire_os_dashboard import show_empire_os_dashboard, show_license_dashboard
+        
+        if st.session_state.page == 'empire_os_dashboard':
+            show_empire_os_dashboard()
+        else:  # license_management
+            show_license_dashboard()
     else:
         # Redirect unauthorized users
         st.warning("⚠️ Only the Emperor has access to this command interface.")

@@ -12,6 +12,9 @@ def show_virtual_silk_road():
     Only accessible to authenticated users with Emperor-level access.
     """
     
+    # Differentiate this from the public landing view with a special notice
+    st.info("⚠️ This is the Emperor's private governance view with special access controls. For the public Virtual Silk Road landing page, navigate to the public view.")
+    
     # Emperor's header with special styling for authorized users
     st.markdown(
         """

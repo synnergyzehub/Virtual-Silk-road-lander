@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+import plotly.express as px
+import time
 
 def show_empire_os_landing():
     """Display the public landing page for Empire OS - The operating system owned by the Emperor"""
@@ -54,35 +57,127 @@ def show_empire_os_landing():
         """, unsafe_allow_html=True)
         
     with col2:
-        # Create a simple architecture diagram
-        fig, ax = plt.subplots(figsize=(8, 10))
-        
-        # Define layers with their heights
+        # Create an animated architecture diagram with Plotly
         layers = ['Emperor Core', 'Governance Layer', 'API Gateway', 'License Management', 'Security Framework']
-        heights = [0.6, 0.5, 0.4, 0.5, 0.7]
+        y_positions = [0, 1, 2, 3, 4]
+        widths = [0.9, 0.8, 0.7, 0.8, 0.9]  # Varying widths for visual interest
         colors = ['gold', '#9932CC', '#4B0082', '#6A5ACD', '#483D8B']
         
-        # Starting position
-        bottom = 0
+        # Create the base architecture diagram
+        fig = go.Figure()
         
-        # Create stacked bars for the architecture layers
-        for i, (layer, height, color) in enumerate(zip(layers, heights, colors)):
-            y_position = bottom + height/2
-            ax.barh(0, width=height*2, height=height, left=0.5-height, color=color, alpha=0.8)
-            ax.text(0.5, y_position, layer, ha='center', va='center', color='white', fontweight='bold')
-            bottom += height
+        # Add each layer as a horizontal bar
+        for i, (layer, y, width, color) in enumerate(zip(layers, y_positions, widths, colors)):
+            # Main bar
+            fig.add_trace(go.Bar(
+                x=[width],
+                y=[layer],
+                orientation='h',
+                marker=dict(color=color),
+                width=0.7,  # Bar height
+                hoverinfo='none',
+                name=layer
+            ))
+            
+            # Add pulsing effect with animation frame
+            # This creates a slightly transparent overlay that will "pulse"
+            fig.add_trace(go.Bar(
+                x=[width * 1.05],  # Slightly wider
+                y=[layer],
+                orientation='h',
+                marker=dict(color=color, opacity=0.3),
+                width=0.7,
+                hoverinfo='none',
+                showlegend=False
+            ))
         
-        # Add an Emperor crown at the top
-        ax.text(0.5, bottom + 0.2, '👑', ha='center', va='center', fontsize=30)
+        # Add a crown icon at the top
+        fig.add_annotation(
+            x=0.45,
+            y="Emperor Core",
+            text="👑",
+            font=dict(size=24),
+            showarrow=False,
+            yshift=25
+        )
         
-        # Set axes limits and remove spines
-        ax.set_xlim(0, 1)
-        ax.set_ylim(0, sum(heights) + 0.4)
-        ax.set_aspect('equal')
-        ax.axis('off')
+        # Connection lines between layers (animated data flows)
+        for i in range(len(layers) - 1):
+            fig.add_trace(go.Scatter(
+                x=[widths[i] * 0.5, widths[i+1] * 0.5],
+                y=[layers[i], layers[i+1]],
+                mode='lines',
+                line=dict(color='rgba(255, 255, 255, 0.5)', width=2, dash='dot'),
+                hoverinfo='none',
+                showlegend=False
+            ))
+            
+            # Add moving dots along the connection lines to simulate data flow
+            fig.add_trace(go.Scatter(
+                x=[widths[i] * 0.5 * 0.7 + widths[i+1] * 0.5 * 0.3],  # Position dot along the line
+                y=[y_positions[i] * 0.7 + y_positions[i+1] * 0.3],  # Position dot along the line
+                mode='markers',
+                marker=dict(
+                    color='white',
+                    size=8,
+                    opacity=0.7
+                ),
+                hoverinfo='none',
+                showlegend=False
+            ))
         
-        # Display the figure
-        st.pyplot(fig)
+        # Add visual styling to the diagram
+        fig.update_layout(
+            title="Empire OS Architecture",
+            title_font=dict(size=16, color="#4B0082"),
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            height=500,
+            margin=dict(l=0, r=0, t=50, b=30),
+            xaxis=dict(
+                showticklabels=False,
+                showgrid=False,
+                zeroline=False,
+                range=[0, 1.2]
+            ),
+            yaxis=dict(
+                categoryorder='array',
+                categoryarray=layers[::-1],  # Reverse order to put Emperor at top
+                showgrid=False
+            ),
+            showlegend=False,
+            bargap=0.3
+        )
+        
+        # Instead of frame-based animation, add a simple visual effect with pulsing overlay
+        for i in range(len(layers)):
+            # Add a pulsing overlay for each layer
+            fig.add_trace(go.Bar(
+                x=[widths[i] * 1.05],  # Slightly wider than the main bar
+                y=[layers[i]],
+                orientation='h',
+                marker=dict(color=colors[i], opacity=0.3),
+                width=0.7,
+                hoverinfo='none',
+                showlegend=False
+            ))
+        
+        # Add a CSS animation for a simple pulsing effect
+        st.markdown("""
+        <style>
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.3; }
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Auto-start the animation
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Add a note about the Emperor's access
+        st.info("👑 For the full interactive Empire OS Command Terminal with real-time metrics and governance controls, request Emperor-level access.")
     
     # Key capabilities
     st.markdown("## Key Capabilities")
