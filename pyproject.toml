@@ -8,6 +8,7 @@ dependencies = [
     "numpy>=2.2.4",
     "pandas>=2.2.3",
     "plotly>=6.0.1",
+    "replit-object-storage>=1.0.2",
     "streamlit>=1.44.0",
     "yfinance>=0.2.55",
 ]

@@ -16,6 +16,7 @@ from visualization import show_visualization
 from empire_os_landing import show_empire_os_landing
 from synergyze_landing import show_synergyze_landing
 from hsn_transaction_system import show_hsn_transaction_system
+from emperor_timeline import show_emperor_timeline
 
 # Configure the page
 st.set_page_config(
@@ -117,6 +118,9 @@ with st.sidebar:
             
         if st.button("⚡ License Management", use_container_width=True):
             st.session_state.page = 'license_management'
+            
+        if st.button("📜 Emperor Timeline", use_container_width=True):
+            st.session_state.page = 'emperor_timeline'
             
         st.markdown("### Enterprise Intelligence")
             
@@ -229,15 +233,17 @@ elif st.session_state.page == 'virtual_silk_road':
         st.warning("⚠️ You need licensed access to view the Emperor's Virtual Silk Road dashboard.")
         show_virtual_silk_road_landing()
 # Emperor control dashboards - redirect if no access
-elif st.session_state.page in ['empire_os_dashboard', 'license_management']:
+elif st.session_state.page in ['empire_os_dashboard', 'license_management', 'emperor_timeline']:
     if st.session_state.user_role == 'emperor':
         # Show the Emperor's dashboard
         from empire_os_dashboard import show_empire_os_dashboard, show_license_dashboard
         
         if st.session_state.page == 'empire_os_dashboard':
             show_empire_os_dashboard()
-        else:  # license_management
+        elif st.session_state.page == 'license_management':
             show_license_dashboard()
+        elif st.session_state.page == 'emperor_timeline':
+            show_emperor_timeline()
     else:
         # Redirect unauthorized users
         st.warning("⚠️ Only the Emperor has access to this command interface.")
@@ -250,7 +256,7 @@ else:
 st.markdown("---")
 
 # Create a universal ecosystem diagram at the bottom of all pages
-if st.session_state.page in ['empire_os_landing', 'vsr_landing', 'synergyze_landing', 'virtual_silk_road', 'empire_os_dashboard', 'license_management']:
+if st.session_state.page in ['empire_os_landing', 'vsr_landing', 'synergyze_landing', 'virtual_silk_road', 'empire_os_dashboard', 'license_management', 'emperor_timeline']:
     # Show the ecosystem hierarchy for all Imperial pages
     st.markdown("""
     <div style="text-align: center; margin-bottom: 10px;">
@@ -280,6 +286,8 @@ if st.session_state.page in ['empire_os_landing', 'vsr_landing', 'synergyze_land
         st.caption("Virtual Silk Road | Powered by Empire OS | © 2025 Imperial Technology")
     elif st.session_state.page in ['synergyze_landing', 'license_management']:
         st.caption("Synergyze Licenses | Deployed on the Virtual Silk Road | Powered by Empire OS | © 2025 Imperial Technology")
+    elif st.session_state.page == 'emperor_timeline':
+        st.caption("Emperor Timeline | ECG Governance Layer | Licensed by Synergyze | © 2025 Imperial Technology")
     else:
         st.caption("Empire Ecosystem | © 2025 Imperial Technology")
 else:

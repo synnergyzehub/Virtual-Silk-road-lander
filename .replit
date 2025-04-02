@@ -43,6 +43,14 @@ args = "Simple Test App"
 task = "workflow.run"
 args = "Streamlit Port 8080 Test"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Emperor OS Timeline"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Test Streamlit App"
+
 [[workflows.workflow]]
 name = "Streamlit Server"
 author = "agent"
@@ -147,6 +155,36 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "streamlit run port_test.py --server.port 8080"
 waitForPort = 8080
+
+[[workflows.workflow]]
+name = "Emperor OS Timeline"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run app.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Test Streamlit App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run test_streamlit.py --server.port 5000"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000

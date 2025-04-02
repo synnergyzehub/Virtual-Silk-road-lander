@@ -1,18 +1,10 @@
 import streamlit as st
 
 def main():
-    st.title("Minimal Streamlit Test")
-    st.write("This is a minimal Streamlit app to test if the server can run properly.")
-    
-    st.write("If you can see this, Streamlit is working correctly!")
-    
-    st.info("Current configuration:")
-    st.code("""
-[server]
-headless = true
-address = "0.0.0.0"
-port = 5000
-    """)
+    print("Starting minimal Streamlit app...")
+    st.title("Minimal Streamlit App")
+    st.write("This is a minimal test application to verify Streamlit works.")
+    print("Minimal app has loaded")
 
 if __name__ == "__main__":
     main()
