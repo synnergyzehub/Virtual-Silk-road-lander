@@ -1,8 +1,0 @@
-Stage,Focus Area,Dependencies,Responsible Team,Estimated Timeframe,Expected Outcome
-Inventory Forecasting,"Stock levels, reorder needs",Real-time stock sync with ERP,Operations,Monthly,Optimal inventory levels for expansion
-Order Fulfillment,Sales and customer orders,Unicommerce and customer data,Sales & Customer Service,Weekly,Efficient order processing and fulfillment
-Sample Planning,Design and swatch review,Approved design concepts,Design,Bi-Monthly,Refined product designs ready for sampling
-Sample Development,Sample creation and evaluation,Sample plans and procurement,Sampling & Procurement,Monthly,High-quality samples for review
-Trade Show Preparation,Present styles to buyers,Approved samples for display,Sales,Quarterly,Increased market visibility and buyer interest
-Sales Data Analysis,Sales metrics and demand trends,ERP and Data Studio sync,Sales & Data Team,Monthly,Accurate sales forecasts
-Production & Supply Chain Sync,End-to-end integration for expansion,"ERP, Google Sheets, Data Flow",Operations & Data Engineering,Continuous,Smooth data integration supporting expansion

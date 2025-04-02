@@ -1,478 +1,493 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import networkx as nx
+import time
 import plotly.graph_objects as go
 import plotly.express as px
-from PIL import Image
-import io
-import base64
 
 def show_virtual_silk_road():
-    """Display the Virtual Silk Road visualization - Emperor's view of the entire ecosystem"""
+    """
+    Display the Emperor's private view of the Virtual Silk Road ecosystem.
+    This is a comprehensive visualization of the entire enterprise governance structure.
+    Only accessible to authenticated users with Emperor-level access.
+    """
     
-    # Create a visually striking header for marketing appeal
+    # Emperor's header with special styling for authorized users
     st.markdown(
         """
-        <div style='background: linear-gradient(90deg, rgba(30,58,138,1) 0%, rgba(123,104,238,1) 100%); padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center;'>
-            <h1 style='color: white; margin: 0; font-size: 2.5rem;'>🏙️ The Virtual Silk Road</h1>
-            <p style='color: #E0E0FF; margin: 10px 0 0 0;'>Connecting Worlds through Digital Governance</p>
+        <div style='background: linear-gradient(90deg, rgba(30,58,138,1) 0%, rgba(75,0,130,1) 100%); 
+        padding: 30px; border-radius: 10px; margin-bottom: 30px; text-align: center;'>
+            <h1 style='color: gold; margin: 0; font-size: 3rem;'>👑 Emperor's Command Center</h1>
+            <p style='color: white; margin: 15px 0 0 0; font-size: 1.5rem;'>Virtual Silk Road Governance Terminal</p>
+            <p style='color: rgba(255,255,255,0.7); margin: 10px 0 0 0;'>Authorized Access: Private View</p>
         </div>
         """, 
         unsafe_allow_html=True
     )
     
-    # Marketing banner highlighting the ecosystem positioning
-    col1, col2, col3 = st.columns([1, 6, 1])
-    with col2:
-        st.markdown("""
-        <div style="background-color: rgba(153, 0, 153, 0.08); padding: 20px; border-radius: 5px; border: 1px solid #990099; margin-bottom: 20px; text-align: center;">
-            <h3 style="color: #990099; margin-top: 0; font-weight: bold;">INTRODUCING THE NEXT EVOLUTION IN ENTERPRISE GOVERNANCE</h3>
-            <p style="font-size: 1.1em; margin-bottom: 15px;">Where Microsoft charges $20,000 for enterprise governance solutions, we democratize access through our modular license model.</p>
-            <div style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 0;">Part of the Empire OS Ecosystem</div>
-        </div>
-        """, unsafe_allow_html=True)
+    # Emperor's dashboard tabs
+    tabs = st.tabs([
+        "🌐 Ecosystem Overview", 
+        "🔬 License Management", 
+        "📊 Governance Analytics",
+        "📅 Review Calendar"
+    ])
     
-    st.markdown("""
-    <div style="background-color: rgba(123, 104, 238, 0.1); padding: 20px; border-radius: 5px; border-left: 5px solid #7B68EE;">
-        <h3 style="color: #7B68EE; margin-top: 0;">Emperor's Digital Twin of the Empire</h3>
-        <p>The Virtual Silk Road is a digital twin of your supply chain ecosystem - similar to how Simulink in MATLAB creates modular 
-        block-based models with interconnected components. It visualizes all entities, data flows, license activities, and governance 
-        structures in a unified interface for complete oversight.</p>
-        <p>This view connects with <b>Empire OS</b> to provide real-time insights into the health and operations of 
-        the entire enterprise, powered by <b>Synergyze</b> and integrated with external systems through APIs.</p>
-        <p><b>For marketing and sales teams:</b> Use this visualization to demonstrate the complete ecosystem to potential clients, 
-        highlighting how your organization connects every aspect of the operation through a unified governance framework.</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Integration information
-    st.markdown("""
-    ### External System Integration
-    
-    This visualization integrates with the following external systems:
-    """)
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        #### Empire OS
-        [https://empire-os.replit.app/auth](https://empire-os.replit.app/auth)
+    # Tab 1: Ecosystem Overview
+    with tabs[0]:
+        st.header("Enterprise Ecosystem Digital Twin")
+        st.write("Complete visualization of the interconnected components in the Empire OS governance model.")
         
-        The central operating system that:
-        - Stores all license data
-        - Manages user permissions
-        - Tracks transactions 
-        - Provides governance oversight
-        """)
-    
-    with col2:
-        st.markdown("""
-        #### Synergyze
-        [https://synnergyze.com/](https://synnergyze.com/)
+        # Simulate complex interactive visualization
+        eco_col1, eco_col2 = st.columns([2, 1])
         
-        The SAAS platform that provides:
-        - Manufacturing modules
-        - Retail distribution tools
-        - Management dashboards
-        - Analytics capabilities
-        """)
-    
-    with col3:
-        st.markdown("""
-        #### Fashion Renderer
-        [https://fashion-renderer-faiz32.replit.app/](https://fashion-renderer-faiz32.replit.app/)
-        
-        Specialized visualization tool for:
-        - Product design rendering
-        - Style visualization
-        - Material simulation
-        - Virtual showrooms
-        """)
-    
-    # The main visualization - Emperor's view of the Virtual Silk Road
-    st.markdown("### 🌐 The Empire: A Unified View")
-    
-    # Create network visualization of the entire ecosystem
-    G = nx.Graph()
-    
-    # Node groups
-    # 1: Emperor & Ministers
-    # 2: Manufacturing (Woven Supply)
-    # 3: Retail (Commune Connect)
-    # 4: Management (Synergyze Hub)
-    # 5: External Systems
-    # 6: Governance Bodies
-    
-    # Add nodes for the ecosystem
-    nodes = [
-        # Emperor's governance
-        {"id": "Emperor", "group": 1, "size": 40, "desc": "Supreme oversight of the entire empire"},
-        {"id": "CFO", "group": 1, "size": 25, "desc": "Financial governance of licenses"},
-        {"id": "CIO", "group": 1, "size": 25, "desc": "Technical governance of platforms"},
-        {"id": "Marketing Officer", "group": 1, "size": 25, "desc": "License sales and promotion"},
-        {"id": "Compliance Minister", "group": 1, "size": 25, "desc": "Regulatory oversight"},
-        
-        # Manufacturing
-        {"id": "Manufacturing Hub", "group": 2, "size": 30, "desc": "Central manufacturing operations"},
-        {"id": "CMP Operations", "group": 2, "size": 20, "desc": "Cut, Make, Pack operations"},
-        {"id": "Material Library", "group": 2, "size": 20, "desc": "Material database with HSN codes"},
-        {"id": "Production Planning", "group": 2, "size": 20, "desc": "Production scheduling system"},
-        {"id": "Quality Control", "group": 2, "size": 20, "desc": "Quality assurance system"},
-        
-        # Retail
-        {"id": "Retail Distribution", "group": 3, "size": 30, "desc": "Retail operations management"},
-        {"id": "Store Operations", "group": 3, "size": 20, "desc": "Individual store management"},
-        {"id": "Marketplace Integration", "group": 3, "size": 20, "desc": "Online marketplace connections"},
-        {"id": "Inventory Management", "group": 3, "size": 20, "desc": "Multi-location inventory tracking"},
-        {"id": "Customer Analytics", "group": 3, "size": 20, "desc": "Customer behavior analysis"},
-        
-        # Management Hub
-        {"id": "Synergyze Hub", "group": 4, "size": 30, "desc": "Central management platform"},
-        {"id": "License Management", "group": 4, "size": 20, "desc": "License administration"},
-        {"id": "Data Governance", "group": 4, "size": 20, "desc": "Data sharing agreements"},
-        {"id": "Executive Dashboards", "group": 4, "size": 20, "desc": "Executive insights"},
-        {"id": "Unified Reporting", "group": 4, "size": 20, "desc": "Cross-platform analytics"},
-        
-        # External Systems
-        {"id": "Empire OS", "group": 5, "size": 25, "desc": "Central operating system"},
-        {"id": "Fashion Renderer", "group": 5, "size": 20, "desc": "Product visualization tool"},
-        {"id": "HSN Tax System", "group": 5, "size": 20, "desc": "Taxation management"},
-        {"id": "API Gateway", "group": 5, "size": 20, "desc": "API management system"},
-        
-        # Governance bodies
-        {"id": "Council of Ministers", "group": 6, "size": 25, "desc": "Advisory group to Emperor"},
-        {"id": "Tech Team", "group": 6, "size": 20, "desc": "Technical implementation team"},
-        {"id": "Compliance Team", "group": 6, "size": 20, "desc": "Regulatory compliance team"},
-        {"id": "Business Development", "group": 6, "size": 20, "desc": "Strategic deployment team"}
-    ]
-    
-    # Add nodes to the graph
-    for node in nodes:
-        G.add_node(node["id"], group=node["group"], size=node["size"], desc=node["desc"])
-    
-    # Add edges to connect the ecosystem
-    edges = [
-        # Emperor connections to ministers
-        ("Emperor", "CFO", 8),
-        ("Emperor", "CIO", 8),
-        ("Emperor", "Marketing Officer", 7),
-        ("Emperor", "Compliance Minister", 7),
-        ("Emperor", "Council of Ministers", 9),
-        
-        # Emperor direct oversight
-        ("Emperor", "Manufacturing Hub", 6),
-        ("Emperor", "Retail Distribution", 6),
-        ("Emperor", "Synergyze Hub", 6),
-        ("Emperor", "Empire OS", 7),
-        
-        # Ministers to functional areas
-        ("CFO", "License Management", 5),
-        ("CIO", "Data Governance", 5),
-        ("Marketing Officer", "Business Development", 5),
-        ("Compliance Minister", "Compliance Team", 5),
-        
-        # Council connections
-        ("Council of Ministers", "Tech Team", 4),
-        ("Council of Ministers", "Compliance Team", 4),
-        ("Council of Ministers", "Business Development", 4),
-        
-        # Core platform connections
-        ("Empire OS", "Manufacturing Hub", 5),
-        ("Empire OS", "Retail Distribution", 5),
-        ("Empire OS", "Synergyze Hub", 5),
-        ("Empire OS", "API Gateway", 5),
-        
-        # Manufacturing connections
-        ("Manufacturing Hub", "CMP Operations", 4),
-        ("Manufacturing Hub", "Material Library", 4),
-        ("Manufacturing Hub", "Production Planning", 4),
-        ("Manufacturing Hub", "Quality Control", 4),
-        ("Material Library", "HSN Tax System", 3),
-        ("CMP Operations", "Fashion Renderer", 3),
-        
-        # Retail connections
-        ("Retail Distribution", "Store Operations", 4),
-        ("Retail Distribution", "Marketplace Integration", 4),
-        ("Retail Distribution", "Inventory Management", 4),
-        ("Retail Distribution", "Customer Analytics", 4),
-        ("Store Operations", "Inventory Management", 3),
-        
-        # Management connections
-        ("Synergyze Hub", "License Management", 4),
-        ("Synergyze Hub", "Data Governance", 4),
-        ("Synergyze Hub", "Executive Dashboards", 4),
-        ("Synergyze Hub", "Unified Reporting", 4),
-        
-        # Cross-functional connections
-        ("Inventory Management", "CMP Operations", 2),
-        ("Executive Dashboards", "Emperor", 5),
-        ("API Gateway", "Fashion Renderer", 3),
-        ("API Gateway", "HSN Tax System", 3),
-        
-        # Governance connections
-        ("License Management", "Compliance Team", 3),
-        ("Data Governance", "Compliance Team", 3),
-    ]
-    
-    # Add edges to the graph
-    for edge in edges:
-        G.add_edge(edge[0], edge[1], weight=edge[2])
-    
-    # Create positions using a spring layout
-    pos = nx.spring_layout(G, seed=42, k=0.3)
-    
-    # Create edge trace
-    edge_trace = []
-    
-    for edge in G.edges():
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
-        weight = G.get_edge_data(edge[0], edge[1])['weight']
-        
-        edge_trace.append(
-            go.Scatter(
-                x=[x0, x1, None],
-                y=[y0, y1, None],
-                line=dict(width=weight/2, color='rgba(128, 128, 128, 0.7)'),
+        with eco_col1:
+            # Create network visualization
+            nodes = {'Manufacturing': 0, 'Retail': 1, 'Finance': 2, 'Logistics': 3, 
+                    'Marketing': 4, 'Compliance': 5, 'Emperor': 6, 'Software': 7}
+            
+            # Create connections (edges) between nodes
+            edges = []
+            for i in range(len(nodes)-1):
+                # Emperor node connects to all other nodes
+                edges.append((nodes['Emperor'], i))
+                
+                # Other connections
+                if i < len(nodes)-2:
+                    edges.append((i, i+1))
+            
+            # Create labels and positions for nodes
+            labels = list(nodes.keys())
+            pos = {}
+            
+            # Place Emperor node in center
+            pos[nodes['Emperor']] = [0, 0]
+            
+            # Place other nodes in a circle around Emperor
+            angle_step = 2 * np.pi / (len(nodes) - 1)
+            for i, node in enumerate([n for n in nodes.keys() if n != 'Emperor']):
+                angle = i * angle_step
+                pos[nodes[node]] = [0.5 * np.cos(angle), 0.5 * np.sin(angle)]
+            
+            # Create a graph using plotly
+            edge_x = []
+            edge_y = []
+            for edge in edges:
+                x0, y0 = pos[edge[0]]
+                x1, y1 = pos[edge[1]]
+                edge_x.extend([x0, x1, None])
+                edge_y.extend([y0, y1, None])
+                
+            edge_trace = go.Scatter(
+                x=edge_x, y=edge_y,
+                line=dict(width=1, color='rgba(150, 150, 150, 0.7)'),
                 hoverinfo='none',
-                mode='lines'
-            )
-        )
-    
-    # Create node traces for different groups
-    node_traces = []
-    
-    # Color map for different groups
-    group_colors = {
-        1: '#FFD700',           # Emperor & Ministers - gold
-        2: '#1E90FF',           # Manufacturing - dodger blue
-        3: '#32CD32',           # Retail - lime green
-        4: '#9932CC',           # Management Hub - dark orchid
-        5: '#FF4500',           # External Systems - orange red
-        6: '#4682B4'            # Governance Bodies - steel blue
-    }
-    
-    # Group names for legend
-    group_names = {
-        1: "Emperor's Council",
-        2: "Manufacturing",
-        3: "Retail Distribution",
-        4: "Management Hub",
-        5: "External Systems",
-        6: "Governance Bodies"
-    }
-    
-    # Create a trace for each group
-    for group in range(1, 7):
-        node_x = []
-        node_y = []
-        node_text = []
-        node_size = []
-        node_hover = []
-        
-        for node in G.nodes():
-            if G.nodes[node]['group'] == group:
-                x, y = pos[node]
+                mode='lines')
+            
+            node_x = []
+            node_y = []
+            node_color = []
+            node_size = []
+            
+            for node in nodes:
+                x, y = pos[nodes[node]]
                 node_x.append(x)
                 node_y.append(y)
-                node_text.append(node)
-                node_size.append(G.nodes[node]['size'])
-                node_hover.append(f"{node}<br>{G.nodes[node]['desc']}")
+                # Emperor node is gold
+                if node == 'Emperor':
+                    node_color.append('gold')
+                    node_size.append(25)
+                else:
+                    node_color.append('steelblue')
+                    node_size.append(15)
+            
+            node_trace = go.Scatter(
+                x=node_x, y=node_y,
+                mode='markers+text',
+                text=labels,
+                textposition="top center",
+                marker=dict(
+                    showscale=False,
+                    color=node_color,
+                    size=node_size,
+                    line=dict(width=1, color='rgba(50, 50, 50, 0.8)')),
+                hoverinfo='text',
+                textfont=dict(size=11))
+            
+            # Create the figure
+            fig = go.Figure(data=[edge_trace, node_trace],
+                            layout=go.Layout(
+                                title="Empire OS Ecosystem Visualization",
+                                titlefont=dict(size=16),
+                                showlegend=False,
+                                hovermode='closest',
+                                margin=dict(b=20, l=5, r=5, t=40),
+                                annotations=[dict(
+                                    text="",
+                                    showarrow=False,
+                                    xref="paper", yref="paper")],
+                                xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                                yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                                height=500,
+                                plot_bgcolor='rgba(255, 255, 255, 0.95)')
+                            )
+            
+            st.plotly_chart(fig, use_container_width=True)
         
-        node_trace = go.Scatter(
-            x=node_x, y=node_y,
-            mode='markers+text',
-            text=node_text,
-            textposition="top center",
-            hovertext=node_hover,
-            hoverinfo='text',
-            marker=dict(
-                color=group_colors[group],
-                size=node_size,
-                line=dict(width=2, color='DarkSlateGrey')
-            ),
-            name=group_names[group]
-        )
+        with eco_col2:
+            st.subheader("System Status")
+            
+            # System status metrics
+            st.metric("Active Licenses", "324", "+12")
+            st.metric("API Requests (24h)", "1.2M", "-3%")
+            st.metric("System Health", "98.7%", "+0.5%")
+            
+            # Active administrators
+            st.subheader("Active Administrators")
+            admins = {
+                "Emperor": {"status": "Online", "last_active": "Now", "color": "gold"},
+                "CFO": {"status": "Online", "last_active": "5m ago", "color": "green"},
+                "CIO": {"status": "Away", "last_active": "1h ago", "color": "orange"},
+                "Marketing Officer": {"status": "Offline", "last_active": "3h ago", "color": "red"}
+            }
+            
+            # Display admin status with colored indicators
+            for admin, data in admins.items():
+                st.markdown(f"""
+                <div style='display: flex; align-items: center;'>
+                    <div style='width: 10px; height: 10px; border-radius: 50%; background-color: {data["color"]}; margin-right: 10px;'></div>
+                    <div style='flex-grow: 1;'><b>{admin}</b> <span style='color: gray; font-size: 0.8em;'>({data["status"]})</span></div>
+                    <div style='color: gray; font-size: 0.8em;'>{data["last_active"]}</div>
+                </div>
+                """, unsafe_allow_html=True)
         
-        node_traces.append(node_trace)
+        # Additional ecosystem metrics
+        st.subheader("Key Ecosystem Metrics")
+        
+        # Create three columns for metrics
+        metric_cols = st.columns(3)
+        
+        with metric_cols[0]:
+            st.markdown("""
+            <div style='background-color: rgba(30, 58, 138, 0.1); padding: 15px; border-radius: 5px; text-align: center;'>
+                <h3 style='margin-top: 0; color: #1E3A8A;'>$1.2M</h3>
+                <p style='margin-bottom: 0;'>Revenue from License Fees</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with metric_cols[1]:
+            st.markdown("""
+            <div style='background-color: rgba(75, 0, 130, 0.1); padding: 15px; border-radius: 5px; text-align: center;'>
+                <h3 style='margin-top: 0; color: #4B0082;'>27</h3>
+                <p style='margin-bottom: 0;'>Connected External Systems</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with metric_cols[2]:
+            st.markdown("""
+            <div style='background-color: rgba(0, 100, 0, 0.1); padding: 15px; border-radius: 5px; text-align: center;'>
+                <h3 style='margin-top: 0; color: #006400;'>98.3%</h3>
+                <p style='margin-bottom: 0;'>Governance Compliance Rate</p>
+            </div>
+            """, unsafe_allow_html=True)
     
-    # Create figure
-    fig = go.Figure(
-        data=edge_trace + node_traces,
-        layout=go.Layout(
-            title="Emperor's View: The Virtual Silk Road Ecosystem",
-            showlegend=True,
-            hovermode='closest',
-            margin=dict(b=20, l=5, r=5, t=40),
-            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-            height=700,
-            plot_bgcolor='rgba(248,248,248,1)',
-            legend=dict(
-                title="Empire Components",
-                orientation="h",
-                yanchor="bottom",
-                y=1.02,
-                xanchor="right",
-                x=1
+    # Tab 2: License Management
+    with tabs[1]:
+        st.header("License Management Console")
+        st.write("Emperor-level control over all license allocations, permissions, and restrictions.")
+        
+        # License management interface
+        license_types = [
+            "Manufacturing Access License", 
+            "Retail Distribution License",
+            "Empire OS Core License",
+            "Financial Oversight License",
+            "Marketing Portal License",
+            "Supply Chain Visualization License"
+        ]
+        
+        # License status table
+        license_data = {
+            "License Type": license_types,
+            "Active Instances": [42, 156, 3, 18, 24, 81],
+            "Usage %": [78, 92, 100, 45, 63, 87],
+            "Monthly Cost": ["$4,200", "$15,600", "$30,000", "$1,800", "$2,400", "$8,100"],
+            "Status": ["✅ Active", "✅ Active", "✅ Active", "⚠️ Underutilized", "✅ Active", "✅ Active"]
+        }
+        
+        df_licenses = pd.DataFrame(license_data)
+        
+        # Style the dataframe
+        st.dataframe(df_licenses, use_container_width=True)
+        
+        # License allocation tools
+        st.subheader("License Allocation Controls")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # License allocation form
+            selected_license = st.selectbox("Select License Type", license_types)
+            entity_name = st.text_input("Entity Name")
+            duration = st.radio("License Duration", ["1 Month", "6 Months", "1 Year", "Perpetual"])
+            permissions = st.multiselect("Permissions", ["View", "Edit", "Delete", "Admin", "API Access"])
+            
+        with col2:
+            # Cost calculator
+            st.subheader("Cost Calculator")
+            
+            # Map selection to a base price
+            base_prices = {
+                "Manufacturing Access License": 100,
+                "Retail Distribution License": 100,
+                "Empire OS Core License": 10000,
+                "Financial Oversight License": 100,
+                "Marketing Portal License": 100,
+                "Supply Chain Visualization License": 100
+            }
+            
+            # Map duration to a multiplier
+            duration_multipliers = {
+                "1 Month": 1,
+                "6 Months": 5.5,
+                "1 Year": 10,
+                "Perpetual": 30
+            }
+            
+            # Calculate cost based on license type, duration, and permissions
+            base_price = base_prices.get(selected_license, 100)
+            duration_multiplier = duration_multipliers.get(duration, 1)
+            permission_cost = len(permissions) * 20  # $20 per permission
+            
+            total_cost = base_price * duration_multiplier + permission_cost
+            
+            # Display calculation
+            st.metric("License Cost", f"${total_cost:,.2f}")
+            
+            # Issue button
+            if st.button("Issue License", type="primary"):
+                st.success(f"License for {entity_name} has been issued successfully!")
+                
+        # License activation history
+        st.subheader("Recent License Activations")
+        
+        # Sample activation data
+        activation_data = {
+            "Entity": ["VOI Jeans Factory #3", "Retail Store #42", "Finance Department", "Marketing Team Alpha"],
+            "License Type": ["Manufacturing Access", "Retail Distribution", "Financial Oversight", "Marketing Portal"],
+            "Activated On": ["2025-03-30", "2025-03-28", "2025-03-25", "2025-03-22"],
+            "Activated By": ["Emperor", "CIO", "CFO", "Marketing Officer"]
+        }
+        
+        df_activations = pd.DataFrame(activation_data)
+        st.table(df_activations)
+    
+    # Tab 3: Governance Analytics
+    with tabs[2]:
+        st.header("Governance Analytics")
+        st.write("Comprehensive analytics on governance metrics across the Empire OS ecosystem.")
+        
+        # Time-based filter for analytics
+        time_range = st.radio("Time Range", ["Last 7 Days", "Last 30 Days", "Last Quarter", "Last Year"], horizontal=True)
+        
+        # Create analytics dashboard
+        chart_col1, chart_col2 = st.columns(2)
+        
+        with chart_col1:
+            # Compliance rate by department
+            st.subheader("Compliance Rate by Department")
+            
+            dept_data = {
+                "Department": ["Manufacturing", "Retail", "Finance", "Logistics", "Marketing", "Technology"],
+                "Compliance Rate": [97, 94, 99, 92, 88, 96]
+            }
+            
+            fig = px.bar(
+                dept_data, 
+                x="Department", 
+                y="Compliance Rate",
+                title="Department Compliance (%)",
+                color="Compliance Rate",
+                color_continuous_scale=px.colors.sequential.Viridis,
+                text="Compliance Rate"
             )
-        )
-    )
-    
-    # Display the network visualization
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # HSN Code Integration 
-    st.subheader("🔍 HSN Code Integration")
-    
-    st.markdown("""
-    The Virtual Silk Road incorporates HSN (Harmonized System of Nomenclature) code taxation logic throughout 
-    the system, particularly in the Material Library where each material and product is tagged with the 
-    appropriate HSN code for automated taxation.
-    """)
-    
-    # Sample HSN code mapping for demonstration
-    hsn_data = {
-        'HSN Code': ['5208', '5209', '5210', '5211', '6103', '6104', '6109', '6203'],
-        'Description': [
-            'Cotton fabric < 200 g/m²',
-            'Cotton fabric > 200 g/m²',
-            'Cotton-blend fabric < 200 g/m²',
-            'Cotton-blend fabric > 200 g/m²',
-            "Men's suits, jackets, trousers",
-            "Women's suits, dresses, skirts",
-            'T-shirts, singlets, vests',
-            "Men's suits, jackets, trousers"
-        ],
-        'GST Rate': ['5%', '5%', '5%', '5%', '12%', '12%', '5%', '12%'],
-        'System Integration': [
-            'Material Library', 
-            'Material Library', 
-            'Material Library', 
-            'Material Library',
-            'Retail Distribution',
-            'Retail Distribution',
-            'Retail Distribution',
-            'Retail Distribution'
-        ]
-    }
-    
-    # Create DataFrame
-    df_hsn = pd.DataFrame(hsn_data)
-    
-    # Display sample HSN data
-    st.dataframe(df_hsn)
-    
-    # Marketing Officer Role
-    st.subheader("👨‍💼 License Marketing & Distribution")
-    
-    st.markdown("""
-    <div style="background-color: rgba(255, 140, 0, 0.1); padding: 20px; border-radius: 5px; border-left: 5px solid darkorange;">
-        <h3 style="color: darkorange; margin-top: 0;">Marketing Officer's Role</h3>
-        <p>The Marketing Officer is responsible for selling licenses to clients based on the Emperor's directives, 
-        after consultation with the CFO and CIO. The officer works with the Business Development team to create 
-        license packages tailored to different client needs.</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # License types and distribution
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("""
-        ### License Types
+            
+            fig.update_traces(texttemplate='%{text}%', textposition='outside')
+            fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
+            
+            st.plotly_chart(fig, use_container_width=True)
+            
+        with chart_col2:
+            # API usage over time
+            st.subheader("API Usage Trends")
+            
+            # Generate some sample data
+            dates = pd.date_range(end=pd.Timestamp.now(), periods=14, freq='D')
+            api_calls = np.random.randint(800, 1200, size=14) * 1000
+            
+            # Create a dataframe
+            api_data = pd.DataFrame({
+                'Date': dates,
+                'API Calls': api_calls
+            })
+            
+            fig = px.line(
+                api_data, 
+                x='Date', 
+                y='API Calls', 
+                title='Daily API Calls (14-day trend)',
+                markers=True
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
         
-        - **Manufacturing License**
-          *Full access to manufacturing modules*
-          
-        - **Retail License**
-          *Full access to retail distribution modules*
-          
-        - **Management License**
-          *Full access to management hub modules*
-          
-        - **Enterprise License**
-          *Complete access to all modules*
-          
-        - **Custom Licenses**
-          *Tailored access based on client needs*
-        """)
+        # Second row of charts
+        chart_col3, chart_col4 = st.columns(2)
         
-    with col2:
-        st.markdown("""
-        ### License Distribution Strategy
+        with chart_col3:
+            # License usage by type
+            st.subheader("License Utilization by Type")
+            
+            license_usage = {
+                "License Type": ["Manufacturing", "Retail", "Financial", "Marketing", "Supply Chain"],
+                "Allocated": [50, 200, 20, 30, 100],
+                "Active": [42, 156, 18, 24, 81]
+            }
+            
+            df_usage = pd.DataFrame(license_usage)
+            df_usage["Utilization"] = (df_usage["Active"] / df_usage["Allocated"] * 100).round(1)
+            
+            fig = px.bar(
+                df_usage,
+                x="License Type",
+                y=["Active", "Allocated"],
+                title="License Allocation vs. Usage",
+                barmode="overlay",
+                opacity=0.7
+            )
+            
+            # Add percentage labels
+            for i, row in df_usage.iterrows():
+                fig.add_annotation(
+                    x=row["License Type"],
+                    y=row["Active"],
+                    text=f"{row['Utilization']}%",
+                    showarrow=False,
+                    yshift=10
+                )
+            
+            st.plotly_chart(fig, use_container_width=True)
+            
+        with chart_col4:
+            # System health metrics
+            st.subheader("System Health")
+            
+            # Create a gauge chart for system health
+            fig = go.Figure(go.Indicator(
+                mode = "gauge+number",
+                value = 98.7,
+                domain = {'x': [0, 1], 'y': [0, 1]},
+                title = {'text': "System Health Score"},
+                gauge = {
+                    'axis': {'range': [None, 100]},
+                    'bar': {'color': "darkgreen"},
+                    'steps' : [
+                        {'range': [0, 50], 'color': "red"},
+                        {'range': [50, 80], 'color': "orange"},
+                        {'range': [80, 90], 'color': "yellow"},
+                        {'range': [90, 100], 'color': "lightgreen"}
+                    ],
+                    'threshold': {
+                        'line': {'color': "green", 'width': 4},
+                        'thickness': 0.75,
+                        'value': 98.7
+                    }
+                }
+            ))
+            
+            st.plotly_chart(fig, use_container_width=True)
         
-        - **Direct Sales**
-          *Enterprise clients with custom requirements*
-          
-        - **Partner Network**
-          *Resellers with industry specialization*
-          
-        - **Online Platform**
-          *Self-service for standard license packages*
-          
-        - **API Marketplace**
-          *Programmatic access for developers*
-          
-        - **Enterprise Agreements**
-          *Multi-year contracts with premium support*
-        """)
+        # Compliance issues table
+        st.subheader("Active Compliance Issues")
+        
+        # Sample compliance issues
+        compliance_issues = {
+            "Issue ID": ["GOV-2324", "GOV-2310", "GOV-2298"],
+            "Department": ["Retail", "Marketing", "Manufacturing"],
+            "Description": [
+                "Missing quarterly retail inventory reconciliation",
+                "Unapproved marketing assets in circulation",
+                "Production process change without proper documentation"
+            ],
+            "Severity": ["Medium", "Low", "High"],
+            "Status": ["In Review", "Assigned", "In Progress"],
+            "Due Date": ["2025-04-10", "2025-04-15", "2025-04-05"]
+        }
+        
+        df_issues = pd.DataFrame(compliance_issues)
+        
+        # Apply color coding for severity
+        def color_severity(val):
+            color_map = {"Low": "green", "Medium": "orange", "High": "red"}
+            return f"background-color: {color_map.get(val, 'white')}; color: white;"
+        
+        # Display styled table
+        st.dataframe(df_issues, use_container_width=True)
     
-    # Emperor's Review Process
-    st.subheader("👑 Emperor's Review Process")
-    
-    st.markdown("""
-    The Emperor conducts regular reviews with the Council of Ministers to ensure the health and prosperity 
-    of the empire. These reviews follow a structured process:
-    """)
-    
-    # Create timeline for review process
-    timeline_data = {
-        'Phase': [
-            'Data Collection',
-            'Minister Reports',
-            'Council Session',
-            "Emperor's Review",
-            'Directive Issuance',
-            'Implementation',
-            'Compliance Audit'
-        ],
-        'Duration': [
-            '7 days',
-            '3 days',
-            '1 day',
-            '2 days',
-            '1 day',
-            '30 days',
-            '5 days'
-        ],
-        'Responsible': [
-            'Tech Team',
-            'Ministers',
-            'Council',
-            'Emperor',
-            'Emperor',
-            'Business Development',
-            'Compliance Team'
-        ],
-        'Description': [
-            'Gathering data from all systems',
-            'Each minister prepares status report',
-            'Council meets to discuss findings',
-            'Emperor reviews all information',
-            'Emperor issues new directives',
-            'Teams execute new directives',
-            'Verify compliance with directives'
-        ]
-    }
-    
-    # Create DataFrame
-    df_timeline = pd.DataFrame(timeline_data)
-    
-    # Display review process
-    st.table(df_timeline)
+    # Tab 4: Review Calendar
+    with tabs[3]:
+        st.header("Governance Review Calendar")
+        st.write("Schedule and tracking for governance reviews conducted by the Emperor and the council of ministers.")
+        
+        # Filter by month
+        current_month = pd.Timestamp.now().strftime("%B %Y")
+        selected_month = st.selectbox("Select Month", [current_month, "May 2025", "June 2025", "July 2025"])
+        
+        # Create schedule calendar
+        st.subheader(f"Review Schedule: {selected_month}")
+        
+        # Sample review schedule
+        review_data = {
+            "Date": ["2025-04-05", "2025-04-12", "2025-04-19", "2025-04-26"],
+            "Review Type": [
+                "Manufacturing Governance",
+                "Retail Distribution Compliance",
+                "Financial Systems Review",
+                "Full Council of Ministers Review"
+            ],
+            "Led By": ["Emperor & Manufacturing Minister", "Retail Minister", "CFO", "Emperor"],
+            "Status": ["Scheduled", "Scheduled", "Scheduled", "Tentative"]
+        }
+        
+        df_reviews = pd.DataFrame(review_data)
+        
+        # Display the schedule
+        st.table(df_reviews)
+        
+        # Review process visualization
+        st.subheader("Review Process Workflow")
+        
+        # Timeline data
+        timeline_data = {
+            "Step": [
+                "Data Collection",
+                "Preliminary Analysis",
+                "Minister Review",
+                "Emperor Review",
+                "Action Items"
+            ],
+            "Duration (days)": [3, 2, 1, 1, 2],
+            "Responsible": [
+                "Department Heads",
+                "Ministers & Advisors",
+                "Council of Ministers",
+                "Emperor",
+                "All Stakeholders"
+            ]
+        }
+        
+        # Display review process
+        st.table(timeline_data)
     
     # Marketing message and competitive positioning
     st.subheader("🌐 Market Democratization Strategy")

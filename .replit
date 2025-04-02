@@ -19,14 +19,6 @@ author = "agent"
 task = "workflow.run"
 args = "Streamlit Server"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Navigation Script"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Notification Settings Test"
-
 [[workflows.workflow]]
 name = "Streamlit Server"
 author = "agent"
@@ -42,43 +34,9 @@ task = "shell.exec"
 args = "streamlit run app.py --server.port 5000"
 waitForPort = 5000
 
-[[workflows.workflow]]
-name = "Navigation Script"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run navigate_to_notification_settings.py --server.port 5001"
-waitForPort = 5001
-
-[[workflows.workflow]]
-name = "Notification Settings Test"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run test_notification_settings.py --server.port 5001"
-waitForPort = 5001
-
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 3000
 
 [objectStorage]
 defaultBucketID = "replit-objstore-e0a659ba-f686-4c68-abf4-46d864a64cea"

@@ -1,6 +1,5 @@
 {pkgs}: {
   deps = [
-    pkgs.postgresql
     pkgs.tk
     pkgs.tcl
     pkgs.qhull
