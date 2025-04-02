@@ -13,6 +13,8 @@ from stock_analysis import show_stock_analysis
 from virtual_silk_road_landing import show_virtual_silk_road_landing
 from virtual_silk_road import show_virtual_silk_road
 from visualization import show_visualization
+from empire_os_landing import show_empire_os_landing
+from synergyze_landing import show_synergyze_landing
 
 # Configure the page
 st.set_page_config(
@@ -60,12 +62,19 @@ with st.sidebar:
     
     # Main navigation sections
     if st.session_state.user_role == 'public':
-        # Public-facing marketing pages
-        st.markdown("### Virtual Silk Road")
+        # Public-facing marketing pages for the ecosystem
+        st.markdown("### Empire Ecosystem")
         
-        if st.button("🌏 Public Landing Page", use_container_width=True):
+        if st.button("👑 Empire OS", use_container_width=True):
+            st.session_state.page = 'empire_os_landing'
+            
+        if st.button("🌏 Virtual Silk Road", use_container_width=True):
             st.session_state.page = 'vsr_landing'
             
+        if st.button("⚡ Synergyze Licenses", use_container_width=True):
+            st.session_state.page = 'synergyze_landing'
+            
+        # Commerce portal
         st.markdown("### Buying House Portal")
         
         if st.button("🛍️ Browse Products", use_container_width=True):
@@ -90,11 +99,19 @@ with st.sidebar:
             st.session_state.page = 'stock_analysis'
             
     else:
-        # Licensed user or Emperor view sections
-        st.markdown("### Enterprise Management")
+        # Licensed user or Emperor view sections - private dashboards
+        st.markdown("### Empire Command Center")
         
+        if st.button("👑 Empire OS Control", use_container_width=True):
+            st.session_state.page = 'empire_os_dashboard'
+            
         if st.button("🏙️ Virtual Silk Road", use_container_width=True):
             st.session_state.page = 'virtual_silk_road'
+            
+        if st.button("⚡ License Management", use_container_width=True):
+            st.session_state.page = 'license_management'
+            
+        st.markdown("### Enterprise Intelligence")
             
         if st.button("📊 Market Intelligence", use_container_width=True):
             st.session_state.page = 'retailer_analysis'
@@ -180,9 +197,15 @@ elif st.session_state.page == 'stock_analysis':
     show_stock_analysis()
 elif st.session_state.page == 'visualization':
     show_visualization()
-# Virtual Silk Road pages - public landing vs private emperor's view
+# Empire Ecosystem pages
+elif st.session_state.page == 'empire_os_landing':
+    show_empire_os_landing()  # Public marketing page for Empire OS
 elif st.session_state.page == 'vsr_landing':
-    show_virtual_silk_road_landing()  # Public marketing page
+    show_virtual_silk_road_landing()  # Public marketing page for Virtual Silk Road
+elif st.session_state.page == 'synergyze_landing':
+    show_synergyze_landing()  # Public marketing page for Synergyze Licenses
+
+# Private access dashboards
 elif st.session_state.page == 'virtual_silk_road':
     # Check if user has proper access
     if st.session_state.user_role in ['licensed', 'emperor']:
@@ -191,13 +214,61 @@ elif st.session_state.page == 'virtual_silk_road':
         # Redirect unauthorized users to the public landing
         st.warning("⚠️ You need licensed access to view the Emperor's Virtual Silk Road dashboard.")
         show_virtual_silk_road_landing()
+# Emperor control dashboards - redirect if no access
+elif st.session_state.page in ['empire_os_dashboard', 'license_management']:
+    if st.session_state.user_role == 'emperor':
+        st.info("This dashboard is under imperial development. 👑")
+        st.markdown("""
+        <div style='background-color: rgba(75, 0, 130, 0.1); padding: 20px; border-radius: 10px; text-align: center;'>
+            <h2 style='color: #4B0082;'>Coming Soon by Imperial Decree</h2>
+            <p style='font-size: 1.2em;'>The Emperor's engineers are building this advanced control interface.</p>
+            <p style='font-style: italic;'>Return to the Virtual Silk Road dashboard for now.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Redirect unauthorized users
+        st.warning("⚠️ Only the Emperor has access to this command interface.")
+        show_empire_os_landing()
 else:
     # Fallback to landing page if an unknown page is requested
     show_virtual_silk_road_landing()
 
 # Footer - dynamically change based on the current section
 st.markdown("---")
-if st.session_state.page in ['vsr_landing', 'virtual_silk_road']:
-    st.caption("Virtual Silk Road | Powered by Empire OS | © 2025 Synergyze")
+
+# Create a universal ecosystem diagram at the bottom of all pages
+if st.session_state.page in ['empire_os_landing', 'vsr_landing', 'synergyze_landing', 'virtual_silk_road', 'empire_os_dashboard', 'license_management']:
+    # Show the ecosystem hierarchy for all Imperial pages
+    st.markdown("""
+    <div style="text-align: center; margin-bottom: 10px;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; gap: 15px;">
+            <div style="text-align: center;">
+                <span style="font-weight: bold; color: gold; font-size: 0.9em;">👑 EMPIRE OS</span><br>
+                <span style="font-size: 0.7em; color: #666;">Operating System</span>
+            </div>
+            <div style="color: #999;">→</div>
+            <div style="text-align: center;">
+                <span style="font-weight: bold; color: #4B0082; font-size: 0.9em;">🌏 VIRTUAL SILK ROAD</span><br>
+                <span style="font-size: 0.7em; color: #666;">Network</span>
+            </div>
+            <div style="color: #999;">→</div>
+            <div style="text-align: center;">
+                <span style="font-weight: bold; color: #8A2BE2; font-size: 0.9em;">⚡ SYNERGYZE</span><br>
+                <span style="font-size: 0.7em; color: #666;">Licenses</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Different footers based on the specific ecosystem page
+    if st.session_state.page == 'empire_os_landing':
+        st.caption("Empire OS | The Ultimate Enterprise Governance Operating System | © 2025 Imperial Technology")
+    elif st.session_state.page in ['vsr_landing', 'virtual_silk_road']:
+        st.caption("Virtual Silk Road | Powered by Empire OS | © 2025 Imperial Technology")
+    elif st.session_state.page in ['synergyze_landing', 'license_management']:
+        st.caption("Synergyze Licenses | Deployed on the Virtual Silk Road | Powered by Empire OS | © 2025 Imperial Technology")
+    else:
+        st.caption("Empire Ecosystem | © 2025 Imperial Technology")
 else:
+    # For other portal pages not directly related to the Empire ecosystem
     st.caption("Buying House Portal | Ready Styles. Bulk Orders. Tailored For You.")
