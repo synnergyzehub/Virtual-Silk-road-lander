@@ -1,0 +1,16 @@
+API Category,API Endpoint,Description
+User Management,/api/v1/user/create,Create new user accounts for VJRIPL & KKCL
+User Management,/api/v1/user/assignRole,Assign Brand License & relevant roles
+Procurement & PO,/api/v1/po/create,Create Purchase Orders to Scotts Garments
+Procurement & PO,/api/v1/po/statusUpdate,"Update PO status (confirmed, pending, completed)"
+Production & WIP,/api/v1/production/start,Initiate production at Scotts
+Production & WIP,/api/v1/production/wipUpdate,Update WIP stages per production schedule
+Production & WIP,/api/v1/production/qcLog,Log QC compliance post production
+Warehouse & Logistics,/api/v1/warehouse/binAssign,Assign warehouse bins for goods receipt
+Warehouse & Logistics,/api/v1/logistics/dispatch,Dispatch goods to VJRIPL & KKCL distribution centers
+Sales & Distribution,/api/v1/sales/invoiceCreate,Create sales invoices for retail channels
+Sales & Distribution,/api/v1/sales/omsUpdate,Update OMS with retailer order details
+Financial & Payment,/api/v1/payment/escrowRelease,Release escrow payments post invoice verification
+Financial & Payment,/api/v1/payment/scfStatus,Track SCF financing status with banks
+Compliance & Audit,/api/v1/compliance/kycCheck,Perform vendor KYC checks
+Compliance & Audit,/api/v1/compliance/gstReport,Generate GST compliance reports for brands
