@@ -1,0 +1,125 @@
+// Empire OS - Replit App Starter (React + Tailwind + Modular Routing)
+
+// Folder Structure:
+// /src
+// ├── /components
+// │   ├── DashboardTile.jsx
+// │   ├── Sidebar.jsx
+// │   ├── Header.jsx
+// │   └── RoleGuard.jsx
+// ├── /pages
+// │   ├── Dashboard.jsx
+// │   ├── Synnergyze.jsx
+// │   ├── DigitalMe.jsx
+// │   ├── WovenSupply.jsx
+// │   ├── CommuneConnect.jsx
+// │   ├── ECGCouncil.jsx
+// │   └── EmperorView.jsx
+// ├── /data
+// │   └── roleConfig.js
+// ├── App.jsx
+// └── main.jsx
+
+// Tailwind CSS included via PostCSS setup in Vite
+
+// ----- main.jsx -----
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// ----- App.jsx -----
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard';
+import Synnergyze from './pages/Synnergyze';
+import DigitalMe from './pages/DigitalMe';
+import WovenSupply from './pages/WovenSupply';
+import CommuneConnect from './pages/CommuneConnect';
+import ECGCouncil from './pages/ECGCouncil';
+import EmperorView from './pages/EmperorView';
+
+function App() {
+  return (
+    <Router>
+      <div className="flex h-screen bg-gray-900 text-white">
+        <Sidebar />
+        <main className="flex-1 overflow-y-scroll p-6">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/synnergyze" element={<Synnergyze />} />
+            <Route path="/digitalme" element={<DigitalMe />} />
+            <Route path="/woven-supply" element={<WovenSupply />} />
+            <Route path="/commune-connect" element={<CommuneConnect />} />
+            <Route path="/ecg-council" element={<ECGCouncil />} />
+            <Route path="/emperor-view" element={<EmperorView />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
+// ----- Sidebar.jsx (Nav Links) -----
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const links = [
+  { path: '/', label: 'Dashboard' },
+  { path: '/synnergyze', label: 'Synnergyze' },
+  { path: '/digitalme', label: 'DigitalMe' },
+  { path: '/woven-supply', label: 'Woven Supply' },
+  { path: '/commune-connect', label: 'Commune Connect' },
+  { path: '/ecg-council', label: 'ECG Council' },
+  { path: '/emperor-view', label: 'Emperor View' },
+];
+
+const Sidebar = () => (
+  <nav className="w-64 bg-gray-800 p-4 space-y-4">
+    {links.map((link) => (
+      <Link
+        key={link.path}
+        to={link.path}
+        className="block p-2 rounded hover:bg-gray-700"
+      >
+        {link.label}
+      </Link>
+    ))}
+  </nav>
+);
+
+export default Sidebar;
+
+// ----- Dashboard.jsx (Example page) -----
+import React from 'react';
+const Dashboard = () => (
+  <div>
+    <h1 className="text-3xl font-bold">Empire OS: Master Dashboard</h1>
+    <p className="mt-2 text-gray-400">Welcome to your world view. Select a module from the sidebar.</p>
+  </div>
+);
+
+export default Dashboard;
+
+// Repeat structure for other pages, use placeholder content for now
+
+// ----- Styling (tailwind.config.js) -----
+// Use Tailwind defaults and set dark mode enabled
+
+module.exports = {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
