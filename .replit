@@ -1,4 +1,4 @@
-modules = ["python-3.11", "postgresql-16"]
+modules = ["python-3.11", "postgresql-16", "python3"]
 
 [nix]
 channel = "stable-24_05"
@@ -19,6 +19,30 @@ author = "agent"
 task = "workflow.run"
 args = "Streamlit Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Streamlit Test"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Minimal Streamlit"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Streamlit New App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "HSN Transaction App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Simple Test App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Streamlit Port 8080 Test"
+
 [[workflows.workflow]]
 name = "Streamlit Server"
 author = "agent"
@@ -34,8 +58,101 @@ task = "shell.exec"
 args = "streamlit run app.py --server.port 5000"
 waitForPort = 5000
 
+[[workflows.workflow]]
+name = "Streamlit Test"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run test_app.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Minimal Streamlit"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run minimal.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Streamlit New App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run new_app.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "HSN Transaction App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run app.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Simple Test App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run simple_test.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Streamlit Port 8080 Test"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run port_test.py --server.port 8080"
+waitForPort = 8080
+
 [[ports]]
 localPort = 5000
+
+[[ports]]
+localPort = 8080
 externalPort = 80
 
 [objectStorage]

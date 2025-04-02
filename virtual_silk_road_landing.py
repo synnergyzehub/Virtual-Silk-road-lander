@@ -42,6 +42,9 @@ def show_virtual_silk_road_landing():
             <h3 style='margin: 0; color: white;'>Request Demo Access</h3>
         </div>
         """, unsafe_allow_html=True)
+        
+        # Add note about Emperor access
+        st.info("👑 **Emperor's Note**: For the comprehensive governance visualization with real-time controls and detailed analytics, request Emperor-level access to view the private Virtual Silk Road Command Center.")
     
     with col2:
         # Create a simple visual representation
