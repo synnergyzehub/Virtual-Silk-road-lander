@@ -11,15 +11,38 @@ import base64
 def show_virtual_silk_road():
     """Display the Virtual Silk Road visualization - Emperor's view of the entire ecosystem"""
     
-    st.title("🏙️ The Virtual Silk Road")
+    # Create a visually striking header for marketing appeal
+    st.markdown(
+        """
+        <div style='background: linear-gradient(90deg, rgba(30,58,138,1) 0%, rgba(123,104,238,1) 100%); padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center;'>
+            <h1 style='color: white; margin: 0; font-size: 2.5rem;'>🏙️ The Virtual Silk Road</h1>
+            <p style='color: #E0E0FF; margin: 10px 0 0 0;'>Connecting Worlds through Digital Governance</p>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+    
+    # Marketing banner highlighting the ecosystem positioning
+    col1, col2, col3 = st.columns([1, 6, 1])
+    with col2:
+        st.markdown("""
+        <div style="background-color: rgba(153, 0, 153, 0.08); padding: 20px; border-radius: 5px; border: 1px solid #990099; margin-bottom: 20px; text-align: center;">
+            <h3 style="color: #990099; margin-top: 0; font-weight: bold;">INTRODUCING THE NEXT EVOLUTION IN ENTERPRISE GOVERNANCE</h3>
+            <p style="font-size: 1.1em; margin-bottom: 15px;">Where Microsoft charges $20,000 for enterprise governance solutions, we democratize access through our modular license model.</p>
+            <div style="font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 0;">Part of the Empire OS Ecosystem</div>
+        </div>
+        """, unsafe_allow_html=True)
     
     st.markdown("""
     <div style="background-color: rgba(123, 104, 238, 0.1); padding: 20px; border-radius: 5px; border-left: 5px solid #7B68EE;">
         <h3 style="color: #7B68EE; margin-top: 0;">Emperor's Digital Twin of the Empire</h3>
-        <p>The Virtual Silk Road is a digital representation of the entire ecosystem. It visualizes all entities, 
-        data flows, license activities, and governance structures in a unified interface for the Emperor's oversight.</p>
+        <p>The Virtual Silk Road is a digital twin of your supply chain ecosystem - similar to how Simulink in MATLAB creates modular 
+        block-based models with interconnected components. It visualizes all entities, data flows, license activities, and governance 
+        structures in a unified interface for complete oversight.</p>
         <p>This view connects with <b>Empire OS</b> to provide real-time insights into the health and operations of 
         the entire enterprise, powered by <b>Synergyze</b> and integrated with external systems through APIs.</p>
+        <p><b>For marketing and sales teams:</b> Use this visualization to demonstrate the complete ecosystem to potential clients, 
+        highlighting how your organization connects every aspect of the operation through a unified governance framework.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -451,12 +474,106 @@ def show_virtual_silk_road():
     # Display review process
     st.table(df_timeline)
     
-    # Final call to action
+    # Marketing message and competitive positioning
+    st.subheader("🌐 Market Democratization Strategy")
+    
+    col1, col2 = st.columns([2, 3])
+    
+    with col1:
+        st.markdown("""
+        ### Why Virtual Silk Road?
+        
+        - **Cost-effective Governance**
+          *At a fraction of competing solutions*
+          
+        - **Unified Ecosystem View**
+          *No more siloed information*
+          
+        - **Real-time Decision Making**
+          *Immediate insights across operations*
+          
+        - **Complete API Integration**
+          *Connect to any existing system*
+          
+        - **Modular License Structure**
+          *Pay only for what you need*
+        """)
+    
+    with col2:
+        # Comparison table
+        st.markdown("### Competitive Advantage")
+        
+        comparison_data = {
+            'Feature': [
+                'Unified Governance View',
+                'Real-time Supply Chain Insights',
+                'HSN Code Integration',
+                'Emperor-level Oversight',
+                'Marketing & Sales Portal',
+                'Custom License Templates',
+                'API-driven Architecture',
+                'ROI Analytics'
+            ],
+            'Virtual Silk Road': [
+                '✅ Included',
+                '✅ Included',
+                '✅ Included',
+                '✅ Included',
+                '✅ Included',
+                '✅ Included',
+                '✅ Included',
+                '✅ Included'
+            ],
+            'Competitors': [
+                '✅ $20,000+',
+                '❌ Extra Module',
+                '❌ Not Available',
+                '❌ Limited Access',
+                '❌ Separate System',
+                '❌ Fixed Templates',
+                '⚠️ Limited APIs',
+                '⚠️ Basic Only'
+            ]
+        }
+        
+        # Create DataFrame
+        df_comparison = pd.DataFrame(comparison_data)
+        
+        # Display comparison
+        st.dataframe(df_comparison, hide_index=True)
+        
+        # Pricing advantage message
+        st.markdown("""
+        <div style="background-color: rgba(50, 205, 50, 0.1); padding: 10px; border-radius: 5px; border-left: 3px solid #32CD32; margin-top: 10px;">
+            <b style="color: #32CD32;">💰 Price Advantage:</b> Our modular licensing approach provides enterprise-grade governance at 60-80% less than competing solutions.
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Marketing call-to-action
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, rgba(75,0,130,0.8) 0%, rgba(123,104,238,0.8) 100%); 
+                padding: 25px; border-radius: 10px; margin-top: 20px; text-align: center; color: white;">
+        <h2 style="color: white; margin-top: 0;">Ready to Transform Your Enterprise Governance?</h2>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            Contact our Marketing Officer to discover the perfect license package for your organization.
+        </p>
+        <div style="margin-top: 20px;">
+            <span style="background-color: white; color: #4B0082; padding: 10px 20px; border-radius: 30px; font-weight: bold; display: inline-block;">
+                Request Demo & Pricing ➔
+            </span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Final Emperor's view message
     st.markdown("""
     <div style="background-color: rgba(70, 130, 180, 0.1); padding: 20px; border-radius: 5px; border-left: 5px solid steelblue; margin-top: 20px;">
         <h3 style="color: steelblue; margin-top: 0;">Emperor's Command Center</h3>
         <p>This visualization provides the Emperor with complete oversight of the entire ecosystem. 
         From here, the Emperor can monitor all activities, issue directives, and ensure the prosperity 
         of the empire through the Virtual Silk Road.</p>
+        <p><b>For Marketing Teams:</b> Demonstrate this comprehensive view to showcase how your organization's 
+        leadership can gain unprecedented visibility across all operations, enabling faster decision-making 
+        and strategic advantage over competitors still using fragmented systems.</p>
     </div>
     """, unsafe_allow_html=True)
