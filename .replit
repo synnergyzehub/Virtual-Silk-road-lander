@@ -37,10 +37,6 @@ args = "HSN Transaction App"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Streamlit Port 8080 Test"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Emperor OS Timeline"
 
 [[workflows.workflow.tasks]]
@@ -135,21 +131,6 @@ args = "streamlit run app.py --server.port 8080"
 waitForPort = 8080
 
 [[workflows.workflow]]
-name = "Streamlit Port 8080 Test"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run port_test.py --server.port 8080"
-waitForPort = 8080
-
-[[workflows.workflow]]
 name = "Emperor OS Timeline"
 author = "agent"
 
@@ -206,8 +187,8 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run simple_app.py --server.port 5000"
-waitForPort = 5000
+args = "streamlit run simple_app.py --server.port 8080"
+waitForPort = 8080
 
 [[workflows.workflow]]
 name = "Basic HTTP Server"
