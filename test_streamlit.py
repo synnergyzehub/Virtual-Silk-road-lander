@@ -1,10 +1,14 @@
 import streamlit as st
 
-# Show we're running
-print("Starting Streamlit test app...")
-
 st.title("Test Streamlit App")
-st.write("This is a test to ensure Streamlit is working properly.")
+st.write("Testing basic Streamlit functionality without any other dependencies")
 
-# Print confirmation of app startup
-print("Streamlit app is running and should be accessible on port 5000")
+# Test basic UI elements
+st.header("UI Test")
+st.button("Test Button")
+st.checkbox("Test Checkbox")
+st.radio("Test Radio", options=["Option 1", "Option 2"])
+st.selectbox("Test Selectbox", options=["Choice 1", "Choice 2"])
+st.text_input("Test Text Input")
+st.text_area("Test Text Area")
+st.slider("Test Slider", 0, 100, 50)

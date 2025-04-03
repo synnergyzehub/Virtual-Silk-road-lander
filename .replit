@@ -37,10 +37,6 @@ args = "HSN Transaction App"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Simple Test App"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Streamlit Port 8080 Test"
 
 [[workflows.workflow.tasks]]
@@ -50,6 +46,18 @@ args = "Emperor OS Timeline"
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Test Streamlit App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Empire OS"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Simple Test App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Basic HTTP Server"
 
 [[workflows.workflow]]
 name = "Streamlit Server"
@@ -127,21 +135,6 @@ args = "streamlit run app.py --server.port 8080"
 waitForPort = 8080
 
 [[workflows.workflow]]
-name = "Simple Test App"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run simple_test.py --server.port 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
 name = "Streamlit Port 8080 Test"
 author = "agent"
 
@@ -184,6 +177,51 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "streamlit run test_streamlit.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Empire OS"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run app.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Simple Test App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run simple_app.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Basic HTTP Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python server_test.py 5000"
 waitForPort = 5000
 
 [[ports]]
