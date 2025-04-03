@@ -45,15 +45,11 @@ args = "Test Streamlit App"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Empire OS"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Simple Test App"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Basic HTTP Server"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Voi Jeans Inventory"
 
 [[workflows.workflow]]
 name = "Streamlit Server"
@@ -161,36 +157,6 @@ args = "streamlit run test_streamlit.py --server.port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
-name = "Empire OS"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run app.py --server.port 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Simple Test App"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run simple_app.py --server.port 8080"
-waitForPort = 8080
-
-[[workflows.workflow]]
 name = "Basic HTTP Server"
 author = "agent"
 
@@ -204,6 +170,21 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "python server_test.py 5000"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Voi Jeans Inventory"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run voi_inventory_management.py --server.port 8080"
+waitForPort = 8080
 
 [[ports]]
 localPort = 5000
