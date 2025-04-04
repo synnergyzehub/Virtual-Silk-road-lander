@@ -2467,12 +2467,18 @@ def show_sync_up():
 def show_inventory_optimization():
     """Display the Inventory Optimization page with One-Click Recommendations"""
     st.title("Inventory Optimization")
-    st.subheader("AI-Powered Optimization Recommendations")
+    st.subheader("Divine Alignment-Powered Optimization Recommendations")
     
-    # Optimization banner
+    # Optimization banner with Divine Mechanics principles
     st.info("""
-    This module uses advanced analytics and AI algorithms to analyze your inventory data 
-    and provide actionable optimization recommendations to improve efficiency and reduce costs.
+    This module uses advanced analytics and the Divine Mechanics Computational System to analyze your inventory data
+    and provide actionable optimization recommendations aligned with the Emperor's governance principles:
+    
+    • **Justice (عدل)**: Balanced inventory across all locations ensuring fairness in distribution
+    • **Mercy (رحمن)**: Preventing stockouts that would negatively impact customer experience
+    • **All-Knowing (علیم)**: Data-driven decisions across your entire inventory ecosystem
+    • **All-Seeing (بصیر)**: Complete visibility into inventory optimization opportunities
+    • **Most Generous (کریم)**: Optimizing resources to maximize value for all stakeholders
     """)
     
     # Set up inventory data (in a real application, this would come from a database)
@@ -2939,8 +2945,61 @@ def show_inventory_optimization():
                                       "Reorder Point", "Days to Stockout"]].sort_values("Stock Status"),
                         use_container_width=True)
         
+        # Emperor's Advisory Section
+        st.markdown("---")
+        st.subheader("👑 Emperor's Advisory")
+        
+        st.info("""
+        The Emperor, through the ECG (Emperor's Computational Governance) framework, provides 
+        the following recommendations aligned with divine principles. Implementation of these 
+        recommendations ensures compliance with the license terms and optimal operations.
+        """)
+        
+        # Create recommendation cards
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### Justice (عدل) Recommendations")
+            st.markdown("""
+            **Balance inventory distribution across all locations:**
+            
+            * Implement cross-location transfers to address imbalances
+            * Standardize stock levels based on store demand patterns
+            * Ensure equitable access to high-demand items
+            """)
+            
+            st.markdown("### Mercy (رحمن) Recommendations")
+            st.markdown("""
+            **Prevent stockouts that impact customer experience:**
+            
+            * Prioritize replenishment for items with highest customer impact
+            * Create emergency replenishment protocols for critical items
+            * Develop alternative product recommendations for out-of-stock scenarios
+            """)
+        
+        with col2:
+            st.markdown("### All-Knowing (علیم) Recommendations")
+            st.markdown("""
+            **Enhance data completeness and quality:**
+            
+            * Implement daily data verification protocols
+            * Ensure all inventory movements are captured in real-time
+            * Connect inventory data with sales and customer feedback
+            """)
+            
+            st.markdown("### Most Generous (کریم) Recommendations")
+            st.markdown("""
+            **Optimize resources for maximum stakeholder value:**
+            
+            * Redirect excess inventory to charitable contributions
+            * Implement resource-saving initiatives throughout the supply chain
+            * Ensure fair pricing that balances business needs and customer value
+            """)
+        
+        st.markdown("---")
+        
         # Implementation buttons
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             if st.button("Generate Purchase Orders"):
@@ -2951,6 +3010,10 @@ def show_inventory_optimization():
                 st.success("Promotion campaign has been scheduled for items with excess inventory.")
         
         with col3:
+            if st.button("Request ECG Compliance Audit"):
+                st.success("ECG compliance audit has been scheduled. The Emperor's governance team will verify alignment with divine principles.")
+        
+        with col4:
             if st.button("Reset Optimization"):
                 # Reset to original state
                 st.session_state.optimization_applied = False
@@ -2958,62 +3021,151 @@ def show_inventory_optimization():
                 st.session_state.optimization_data = st.session_state.optimization_data_original
                 st.rerun()
     
-    # Inventory health score
-    st.subheader("Inventory Health Score")
+    # Inventory health score and Divine Alignment
+    st.subheader("Inventory Health & Divine Alignment Scores")
     
-    # Calculate a simple health score based on various factors
-    df = st.session_state.optimization_data
+    col1, col2 = st.columns(2)
     
-    # Factors for health score (0-100 scale)
-    percent_optimal = (len(df[df["Stock Status"] == "Optimal"]) / len(df)) * 100
-    percent_overstock = (len(df[df["Stock Status"] == "Overstocked"]) / len(df)) * 100
-    percent_stockout_risk = (len(df[df["Stock Status"].isin(["Out of Stock", "Critical", "Low"])]) / len(df)) * 100
-    
-    avg_days_in_inventory = min(100, df["Days in Inventory"].mean())  # Cap at 100 days
-    days_in_inventory_score = max(0, 100 - avg_days_in_inventory)
-    
-    # Calculate overall health score (weighted average)
-    health_score = (
-        percent_optimal * 0.4 +  # 40% weight to optimal stock items
-        (100 - percent_overstock) * 0.3 +  # 30% weight to not having overstock
-        (100 - percent_stockout_risk) * 0.2 +  # 20% weight to not having stockout risk
-        days_in_inventory_score * 0.1  # 10% weight to days in inventory
-    )
-    
-    # Display health score gauge
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=health_score,
-        title={"text": "Inventory Health Score"},
-        gauge={
-            "axis": {"range": [0, 100]},
-            "bar": {"color": "darkblue"},
-            "steps": [
-                {"range": [0, 40], "color": "red"},
-                {"range": [40, 60], "color": "orange"},
-                {"range": [60, 80], "color": "yellow"},
-                {"range": [80, 100], "color": "green"}
-            ],
-            "threshold": {
-                "line": {"color": "black", "width": 4},
-                "thickness": 0.75,
-                "value": health_score
+    with col1:
+        # Calculate a simple health score based on various factors
+        df = st.session_state.optimization_data
+        
+        # Factors for health score (0-100 scale)
+        percent_optimal = (len(df[df["Stock Status"] == "Optimal"]) / len(df)) * 100
+        percent_overstock = (len(df[df["Stock Status"] == "Overstocked"]) / len(df)) * 100
+        percent_stockout_risk = (len(df[df["Stock Status"].isin(["Out of Stock", "Critical", "Low"])]) / len(df)) * 100
+        
+        avg_days_in_inventory = min(100, df["Days in Inventory"].mean())  # Cap at 100 days
+        days_in_inventory_score = max(0, 100 - avg_days_in_inventory)
+        
+        # Calculate overall health score (weighted average)
+        health_score = (
+            percent_optimal * 0.4 +  # 40% weight to optimal stock items
+            (100 - percent_overstock) * 0.3 +  # 30% weight to not having overstock
+            (100 - percent_stockout_risk) * 0.2 +  # 20% weight to not having stockout risk
+            days_in_inventory_score * 0.1  # 10% weight to days in inventory
+        )
+        
+        # Display health score gauge
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=health_score,
+            title={"text": "Inventory Health Score"},
+            gauge={
+                "axis": {"range": [0, 100]},
+                "bar": {"color": "darkblue"},
+                "steps": [
+                    {"range": [0, 40], "color": "red"},
+                    {"range": [40, 60], "color": "orange"},
+                    {"range": [60, 80], "color": "yellow"},
+                    {"range": [80, 100], "color": "green"}
+                ],
+                "threshold": {
+                    "line": {"color": "black", "width": 4},
+                    "thickness": 0.75,
+                    "value": health_score
+                }
             }
+        ))
+        
+        fig.update_layout(height=300)
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Health score interpretation
+        if health_score >= 80:
+            st.success("Your inventory is well-optimized. Continue to maintain these levels for optimal performance.")
+        elif health_score >= 60:
+            st.warning("Your inventory is reasonably healthy but has opportunities for improvement. Focus on the recommendations above.")
+        elif health_score >= 40:
+            st.error("Your inventory needs significant optimization. Follow the recommendations to improve efficiency.")
+        else:
+            st.error("Your inventory is in critical condition. Immediate action is required to address the issues highlighted above.")
+    
+    with col2:
+        # Calculate Divine Alignment Score based on Emperor's governance principles
+        
+        # Divine principle: Justice (عدل) - Balance in distribution
+        # Measure the variance in stock levels across locations
+        location_balance = df.groupby("Location")["Stock Status"].value_counts().unstack().fillna(0)
+        location_optimal_percent = location_balance["Optimal"] / location_balance.sum(axis=1) * 100
+        justice_score = 100 - min(100, location_optimal_percent.std() * 2)  # Lower std dev = higher score
+        
+        # Divine principle: Mercy (رحمن) - Preventing stockouts
+        mercy_score = 100 - percent_stockout_risk
+        
+        # Divine principle: All-Knowing (علیم) - Data completeness
+        # Percentage of items with complete data (no missing values)
+        all_knowing_score = 100 - min(100, (df.isna().sum().sum() / (df.shape[0] * df.shape[1])) * 100)
+        
+        # Divine principle: All-Seeing (بصیر) - Inventory visibility
+        # Based on how many days of visibility we have (days to stockout)
+        visibility_days = df["Days to Stockout"].mean()
+        all_seeing_score = min(100, (visibility_days / 90) * 100)  # 90 days as target
+        
+        # Divine principle: Most Generous (کریم) - Resource optimization
+        # Based on balancing customer service (no stockouts) with financial efficiency (no excess)
+        generosity_score = (
+            mercy_score * 0.5 +  # No stockouts = good customer service
+            (100 - percent_overstock) * 0.5  # No excess = financial efficiency
+        )
+        
+        # Calculate composite Divine Alignment Score
+        divine_alignment_score = (
+            justice_score * 0.2 +
+            mercy_score * 0.2 +
+            all_knowing_score * 0.2 +
+            all_seeing_score * 0.2 +
+            generosity_score * 0.2
+        )
+        
+        # Display Divine Alignment score gauge
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=divine_alignment_score,
+            title={"text": "Divine Alignment Score"},
+            gauge={
+                "axis": {"range": [0, 100]},
+                "bar": {"color": "gold"},
+                "steps": [
+                    {"range": [0, 40], "color": "darkred"},
+                    {"range": [40, 60], "color": "darkorange"},
+                    {"range": [60, 80], "color": "goldenrod"},
+                    {"range": [80, 100], "color": "darkgreen"}
+                ],
+                "threshold": {
+                    "line": {"color": "black", "width": 4},
+                    "thickness": 0.75,
+                    "value": divine_alignment_score
+                }
+            }
+        ))
+        
+        fig.update_layout(height=300)
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Divine Alignment score breakdown
+        st.markdown("### Divine Alignment Breakdown")
+        
+        principles_scores = {
+            "Justice (عدل)": justice_score,
+            "Mercy (رحمن)": mercy_score,
+            "All-Knowing (علیم)": all_knowing_score,
+            "All-Seeing (بصیر)": all_seeing_score,
+            "Most Generous (کریم)": generosity_score
         }
-    ))
-    
-    fig.update_layout(height=300)
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # Health score interpretation
-    if health_score >= 80:
-        st.success("Your inventory is well-optimized. Continue to maintain these levels for optimal performance.")
-    elif health_score >= 60:
-        st.warning("Your inventory is reasonably healthy but has opportunities for improvement. Focus on the recommendations above.")
-    elif health_score >= 40:
-        st.error("Your inventory needs significant optimization. Follow the recommendations to improve efficiency.")
-    else:
-        st.error("Your inventory is in critical condition. Immediate action is required to address the issues highlighted above.")
+        
+        for principle, score in principles_scores.items():
+            st.markdown(f"**{principle}**: {score:.1f}/100")
+        
+        # Divine Alignment interpretation
+        if divine_alignment_score >= 80:
+            st.success("Your inventory management is divinely aligned with the Emperor's governance principles.")
+        elif divine_alignment_score >= 60:
+            st.warning("Your inventory management is generally aligned with divine principles but has room for improvement.")
+        elif divine_alignment_score >= 40:
+            st.error("Your inventory management needs significant realignment with divine principles.")
+        else:
+            st.error("Your inventory management is severely misaligned with divine principles. Immediate action is required.")
 
 def show_settings():
     """Display the settings page"""
