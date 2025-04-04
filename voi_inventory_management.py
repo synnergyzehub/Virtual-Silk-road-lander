@@ -44,6 +44,7 @@ def main():
             [
                 "Dashboard", 
                 "Inventory Analytics",
+                "Inventory Optimization", # New feature
                 "Woven Supply (Manufacturing)",
                 "Commune Connect (Distribution)",
                 "Store Performance",
@@ -58,6 +59,8 @@ def main():
             show_dashboard()
         elif nav_option == "Inventory Analytics":
             show_inventory_analytics()
+        elif nav_option == "Inventory Optimization": # New feature
+            show_inventory_optimization()
         elif nav_option == "Woven Supply (Manufacturing)":
             show_woven_supply()
         elif nav_option == "Commune Connect (Distribution)":
@@ -2460,6 +2463,557 @@ def show_sync_up():
                 fig = px.line(df_forecast, x="Month", y="Forecast",
                              title=f"{report_category} Forecast for Next 6 Months")
                 st.plotly_chart(fig, use_container_width=True)
+
+def show_inventory_optimization():
+    """Display the Inventory Optimization page with One-Click Recommendations"""
+    st.title("Inventory Optimization")
+    st.subheader("AI-Powered Optimization Recommendations")
+    
+    # Optimization banner
+    st.info("""
+    This module uses advanced analytics and AI algorithms to analyze your inventory data 
+    and provide actionable optimization recommendations to improve efficiency and reduce costs.
+    """)
+    
+    # Set up inventory data (in a real application, this would come from a database)
+    if 'optimization_data' not in st.session_state:
+        # Generate sample inventory data
+        inventory_data = []
+        
+        categories = ["Jeans", "T-Shirts", "Shirts", "Jackets", "Accessories"]
+        sub_categories = {
+            "Jeans": ["Slim Fit", "Regular Fit", "Relaxed Fit", "Skinny", "Boot Cut"],
+            "T-Shirts": ["Round Neck", "V-Neck", "Polo", "Graphic", "Basic"],
+            "Shirts": ["Formal", "Casual", "Denim", "Checked", "Printed"],
+            "Jackets": ["Bomber", "Denim", "Leather", "Winter", "Casual"],
+            "Accessories": ["Belts", "Wallets", "Socks", "Caps", "Bags"]
+        }
+        
+        locations = ["Warehouse A", "Warehouse B", "Store 1", "Store 2", "Store 3"]
+        
+        for _ in range(200):
+            category = random.choice(categories)
+            sub_category = random.choice(sub_categories[category])
+            sku = f"VOI-{category[:3].upper()}-{random.randint(1000, 9999)}"
+            location = random.choice(locations)
+            quantity = random.randint(5, 500)
+            avg_cost = random.uniform(500, 2000)
+            mrp = avg_cost * random.uniform(1.5, 2.5)
+            days_in_inventory = random.randint(1, 365)
+            sales_velocity = random.randint(1, 50)  # Average units sold per month
+            reorder_point = sales_velocity * random.uniform(0.5, 2.0)  # Calculated reorder point
+            lead_time = random.randint(7, 45)  # Lead time in days
+            
+            # Create stocking level flags
+            if quantity == 0:
+                stock_status = "Out of Stock"
+            elif quantity < reorder_point * 0.5:
+                stock_status = "Critical"
+            elif quantity < reorder_point:
+                stock_status = "Low"
+            elif quantity > sales_velocity * 6:
+                stock_status = "Overstocked"
+            else:
+                stock_status = "Optimal"
+            
+            # Calculate recommended order quantity
+            if stock_status in ["Out of Stock", "Critical", "Low"]:
+                recommended_order = int(max(0, (sales_velocity * 3) - quantity))
+            else:
+                recommended_order = 0
+            
+            # Calculate excess inventory
+            if stock_status == "Overstocked":
+                excess_units = int(quantity - (sales_velocity * 3))
+                excess_value = excess_units * avg_cost
+            else:
+                excess_units = 0
+                excess_value = 0
+            
+            # Calculate days until stockout
+            if sales_velocity > 0:
+                days_to_stockout = int(quantity / (sales_velocity / 30))
+            else:
+                days_to_stockout = 999  # Arbitrary high number
+            
+            inventory_data.append({
+                "SKU": sku,
+                "Category": category,
+                "Sub-Category": sub_category,
+                "Location": location,
+                "Quantity": quantity,
+                "Average Cost": avg_cost,
+                "MRP": mrp,
+                "Inventory Value": quantity * avg_cost,
+                "Days in Inventory": days_in_inventory,
+                "Sales Velocity (monthly)": sales_velocity,
+                "Reorder Point": int(reorder_point),
+                "Lead Time (days)": lead_time,
+                "Stock Status": stock_status,
+                "Recommended Order": recommended_order,
+                "Excess Units": excess_units,
+                "Excess Value": excess_value,
+                "Days to Stockout": days_to_stockout
+            })
+        
+        st.session_state.optimization_data = pd.DataFrame(inventory_data)
+        st.session_state.optimization_applied = False
+        st.session_state.show_transfers = False
+    
+    # Dashboard metrics before optimization
+    df = st.session_state.optimization_data
+    
+    # Calculate key metrics
+    total_inventory_value = df["Inventory Value"].sum()
+    total_excess_value = df["Excess Value"].sum()
+    stockout_risk_count = len(df[df["Stock Status"].isin(["Out of Stock", "Critical", "Low"])])
+    optimal_items_count = len(df[df["Stock Status"] == "Optimal"])
+    
+    st.subheader("Current Inventory Status")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric(
+            "Total Inventory Value", 
+            f"₹{total_inventory_value:,.2f}",
+            delta=None
+        )
+    
+    with col2:
+        st.metric(
+            "Excess Inventory Value", 
+            f"₹{total_excess_value:,.2f}",
+            f"-{(total_excess_value/total_inventory_value*100):.1f}% opportunity",
+            delta_color="inverse"
+        )
+    
+    with col3:
+        st.metric(
+            "Stockout Risk Items", 
+            f"{stockout_risk_count}",
+            f"{(stockout_risk_count/len(df)*100):.1f}% of items"
+        )
+    
+    with col4:
+        st.metric(
+            "Optimal Stock Items", 
+            f"{optimal_items_count}",
+            f"{(optimal_items_count/len(df)*100):.1f}% of items"
+        )
+    
+    # Stock status summary
+    st.subheader("Stock Status Summary")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        # Stock status distribution chart
+        status_counts = df["Stock Status"].value_counts().reset_index()
+        status_counts.columns = ["Status", "Count"]
+        
+        # Define color map for statuses
+        color_map = {
+            "Out of Stock": "red",
+            "Critical": "orange",
+            "Low": "yellow",
+            "Optimal": "green",
+            "Overstocked": "blue"
+        }
+        
+        # Create a custom color sequence based on the order in the dataframe
+        colors = [color_map[status] for status in status_counts["Status"]]
+        
+        fig = px.pie(
+            status_counts, 
+            values="Count", 
+            names="Status",
+            title="Inventory Status Distribution",
+            color="Status",
+            color_discrete_map=color_map
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        # Key Improvement Opportunities
+        st.markdown("### Key Opportunities")
+        
+        # Calculate opportunity metrics
+        excess_percent = (total_excess_value / total_inventory_value) * 100
+        stockout_percent = (stockout_risk_count / len(df)) * 100
+        avg_days_in_inventory = df["Days in Inventory"].mean()
+        
+        st.markdown(f"**Excess Inventory:** ₹{total_excess_value:,.2f} ({excess_percent:.1f}%)")
+        st.markdown(f"**Stockout Risk:** {stockout_risk_count} items ({stockout_percent:.1f}%)")
+        st.markdown(f"**Average Age:** {avg_days_in_inventory:.1f} days")
+        
+        # One-Click Optimization button
+        if not st.session_state.optimization_applied:
+            if st.button("🚀 Apply One-Click Optimization"):
+                # In a real application, this would run complex algorithms
+                # For this demo, we'll simulate optimization by adjusting the data
+                df_optimized = df.copy()
+                
+                # Simulate optimization results
+                # 1. Reduce excess inventory
+                for idx, row in df_optimized[df_optimized["Stock Status"] == "Overstocked"].iterrows():
+                    # Reduce quantity to optimal level (3 months of sales velocity)
+                    optimal_quantity = int(row["Sales Velocity (monthly)"] * 3)
+                    units_to_reduce = row["Quantity"] - optimal_quantity
+                    
+                    if units_to_reduce > 0:
+                        df_optimized.at[idx, "Quantity"] = optimal_quantity
+                        df_optimized.at[idx, "Inventory Value"] = optimal_quantity * row["Average Cost"]
+                        df_optimized.at[idx, "Stock Status"] = "Optimal"
+                        df_optimized.at[idx, "Excess Units"] = 0
+                        df_optimized.at[idx, "Excess Value"] = 0
+                        df_optimized.at[idx, "Days to Stockout"] = int(optimal_quantity / (row["Sales Velocity (monthly)"] / 30))
+                
+                # 2. Restock low inventory
+                for idx, row in df_optimized[df_optimized["Stock Status"].isin(["Out of Stock", "Critical", "Low"])].iterrows():
+                    # Increase quantity to optimal level (3 months of sales velocity)
+                    optimal_quantity = int(row["Sales Velocity (monthly)"] * 3)
+                    units_to_add = optimal_quantity - row["Quantity"]
+                    
+                    if units_to_add > 0:
+                        df_optimized.at[idx, "Quantity"] = optimal_quantity
+                        df_optimized.at[idx, "Inventory Value"] = optimal_quantity * row["Average Cost"]
+                        df_optimized.at[idx, "Stock Status"] = "Optimal"
+                        df_optimized.at[idx, "Recommended Order"] = 0
+                        df_optimized.at[idx, "Days to Stockout"] = int(optimal_quantity / (row["Sales Velocity (monthly)"] / 30))
+                
+                # Store optimized data
+                st.session_state.optimization_data_original = df.copy()
+                st.session_state.optimization_data = df_optimized
+                st.session_state.optimization_applied = True
+                st.session_state.show_transfers = True
+                
+                # Rerun to show updated state
+                st.rerun()
+    
+    # Show results after optimization
+    if st.session_state.optimization_applied:
+        st.success("Optimization successfully applied! Here are the results:")
+        
+        # Get original and optimized data
+        df_original = st.session_state.optimization_data_original
+        df_optimized = st.session_state.optimization_data
+        
+        # Calculate key metrics for comparison
+        total_inventory_value_original = df_original["Inventory Value"].sum()
+        total_inventory_value_optimized = df_optimized["Inventory Value"].sum()
+        
+        total_excess_value_original = df_original["Excess Value"].sum()
+        total_excess_value_optimized = df_optimized["Excess Value"].sum()
+        
+        stockout_risk_count_original = len(df_original[df_original["Stock Status"].isin(["Out of Stock", "Critical", "Low"])])
+        stockout_risk_count_optimized = len(df_optimized[df_optimized["Stock Status"].isin(["Out of Stock", "Critical", "Low"])])
+        
+        optimal_items_count_original = len(df_original[df_original["Stock Status"] == "Optimal"])
+        optimal_items_count_optimized = len(df_optimized[df_optimized["Stock Status"] == "Optimal"])
+        
+        # Comparison metrics
+        st.subheader("Optimization Impact")
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            delta_inventory = total_inventory_value_optimized - total_inventory_value_original
+            delta_percent = (delta_inventory / total_inventory_value_original) * 100
+            
+            st.metric(
+                "Total Inventory Value", 
+                f"₹{total_inventory_value_optimized:,.2f}",
+                f"{delta_percent:.1f}%"
+            )
+        
+        with col2:
+            delta_excess = total_excess_value_optimized - total_excess_value_original
+            delta_percent = (delta_excess / total_excess_value_original) * 100 if total_excess_value_original > 0 else -100
+            
+            st.metric(
+                "Excess Inventory Value", 
+                f"₹{total_excess_value_optimized:,.2f}",
+                f"{delta_percent:.1f}%",
+                delta_color="inverse"
+            )
+        
+        with col3:
+            delta_stockout = stockout_risk_count_optimized - stockout_risk_count_original
+            delta_percent = (delta_stockout / stockout_risk_count_original) * 100 if stockout_risk_count_original > 0 else -100
+            
+            st.metric(
+                "Stockout Risk Items", 
+                f"{stockout_risk_count_optimized}",
+                f"{delta_percent:.1f}%",
+                delta_color="inverse"
+            )
+        
+        with col4:
+            delta_optimal = optimal_items_count_optimized - optimal_items_count_original
+            delta_percent = (delta_optimal / optimal_items_count_original) * 100 if optimal_items_count_original > 0 else 100
+            
+            st.metric(
+                "Optimal Stock Items", 
+                f"{optimal_items_count_optimized}",
+                f"{delta_percent:.1f}%"
+            )
+        
+        # Stock status distribution after optimization
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.subheader("Before Optimization")
+            status_counts_original = df_original["Stock Status"].value_counts().reset_index()
+            status_counts_original.columns = ["Status", "Count"]
+            
+            fig = px.pie(
+                status_counts_original, 
+                values="Count", 
+                names="Status",
+                title="Original Inventory Status",
+                color="Status",
+                color_discrete_map=color_map
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        
+        with col2:
+            st.subheader("After Optimization")
+            status_counts_optimized = df_optimized["Stock Status"].value_counts().reset_index()
+            status_counts_optimized.columns = ["Status", "Count"]
+            
+            fig = px.pie(
+                status_counts_optimized, 
+                values="Count", 
+                names="Status",
+                title="Optimized Inventory Status",
+                color="Status",
+                color_discrete_map=color_map
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        
+        # Summary of recommendations
+        st.subheader("Action Plan")
+        
+        # Calculate changes
+        items_to_restock = df_original[df_original["Stock Status"].isin(["Out of Stock", "Critical", "Low"])]
+        items_to_reduce = df_original[df_original["Stock Status"] == "Overstocked"]
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### Items to Restock")
+            restock_summary = items_to_restock.groupby("Category")["Recommended Order"].sum().reset_index()
+            restock_summary.columns = ["Category", "Units to Order"]
+            restock_summary["Estimated Cost"] = restock_summary["Units to Order"] * df_original.groupby("Category")["Average Cost"].mean().reset_index()["Average Cost"]
+            
+            # Only include categories that need restocking
+            restock_summary = restock_summary[restock_summary["Units to Order"] > 0]
+            
+            if len(restock_summary) > 0:
+                fig = px.bar(
+                    restock_summary,
+                    x="Category",
+                    y="Units to Order",
+                    title="Recommended Restocking by Category",
+                    color="Category"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+                
+                st.dataframe(restock_summary, use_container_width=True)
+                
+                total_restock_cost = restock_summary["Estimated Cost"].sum()
+                st.markdown(f"**Total Estimated Restock Cost:** ₹{total_restock_cost:,.2f}")
+            else:
+                st.info("No items need restocking.")
+        
+        with col2:
+            st.markdown("### Excess Inventory to Reduce")
+            excess_summary = items_to_reduce.groupby("Category")["Excess Units"].sum().reset_index()
+            excess_summary.columns = ["Category", "Units to Reduce"]
+            excess_summary["Excess Value"] = excess_summary["Units to Reduce"] * df_original.groupby("Category")["Average Cost"].mean().reset_index()["Average Cost"]
+            
+            # Only include categories with excess inventory
+            excess_summary = excess_summary[excess_summary["Units to Reduce"] > 0]
+            
+            if len(excess_summary) > 0:
+                fig = px.bar(
+                    excess_summary,
+                    x="Category",
+                    y="Units to Reduce",
+                    title="Excess Inventory by Category",
+                    color="Category"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+                
+                st.dataframe(excess_summary, use_container_width=True)
+                
+                total_excess_value = excess_summary["Excess Value"].sum()
+                st.markdown(f"**Total Excess Inventory Value:** ₹{total_excess_value:,.2f}")
+            else:
+                st.info("No excess inventory to reduce.")
+        
+        # Show detailed recommendations
+        st.subheader("Detailed Recommendations")
+        
+        tabs = st.tabs(["Restocking Recommendations", "Excess Inventory", "Inventory Transfers", "All Items"])
+        
+        with tabs[0]:
+            # Items that need restocking
+            items_to_restock = df_original[df_original["Stock Status"].isin(["Out of Stock", "Critical", "Low"])].sort_values("Stock Status")
+            if len(items_to_restock) > 0:
+                st.dataframe(items_to_restock[["SKU", "Category", "Sub-Category", "Location", "Quantity", 
+                                              "Reorder Point", "Stock Status", "Recommended Order", 
+                                              "Sales Velocity (monthly)", "Days to Stockout"]],
+                            use_container_width=True)
+            else:
+                st.info("No items need restocking.")
+        
+        with tabs[1]:
+            # Items with excess inventory
+            items_to_reduce = df_original[df_original["Stock Status"] == "Overstocked"].sort_values("Excess Value", ascending=False)
+            if len(items_to_reduce) > 0:
+                st.dataframe(items_to_reduce[["SKU", "Category", "Sub-Category", "Location", "Quantity", 
+                                             "Sales Velocity (monthly)", "Excess Units", "Excess Value"]],
+                            use_container_width=True)
+            else:
+                st.info("No excess inventory to reduce.")
+        
+        with tabs[2]:
+            if st.session_state.show_transfers:
+                st.markdown("### Recommended Inventory Transfers")
+                st.info("The system has identified potential inventory transfers to balance stock across locations.")
+                
+                # Generate sample transfer recommendations
+                inventory_transfers = []
+                
+                # Find items that are overstocked in one location and understocked in another
+                overstocked_items = df_original[df_original["Stock Status"] == "Overstocked"].sort_values("Excess Value", ascending=False)
+                understocked_items = df_original[df_original["Stock Status"].isin(["Out of Stock", "Critical", "Low"])].sort_values("Stock Status")
+                
+                # Create sample transfers (this would be more sophisticated in a real system)
+                for i in range(min(10, len(overstocked_items), len(understocked_items))):
+                    source_item = overstocked_items.iloc[i]
+                    dest_item = understocked_items.iloc[i]
+                    
+                    # Find similar items (same category)
+                    similar_overstocked = overstocked_items[overstocked_items["Category"] == dest_item["Category"]]
+                    if len(similar_overstocked) > 0:
+                        source_item = similar_overstocked.iloc[0]
+                    
+                    transfer_qty = min(source_item["Excess Units"], dest_item["Recommended Order"])
+                    
+                    if transfer_qty > 0:
+                        transfer_value = transfer_qty * source_item["Average Cost"]
+                        
+                        inventory_transfers.append({
+                            "Source Location": source_item["Location"],
+                            "Source SKU": source_item["SKU"],
+                            "Category": source_item["Category"],
+                            "Destination Location": dest_item["Location"],
+                            "Destination SKU": dest_item["SKU"],
+                            "Transfer Quantity": transfer_qty,
+                            "Transfer Value": transfer_value,
+                            "Status": "Recommended"
+                        })
+                
+                if len(inventory_transfers) > 0:
+                    df_transfers = pd.DataFrame(inventory_transfers)
+                    st.dataframe(df_transfers, use_container_width=True)
+                    
+                    total_transfer_value = df_transfers["Transfer Value"].sum()
+                    st.markdown(f"**Total Transfer Value:** ₹{total_transfer_value:,.2f}")
+                    st.markdown(f"**Total Items to Transfer:** {df_transfers['Transfer Quantity'].sum()}")
+                    
+                    if st.button("Generate Transfer Orders"):
+                        st.success("Transfer orders have been generated and sent to warehouse managers for execution.")
+                else:
+                    st.info("No suitable transfers identified.")
+            else:
+                st.info("Apply optimization first to see inventory transfer recommendations.")
+        
+        with tabs[3]:
+            # All items with their current status
+            st.dataframe(df_optimized[["SKU", "Category", "Sub-Category", "Location", "Quantity", 
+                                      "Inventory Value", "Stock Status", "Sales Velocity (monthly)",
+                                      "Reorder Point", "Days to Stockout"]].sort_values("Stock Status"),
+                        use_container_width=True)
+        
+        # Implementation buttons
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if st.button("Generate Purchase Orders"):
+                st.success("Purchase orders have been generated for all items that need restocking.")
+        
+        with col2:
+            if st.button("Schedule Promotion Campaign"):
+                st.success("Promotion campaign has been scheduled for items with excess inventory.")
+        
+        with col3:
+            if st.button("Reset Optimization"):
+                # Reset to original state
+                st.session_state.optimization_applied = False
+                st.session_state.show_transfers = False
+                st.session_state.optimization_data = st.session_state.optimization_data_original
+                st.rerun()
+    
+    # Inventory health score
+    st.subheader("Inventory Health Score")
+    
+    # Calculate a simple health score based on various factors
+    df = st.session_state.optimization_data
+    
+    # Factors for health score (0-100 scale)
+    percent_optimal = (len(df[df["Stock Status"] == "Optimal"]) / len(df)) * 100
+    percent_overstock = (len(df[df["Stock Status"] == "Overstocked"]) / len(df)) * 100
+    percent_stockout_risk = (len(df[df["Stock Status"].isin(["Out of Stock", "Critical", "Low"])]) / len(df)) * 100
+    
+    avg_days_in_inventory = min(100, df["Days in Inventory"].mean())  # Cap at 100 days
+    days_in_inventory_score = max(0, 100 - avg_days_in_inventory)
+    
+    # Calculate overall health score (weighted average)
+    health_score = (
+        percent_optimal * 0.4 +  # 40% weight to optimal stock items
+        (100 - percent_overstock) * 0.3 +  # 30% weight to not having overstock
+        (100 - percent_stockout_risk) * 0.2 +  # 20% weight to not having stockout risk
+        days_in_inventory_score * 0.1  # 10% weight to days in inventory
+    )
+    
+    # Display health score gauge
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=health_score,
+        title={"text": "Inventory Health Score"},
+        gauge={
+            "axis": {"range": [0, 100]},
+            "bar": {"color": "darkblue"},
+            "steps": [
+                {"range": [0, 40], "color": "red"},
+                {"range": [40, 60], "color": "orange"},
+                {"range": [60, 80], "color": "yellow"},
+                {"range": [80, 100], "color": "green"}
+            ],
+            "threshold": {
+                "line": {"color": "black", "width": 4},
+                "thickness": 0.75,
+                "value": health_score
+            }
+        }
+    ))
+    
+    fig.update_layout(height=300)
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Health score interpretation
+    if health_score >= 80:
+        st.success("Your inventory is well-optimized. Continue to maintain these levels for optimal performance.")
+    elif health_score >= 60:
+        st.warning("Your inventory is reasonably healthy but has opportunities for improvement. Focus on the recommendations above.")
+    elif health_score >= 40:
+        st.error("Your inventory needs significant optimization. Follow the recommendations to improve efficiency.")
+    else:
+        st.error("Your inventory is in critical condition. Immediate action is required to address the issues highlighted above.")
 
 def show_settings():
     """Display the settings page"""
