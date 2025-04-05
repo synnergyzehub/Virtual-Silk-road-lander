@@ -6,280 +6,436 @@
     <title>Empire OS - Welcome</title>
     <style>
         :root {
-            --primary: #1E3A8A;
-            --primary-light: #3B82F6;
-            --secondary: #2563EB;
-            --light: #F8FAFC;
-            --dark: #0F172A;
-            --accent: #60A5FA;
+            --primary-color: #1a365d;
+            --secondary-color: #2a4a7f;
+            --accent-color: #ffd700;
+            --text-color: #333;
+            --light-text: #fff;
+            --success-color: #27ae60;
+            --info-color: #2980b9;
+            --warning-color: #f39c12;
+            --danger-color: #c0392b;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--light);
-            color: var(--dark);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            color: var(--text-color);
+            background-color: #f5f7fa;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         
         header {
-            background-color: var(--primary);
-            color: white;
-            padding: 20px 0;
-            text-align: center;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--box-shadow);
         }
         
         .logo {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .tagline {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .main-content {
             display: flex;
-            flex-wrap: wrap;
-            margin: 40px 0;
+            align-items: center;
         }
         
-        .column {
+        .logo-icon {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        
+        main {
             flex: 1;
-            min-width: 300px;
-            padding: 0 20px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
         
-        .welcome-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-bottom: 30px;
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
         }
         
-        .welcome-card h2 {
-            color: var(--primary);
-            margin-top: 0;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
         }
         
-        .feature-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--secondary);
-        }
-        
-        .feature-card h3 {
-            color: var(--secondary);
-            margin-top: 0;
-        }
-        
-        .highlight {
-            background-color: #DBEAFE;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            border-left: 4px solid var(--primary-light);
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            max-width: 800px;
+            margin: 0 auto 2rem;
         }
         
         .btn {
             display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
             text-decoration: none;
-            font-weight: 600;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+            margin: 0 0.5rem;
         }
         
-        .btn:hover {
-            background-color: var(--secondary);
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
         }
         
-        .architecture {
+        .btn-primary:hover {
+            background-color: #e5c100;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3a5a8f;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .feature-card {
             background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 40px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: transform 0.3s ease;
         }
         
-        .architecture h2 {
-            color: var(--primary);
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-description {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .modules {
+            margin-bottom: 4rem;
+        }
+        
+        .modules h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+        
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .module-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
         }
         
-        .layer {
-            padding: 15px;
-            margin: 10px 0;
-            color: white;
+        .module-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .module-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .module-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .module-description {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .cta {
             text-align: center;
-            font-weight: 600;
-            border-radius: 6px;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 3rem 2rem;
+            margin: 0 -2rem -2rem;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+        
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
         }
         
         footer {
-            background-color: var(--primary);
-            color: white;
-            padding: 30px 0;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 2rem;
             text-align: center;
-            margin-top: 40px;
         }
         
-        .divine-signature {
-            font-family: cursive;
-            font-size: 1.5rem;
-            margin-top: 20px;
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: var(--light-text);
+            margin: 0 1rem;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .feature-card {
+                padding: 1.5rem;
+            }
+            
+            .cta {
+                padding: 2rem 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">Empire OS</div>
-            <div class="tagline">Divine Mechanics Computational System</div>
+        <div class="logo">
+            <div class="logo-icon">🏛️👑</div>
+            <div class="logo-text">Empire OS</div>
         </div>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="/subscription-demo/">Subscribe</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
     </header>
     
-    <div class="container">
-        <div class="main-content">
-            <div class="column">
-                <div class="welcome-card">
-                    <h2>Welcome to Empire OS</h2>
-                    <p>The Divine Mechanics Computational System is a unified enterprise governance platform implementing divine principles for sustainable and ethical organizational management.</p>
-                    
-                    <div class="highlight">
-                        <h3>Onboarding Process</h3>
-                        <p>This onboarding experience will guide you through the key components of the Empire OS ecosystem, helping you understand how to leverage divine governance for your organization.</p>
-                    </div>
-                    
-                    <a href="https://synnergy-pro.replit.app/" class="btn">Begin Onboarding</a>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>License Gateway</h3>
-                    <p>The entry point to the governance system where all enterprise operations are regulated through divine principles.</p>
-                </div>
-                
-                <div class="feature-card" id="river-os-feedback">
-                    <h3>RiverOS Feedback Mechanism</h3>
-                    <p>A predictive system that models enterprise flows and identifies optimization opportunities based on divine principles.</p>
-                    
-                    <div class="highlight" style="background-color: #EFF6FF; margin-top: 15px;">
-                        <h4>Flow Simulation Feedback</h4>
-                        <p>RiverOS provides real-time feedback on your enterprise's:</p>
-                        <ul>
-                            <li><strong>Information Flows</strong> - Ensuring knowledge transparency and divine truth.</li>
-                            <li><strong>Resource Flows</strong> - Optimizing allocation according to justice principles.</li>
-                            <li><strong>Decision Flows</strong> - Aligning choices with divine wisdom and mercy.</li>
-                            <li><strong>Value Flows</strong> - Ensuring equitable distribution aligned with unity principles.</li>
-                        </ul>
-                        <p><em>The simulation provides actionable recommendations with divine alignment scores to optimize your enterprise operations.</em></p>
-                    </div>
-                </div>
+    <main>
+        <section class="hero">
+            <h1>Empire OS - Divine Mechanics Computational System</h1>
+            <p>A unified enterprise governance platform implementing divine principles for sustainable and ethical organizational management.</p>
+            <div class="hero-buttons">
+                <a href="/subscription-demo/" class="btn btn-primary">View Subscription Demo</a>
+                <a href="https://empire-os.replit.app/" target="_blank" class="btn btn-secondary">Go to Empire OS Portal</a>
+            </div>
+        </section>
+        
+        <section id="features" class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🌊</div>
+                <h3 class="feature-title">RiverOS Simulation</h3>
+                <p class="feature-description">Simulate complex organizational dynamics with our fluid-based computational model, allowing for real-time adaptation to changing conditions.</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
             </div>
             
-            <div class="column">
-                <div class="feature-card" id="digital-me-feedback">
-                    <h3>DigitalMe Feedback Mechanism</h3>
-                    <p>Identity management aligned with divine principles ensuring ethical data stewardship and governance.</p>
-                    
-                    <div class="highlight" style="background-color: #EFF6FF; margin-top: 15px;">
-                        <h4>Identity Governance Feedback</h4>
-                        <p>DigitalMe provides divine guidance on:</p>
-                        <ul>
-                            <li><strong>Identity Configuration</strong> - Ensuring unity in organizational identity.</li>
-                            <li><strong>Role Governance</strong> - Aligning roles with divine justice principles.</li>
-                            <li><strong>Permission Simulation</strong> - Testing access controls against mercy principles.</li>
-                            <li><strong>Divine Alignment</strong> - Measuring overall compliance with divine governance.</li>
-                        </ul>
-                        <p><em>The feedback includes dimensional scores and specific recommendations to enhance your governance framework.</em></p>
-                    </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3 class="feature-title">DigitalMe Governance</h3>
+                <p class="feature-description">Manage digital identities across your enterprise with our comprehensive identity management and governance system.</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚖️</div>
+                <h3 class="feature-title">Divine Alignment</h3>
+                <p class="feature-description">Ensure all operations align with divine principles through our ethical governance framework and alignment scoring system.</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+        </section>
+        
+        <section id="modules" class="modules">
+            <h2>Integrated Modules</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-icon">🔑</div>
+                    <h3 class="module-title">License Gateway</h3>
+                    <p class="module-description">Manage enterprise-wide licensing and access control through our secure gateway system.</p>
+                    <a href="https://empire-os.replit.app/license" target="_blank" class="btn btn-secondary">Explore</a>
                 </div>
                 
-                <div class="feature-card" id="integration-feedback">
-                    <h3>Integration Feedback</h3>
-                    <p>Experience how RiverOS and DigitalMe feedback mechanisms work together to provide comprehensive divine governance.</p>
-                    
-                    <div class="highlight" style="background-color: #EFF6FF; margin-top: 15px;">
-                        <h4>Combined Feedback Benefits</h4>
-                        <ul>
-                            <li><strong>Enhanced Governance</strong> - Unified divine principles across all operations.</li>
-                            <li><strong>Synergy Effects</strong> - Amplified compliance through combined systems.</li>
-                            <li><strong>Emperor's Guidance</strong> - Direct divine recommendations from integrated analysis.</li>
-                        </ul>
-                        <p><em>Integration creates a holistic feedback loop that continuously improves divine alignment.</em></p>
-                    </div>
+                <div class="module-card">
+                    <div class="module-icon">🏫</div>
+                    <h3 class="module-title">Realm Panes</h3>
+                    <p class="module-description">Visualize and manage different operational realms of your organization in a unified interface.</p>
+                    <a href="https://empire-os.replit.app/realms" target="_blank" class="btn btn-secondary">Explore</a>
                 </div>
                 
-                <div class="architecture">
-                    <h2>System Architecture</h2>
-                    <div class="layer" style="background-color: #4338CA;">Divine Alignment Layer</div>
-                    <div class="layer" style="background-color: #3B82F6;">Federal Alignment Protocol</div>
-                    <div class="layer" style="background-color: #60A5FA;">DigitalMe</div>
-                    <div class="layer" style="background-color: #93C5FD;">Empire OS Interface</div>
-                    <div class="layer" style="background-color: #BFDBFE; color: #1E3A8A;">RiverOS</div>
-                    <div class="layer" style="background-color: #DBEAFE; color: #1E3A8A;">CCPC Core</div>
+                <div class="module-card">
+                    <div class="module-icon">🔄</div>
+                    <h3 class="module-title">Transformer Layer</h3>
+                    <p class="module-description">Transform data across different domains and systems with our intelligent mapping system.</p>
+                    <a href="https://empire-os.replit.app/transformer" target="_blank" class="btn btn-secondary">Explore</a>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">🌐</div>
+                    <h3 class="module-title">Synergyze Hub</h3>
+                    <p class="module-description">Centralize data and operations for enhanced synergy across departments and systems.</p>
+                    <a href="https://empire-os.replit.app/synergyze" target="_blank" class="btn btn-secondary">Explore</a>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">🧵</div>
+                    <h3 class="module-title">Woven Supply</h3>
+                    <p class="module-description">Manage supply chain operations with our integrated inventory and logistics system.</p>
+                    <a href="/voi-inventory/" class="btn btn-secondary">Explore</a>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">🤝</div>
+                    <h3 class="module-title">Commune Connect</h3>
+                    <p class="module-description">Facilitate communication and collaboration across your organization and beyond.</p>
+                    <a href="https://empire-os.replit.app/commune" target="_blank" class="btn btn-secondary">Explore</a>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">🛣️</div>
+                    <h3 class="module-title">Virtual Silk Road</h3>
+                    <p class="module-description">Connect to global markets and partners through our digital trade network.</p>
+                    <a href="https://empire-os.replit.app/silk-road" target="_blank" class="btn btn-secondary">Explore</a>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">⏳</div>
+                    <h3 class="module-title">Emperor Timeline</h3>
+                    <p class="module-description">Track governance and compliance over time with our enterprise timeline visualization.</p>
+                    <a href="https://empire-os.replit.app/timeline" target="_blank" class="btn btn-secondary">Explore</a>
                 </div>
             </div>
-        </div>
-
-        <!-- Detailed Feedback Simulation Section -->
-        <div class="main-content">
-            <div class="welcome-card">
-                <h2>Simulated Feedback Experience</h2>
-                <p>The following examples demonstrate how the feedback mechanisms provide divine guidance for your organization.</p>
-                
-                <div class="column" style="margin-top: 20px; padding: 0;">
-                    <div style="background-color: #DCFCE7; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #10B981;">
-                        <h3 style="color: #065F46;">RiverOS: Resource Flow Optimization</h3>
-                        <p><strong>Feedback:</strong> Your current resource allocation achieves 78% alignment with divine justice principles.</p>
-                        <p><strong>Recommendation:</strong> Adjusting distribution pathways could enhance alignment to 92% by prioritizing equitable allocation based on the principle of "Al-Adl" (The Just).</p>
-                        <p><strong>Expected Outcome:</strong> +15% operational efficiency with improved stakeholder satisfaction.</p>
-                    </div>
-                </div>
-                
-                <div class="column" style="padding: 0;">
-                    <div style="background-color: #FEF3C7; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #F59E0B;">
-                        <h3 style="color: #92400E;">DigitalMe: Identity Governance Analysis</h3>
-                        <p><strong>Feedback:</strong> Your current identity framework shows moderate alignment (72%) with divine unity principles.</p>
-                        <p><strong>Recommendation:</strong> Implement a hybrid unity framework with enhanced centralization of core divine principles while maintaining federated operational flexibility.</p>
-                        <p><strong>Expected Outcome:</strong> Improved divine alignment score of 85% with enhanced coherence across the organization.</p>
-                    </div>
-                </div>
-                
-                <div style="background-color: #DBEAFE; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #3B82F6;">
-                    <h3 style="color: #1E40AF;">Integration Simulation Results</h3>
-                    <p><strong>Combined Analysis:</strong> The integration of RiverOS and DigitalMe feedback mechanisms reveals 89% compatibility, creating significant synergy potential.</p>
-                    <p><strong>Emperor's Divine Guidance:</strong> Implement the recommended changes from both systems in parallel to maximize divine alignment across all enterprise operations.</p>
-                    <p><strong>Long-term Vision:</strong> Preparation for Virtual Silk Road integration in approximately 12 years, with continuous improvement in Divine Alignment (DA) Vinci scores through gameified tracking.</p>
-                </div>
-                
-                <a href="https://synnergy-pro.replit.app/" class="btn" style="margin-top: 30px;">Experience Full Onboarding</a>
-            </div>
-        </div>
-    </div>
+        </section>
+        
+        <section id="contact" class="cta">
+            <h2>Ready to Revolutionize Your Enterprise?</h2>
+            <p>Experience the power of divine governance and computational excellence with Empire OS. Contact us today to schedule a personalized demo.</p>
+            <a href="/subscription-demo/#subscription-plans" class="btn btn-primary">Request Demo</a>
+        </section>
+    </main>
     
     <footer>
-        <div class="container">
-            <p>Empire OS - Divine Mechanics Computational System</p>
-            <p>All operations governed by Emperor's Computational Governance (ECG) License</p>
-            <div class="divine-signature">The Emperor</div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">License Terms</a>
+            <a href="#">Support</a>
+        </div>
+        <div class="copyright">
+            © 2025 Empire OS - Divine Mechanics Computational System. All rights reserved.
         </div>
     </footer>
 </body>

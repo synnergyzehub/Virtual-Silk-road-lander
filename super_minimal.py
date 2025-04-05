@@ -1,5 +1,4 @@
 import streamlit as st
 
-st.title("Super Minimal App")
-st.write("This is the absolute minimal Streamlit app.")
-st.button("Click Me")
+st.title("Super Minimal Test")
+st.write("If you can see this, Streamlit is working!")
