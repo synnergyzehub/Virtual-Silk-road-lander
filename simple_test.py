@@ -1,17 +1,9 @@
 import streamlit as st
 
 def main():
-    st.title("Simple Test App")
-    st.write("This is a basic Streamlit app with minimal dependencies.")
-    
-    if st.button("Click Me"):
-        st.success("Button clicked successfully!")
-    
-    value = st.slider("Select a value", 0, 100, 50)
-    st.write(f"Selected value: {value}")
-    
-    option = st.selectbox("Choose an option", ["Option 1", "Option 2", "Option 3"])
-    st.write(f"Selected option: {option}")
+    st.title("Simple Test")
+    st.write("This is a simple test app to verify that Streamlit is working properly.")
+    st.button("Click Me")
 
 if __name__ == "__main__":
     main()

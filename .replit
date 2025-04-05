@@ -17,15 +17,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Streamlit Server"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Streamlit Test"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Minimal Streamlit"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
@@ -33,38 +25,27 @@ args = "Streamlit New App"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "HSN Transaction App"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Emperor OS Timeline"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Test Streamlit App"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Basic HTTP Server"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Voi Jeans Inventory"
 
-[[workflows.workflow]]
-name = "Streamlit Server"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Simple Test"
 
 [[workflows.workflow.tasks]]
-task = "packager.installForAll"
+task = "workflow.run"
+args = "Simple Test 8501"
 
 [[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run app.py --server.port 5000"
-waitForPort = 5000
+task = "workflow.run"
+args = "Minimal Voi"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Minimal Voi 8501"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Super Minimal"
 
 [[workflows.workflow]]
 name = "Streamlit Test"
@@ -79,21 +60,6 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "streamlit run test_app.py --server.port 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Minimal Streamlit"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run minimal.py --server.port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
@@ -112,66 +78,6 @@ args = "streamlit run new_app.py --server.port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
-name = "HSN Transaction App"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run app.py --server.port 8080"
-waitForPort = 8080
-
-[[workflows.workflow]]
-name = "Emperor OS Timeline"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run app.py --server.port 8080"
-waitForPort = 8080
-
-[[workflows.workflow]]
-name = "Test Streamlit App"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run test_streamlit.py --server.port 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Basic HTTP Server"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python server_test.py 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
 name = "Voi Jeans Inventory"
 author = "agent"
 
@@ -183,8 +89,83 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run voi_inventory_management.py --server.port 8080"
-waitForPort = 8080
+args = "streamlit run voi_inventory_management.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Simple Test"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run simple_test.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Simple Test 8501"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run simple_test.py"
+waitForPort = 8501
+
+[[workflows.workflow]]
+name = "Minimal Voi"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run minimal_voi.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Minimal Voi 8501"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run minimal_voi.py"
+waitForPort = 8501
+
+[[workflows.workflow]]
+name = "Super Minimal"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run super_minimal.py"
+waitForPort = 8501
 
 [[ports]]
 localPort = 5000
@@ -192,6 +173,10 @@ localPort = 5000
 [[ports]]
 localPort = 8080
 externalPort = 80
+
+[[ports]]
+localPort = 8501
+externalPort = 3000
 
 [objectStorage]
 defaultBucketID = "replit-objstore-e0a659ba-f686-4c68-abf4-46d864a64cea"

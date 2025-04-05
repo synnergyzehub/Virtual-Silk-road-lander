@@ -1,14 +1,23 @@
 import streamlit as st
 
 st.title("Test Streamlit App")
-st.write("Testing basic Streamlit functionality without any other dependencies")
+st.write("This is a simple test app to verify that Streamlit is working properly.")
 
-# Test basic UI elements
-st.header("UI Test")
-st.button("Test Button")
-st.checkbox("Test Checkbox")
-st.radio("Test Radio", options=["Option 1", "Option 2"])
-st.selectbox("Test Selectbox", options=["Choice 1", "Choice 2"])
-st.text_input("Test Text Input")
-st.text_area("Test Text Area")
-st.slider("Test Slider", 0, 100, 50)
+st.header("Sample Data Display")
+import pandas as pd
+import numpy as np
+
+# Create a sample dataframe
+data = pd.DataFrame({
+    'Category': ['A', 'B', 'C', 'D', 'E'],
+    'Value': np.random.randint(1, 100, 5)
+})
+
+st.dataframe(data)
+
+st.header("Interactive Elements")
+name = st.text_input("Enter your name")
+if name:
+    st.write(f"Hello, {name}!")
+
+st.button("Click Me!")
