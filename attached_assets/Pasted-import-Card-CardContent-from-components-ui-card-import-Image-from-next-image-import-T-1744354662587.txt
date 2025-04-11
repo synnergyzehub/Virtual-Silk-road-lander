@@ -1,0 +1,53 @@
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+export default function VirtualSilkRoadMap() {
+  return (
+    <TooltipProvider>
+      <div className="p-6 space-y-6">
+        <h1 className="text-3xl font-bold">Empire Virtual Silk Road Map</h1>
+        <Card>
+          <CardContent className="p-4">
+            <div className="relative">
+              <Image
+                src="/empire_virtual_silk_road.png"
+                alt="Empire Virtual Silk Road Architecture"
+                width={1200}
+                height={900}
+                className="rounded-xl shadow-md"
+              />
+              <Tooltip>
+                <TooltipTrigger className="absolute top-[10%] left-[25%] w-10 h-10 bg-transparent" />
+                <TooltipContent>CPU Cluster (EmpireOS + SynAdmin)</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger className="absolute top-[10%] left-[65%] w-10 h-10 bg-transparent" />
+                <TooltipContent>GPU Cluster (RiverOS + Simulation)</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger className="absolute top-[70%] left-[30%] w-10 h-10 bg-transparent" />
+                <TooltipContent>SCF: Factory Node</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger className="absolute top-[75%] left-[50%] w-10 h-10 bg-transparent" />
+                <TooltipContent>VOI: Retail Node</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger className="absolute top-[80%] left-[70%] w-10 h-10 bg-transparent" />
+                <TooltipContent>Emperor: Tailoring Node</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger className="absolute top-[40%] left-[48%] w-10 h-10 bg-transparent" />
+                <TooltipContent>Virtual Silk Road (Intent-Aware Transfer Layer)</TooltipContent>
+              </Tooltip>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              This visual represents your Empire computing environment — where the Virtual Silk Road links CPU + GPU operations to brand clusters in a morally aligned, intent-aware network.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </TooltipProvider>
+  );
+}

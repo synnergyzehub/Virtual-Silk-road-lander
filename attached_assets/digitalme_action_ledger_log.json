@@ -1,0 +1,15 @@
+{
+  "digitalme_id": "ede569358b0e901527aef15e0bc8be6e1974a831ae870ac115beb246bf2efa63",
+  "session_id": "SESSION-96941",
+  "device": "MacBook Pro M3 \u2013 Secure Enclave Enabled",
+  "geo_location": "India / Karnataka",
+  "license_id": "ESOM-VOI-JEANS-D2C-001",
+  "role": "Founder",
+  "action": "auto-debit without consent",
+  "intent_token": "TOK-558831",
+  "action_status": "blocked",
+  "timestamp": "2025-04-11T06:55:13.242834Z",
+  "validated_by": "DigitalMe + DivineFilterCore",
+  "risk_score": 87,
+  "notes": "Attempted high-scope financial transaction; blocked due to ethical non-compliance."
+}
