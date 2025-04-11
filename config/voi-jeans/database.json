@@ -1,0 +1,8 @@
+{
+  "database_name": "empireos_voi_jeans",
+  "database_user": "empireos_user",
+  "database_password": "secure_password",
+  "database_host": "localhost",
+  "database_port": 3306,
+  "connection_string": "mysql://empireos_user:secure_password@localhost:3306/empireos_voi_jeans"
+}

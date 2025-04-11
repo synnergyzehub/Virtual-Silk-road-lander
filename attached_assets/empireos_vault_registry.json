@@ -1,0 +1,16 @@
+[
+  {
+    "doc_type": "Certificate of Sovereignty",
+    "file_name": "Genesis_Certificate_of_Sovereignty.pdf",
+    "issuer": "DigitalMe System",
+    "linked_stack": "Genesis_Stack_v1.0_Emperor_Build",
+    "hash": "c5d12fb258b38be3f1a1c11716c72de1729b7ca0e764d2ce0b8c9f0edb56da88",
+    "timestamp": "2025-04-11T07:29:37.121931Z",
+    "access": [
+      "Founder",
+      "ECG",
+      "DigitalMe",
+      "EmpireOS Index"
+    ]
+  }
+]

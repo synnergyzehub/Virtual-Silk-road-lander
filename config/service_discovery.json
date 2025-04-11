@@ -1,0 +1,22 @@
+{
+  "entity_registry": [
+    {
+      "id": "ENT-VOI-250411",
+      "name": "Voi Jeans",
+      "license_api_url": "http://localhost:5101",
+      "brand_portal_url": "http://localhost:5100",
+      "license_management_url": "http://localhost:8605",
+      "welcome_page_url": "http://localhost:8190",
+      "digitalme_console_url": "http://localhost:8195"
+    },
+    {
+      "id": "ENT-DFLT-250411",
+      "name": "Default Entity",
+      "license_api_url": "http://localhost:5001",
+      "brand_portal_url": "http://localhost:5000",
+      "license_management_url": "http://localhost:8505",
+      "welcome_page_url": "http://localhost:8090",
+      "digitalme_console_url": "http://localhost:8095"
+    }
+  ]
+}

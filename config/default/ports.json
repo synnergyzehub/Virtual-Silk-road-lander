@@ -1,0 +1,7 @@
+{
+  "license_api_port": 5001,
+  "brand_portal_port": 5000,
+  "license_management_port": 8505,
+  "welcome_page_port": 8090,
+  "digitalme_console_port": 8095
+}

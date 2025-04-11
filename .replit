@@ -71,6 +71,10 @@ args = "License API"
 task = "workflow.run"
 args = "License Management"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Genesis Shell"
+
 [[workflows.workflow]]
 name = "Streamlit New App"
 author = "agent"
@@ -278,6 +282,20 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "python run_license_management.py"
 waitForPort = 8505
+
+[[workflows.workflow]]
+name = "Genesis Shell"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_genesis_shell.py"
 
 [[ports]]
 localPort = 5000

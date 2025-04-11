@@ -1,0 +1,8 @@
+{
+  "api_key": "${EMPIRE_API_KEY_ENTITY:-entity_specific_secure_key}",
+  "api_base_url": "http://localhost:52XX",
+  "api_timeout": 30,
+  "api_retry_attempts": 3,
+  "jwt_secret": "${JWT_SECRET_ENTITY:-entity_specific_jwt_secret}",
+  "jwt_expiry": 86400
+}

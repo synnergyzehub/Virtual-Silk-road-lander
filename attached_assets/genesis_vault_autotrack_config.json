@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "vault": "EmpireOS",
+  "stack_id": "Genesis_Stack_v1.0_Emperor_Build",
+  "autotrack_trigger": "Any UI/API/Script update",
+  "hash_basis": "SHA256(stack_json + module_register)",
+  "register_to": [
+    "digitalme_ledger_registry.json",
+    "empireos_vault_registry.json"
+  ],
+  "next_version_seed": "v1.1"
+}
