@@ -1,9 +1,10 @@
 # Genesis Ecosystem Pricing Matrix
-## ECG HSN-Based License Pricing Framework
+## ECG HSN-Based License Pricing Framework with WTO-Region Compliance
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Date:** April 11, 2025  
 **Classification:** Emperor's Commercial Directive
+**Compliance:** WTO Trade Policy Review Aligned
 
 ---
 
@@ -102,18 +103,30 @@ Total Price = ∑ [
 - Triennial: 25.0 × Base Price (30.6% discount)
 - Perpetual: 40.0 × Base Price (includes 5 years of updates)
 
-### Region Multipliers
-- AWS-US-EAST: 1.0
-- AWS-US-WEST: 1.1
-- AWS-EUROPE: 1.2
-- AWS-ASIA: 1.3
-- AZURE-US: 1.05
-- AZURE-EUROPE: 1.25
-- AZURE-ASIA: 1.35
-- GCP-US: 1.0
-- GCP-EUROPE: 1.2
-- GCP-ASIA: 1.3
-- LOCAL-DC: 0.9
+### WTO Trade Region Multipliers
+The Genesis Ecosystem implements WTO-compliant regional pricing through specialized multipliers linked to trade agreements and compliance frameworks:
+
+| WTO Region | Region Code | Region Multiplier | Divine Alignment Factor | Compliance Protocol |
+|------------|-------------|-------------------|-------------------------|---------------------|
+| EU | REG-EU | 1.25 | 0.98 | GDPR + EU Digital Services Act |
+| APAC | REG-APAC | 1.35 | 0.92 | Pan-Asia Trade Framework |
+| SAARC | REG-SAARC | 1.15 | 0.94 | South Asian Preferential Trading Arrangement |
+| Americas | REG-AM | 1.10 | 0.95 | North American Free Trade Agreement |
+| Middle East | REG-ME | 1.30 | 0.90 | GCC Trade Framework |
+| Africa | REG-AF | 1.05 | 0.96 | African Continental Free Trade Area |
+
+#### Cloud Provider Region Mapping
+- AWS-US-EAST: 1.0 (REG-AM)
+- AWS-US-WEST: 1.1 (REG-AM)
+- AWS-EUROPE: 1.2 (REG-EU)
+- AWS-ASIA: 1.3 (REG-APAC/REG-SAARC)
+- AZURE-US: 1.05 (REG-AM)
+- AZURE-EUROPE: 1.25 (REG-EU)
+- AZURE-ASIA: 1.35 (REG-APAC)
+- GCP-US: 1.0 (REG-AM)
+- GCP-EUROPE: 1.2 (REG-EU)
+- GCP-ASIA: 1.3 (REG-APAC)
+- LOCAL-DC: 0.9 (Region-specific)
 
 ### Volume Discounts
 - 100-500 users: 5% discount
@@ -164,9 +177,9 @@ services:
       hsn.npu_scaling_factor: "0.05"
 ```
 
-## 5. HSN License Manifest
+## 5. WTO-Integrated HSN License Manifest
 
-Each containerized deployment includes an HSN License Manifest that catalogs all components and their pricing:
+Each containerized deployment includes an HSN License Manifest that catalogs all components and their pricing, with WTO region compliance information:
 
 ```json
 {
@@ -176,6 +189,14 @@ Each containerized deployment includes an HSN License Manifest that catalogs all
   "license_key": "SYN-XXXX-XXXX",
   "issue_date": "2025-04-11",
   "expiration_date": "2026-04-11",
+  "wto_region": {
+    "region_block": "APAC",
+    "country": "India",
+    "wto_compliance": "Developing Economy Protocol",
+    "jurisdiction_rules": "GST + RBI Export Regulation",
+    "divine_alignment_factor": 0.92,
+    "region_code": "REG-APAC"
+  },
   "components": [
     {
       "hsn_code": "HSN-GEN-10-02-S",
@@ -187,21 +208,46 @@ Each containerized deployment includes an HSN License Manifest that catalogs all
       "user_scaling_price": 0.1,
       "npu_count": 5,
       "npu_scaling_price": 0.4,
-      "region": "AWS-US-EAST",
-      "region_multiplier": 1.0,
+      "region": "AWS-ASIA",
+      "region_multiplier": 1.35,
       "duration": "annual",
       "duration_multiplier": 10.0,
-      "total_component_price": 12.5
+      "total_component_price": 15.1875,
+      "local_currency_code": "INR",
+      "local_pricing": true
     },
     // Additional components...
   ],
-  "subtotal": 50.0,
+  "subtotal": 60.75,
   "volume_discount_rate": 0.1,
-  "volume_discount_amount": 5.0,
-  "total_price": 45.0,
+  "volume_discount_amount": 6.075,
+  "regional_compliance_discount": 0.05,
+  "regional_compliance_amount": 3.0375,
+  "total_price": 51.6375,
   "currency": "BTC",
+  "local_currency_total": "₹4,390,625",
   "payment_terms": "Net 30",
-  "divine_alignment_factor": 0.95
+  "divine_alignment_factor": 0.92,
+  "amendments": [
+    {
+      "amendment_id": "GEN-AMD-2025-04",
+      "date": "2025-04-01",
+      "reason": "WTO Region Update - India TPR 2025",
+      "changes": [
+        {
+          "field": "tax_policy",
+          "old": "Flat GST 18%",
+          "new": "Variable GST slab with digital exports at 0%"
+        },
+        {
+          "field": "divine_alignment_factor",
+          "old": 0.90,
+          "new": 0.92
+        }
+      ],
+      "impact": "Reduced license cost by 7%"
+    }
+  ]
 }
 ```
 
