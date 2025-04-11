@@ -63,6 +63,14 @@ args = "Minimal Voi 8501"
 task = "workflow.run"
 args = "Genesis Dashboard"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "License API"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "License Management"
+
 [[workflows.workflow]]
 name = "Streamlit New App"
 author = "agent"
@@ -241,8 +249,42 @@ task = "shell.exec"
 args = "streamlit run genesis_dashboard.py --server.port 5000"
 waitForPort = 5000
 
+[[workflows.workflow]]
+name = "License API"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_license_api.py"
+waitForPort = 5001
+
+[[workflows.workflow]]
+name = "License Management"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_license_management.py"
+waitForPort = 8505
+
 [[ports]]
 localPort = 5000
+
+[[ports]]
+localPort = 5001
+externalPort = 3002
 
 [[ports]]
 localPort = 8080
@@ -255,6 +297,10 @@ externalPort = 3001
 [[ports]]
 localPort = 8501
 externalPort = 3000
+
+[[ports]]
+localPort = 8505
+externalPort = 3003
 
 [objectStorage]
 defaultBucketID = "replit-objstore-e0a659ba-f686-4c68-abf4-46d864a64cea"
