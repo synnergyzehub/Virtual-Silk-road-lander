@@ -1,0 +1,184 @@
+{
+  "license_id": "VOI-DEMO-123",
+  "license_type": "enterprise",
+  "holder_name": "VOI Jeans Retail India PVT LTD",
+  "overall_score": 92.52877891320695,
+  "principle_scores": [
+    {
+      "principle_id": "transaction_integrity",
+      "principle_name": "Transaction Integrity",
+      "description": "Ensuring all transactions adhere to ethical pricing and distribution principles",
+      "overall_score": 88.47870281550843,
+      "factors": [
+        {
+          "name": "Pricing Fairness",
+          "score": 87.86528153172864,
+          "weight": 0.3
+        },
+        {
+          "name": "Transparency",
+          "score": 89.21250454156385,
+          "weight": 0.3
+        },
+        {
+          "name": "Value Distribution",
+          "score": 87.14769624207352,
+          "weight": 0.2
+        },
+        {
+          "name": "Customer Value",
+          "score": 89.62913872552991,
+          "weight": 0.2
+        }
+      ],
+      "timestamp": "2025-04-11T16:46:11.896048+00:00"
+    },
+    {
+      "principle_id": "resource_optimization",
+      "principle_name": "Resource Optimization",
+      "description": "Verifying appropriate resource utilization with minimal waste",
+      "overall_score": 97.05728107559756,
+      "factors": [
+        {
+          "name": "Efficiency",
+          "score": 97.31390193353506,
+          "weight": 0.25
+        },
+        {
+          "name": "Waste Reduction",
+          "score": 97.6462559738656,
+          "weight": 0.25
+        },
+        {
+          "name": "Renewable Usage",
+          "score": 98.64588020425504,
+          "weight": 0.25
+        },
+        {
+          "name": "Longevity",
+          "score": 94.62308619073451,
+          "weight": 0.25
+        }
+      ],
+      "timestamp": "2025-04-11T16:46:11.896080+00:00"
+    },
+    {
+      "principle_id": "fair_trade",
+      "principle_name": "Fair Trade",
+      "description": "Confirming compliance with fair trade principles across all operations",
+      "overall_score": 95.07362338463498,
+      "factors": [
+        {
+          "name": "Fair Compensation",
+          "score": 91.03357285975144,
+          "weight": 0.3
+        },
+        {
+          "name": "Supply Chain Ethics",
+          "score": 95.58542708162497,
+          "weight": 0.3
+        },
+        {
+          "name": "Local Community Impact",
+          "score": 96.32150435367315,
+          "weight": 0.2
+        },
+        {
+          "name": "Global Standards Alignment",
+          "score": 99.11811265743717,
+          "weight": 0.2
+        }
+      ],
+      "timestamp": "2025-04-11T16:46:11.896095+00:00"
+    },
+    {
+      "principle_id": "transparency",
+      "principle_name": "Transparency",
+      "description": "Validating accurate and transparent reporting and disclosure",
+      "overall_score": 93.90583065513297,
+      "factors": [
+        {
+          "name": "Data Accuracy",
+          "score": 96.29569776536258,
+          "weight": 0.25
+        },
+        {
+          "name": "Reporting Completeness",
+          "score": 90.82441664825294,
+          "weight": 0.25
+        },
+        {
+          "name": "Stakeholder Communication",
+          "score": 96.77810331310307,
+          "weight": 0.25
+        },
+        {
+          "name": "Audit Traceability",
+          "score": 91.7251048938133,
+          "weight": 0.25
+        }
+      ],
+      "timestamp": "2025-04-11T16:46:11.896112+00:00"
+    },
+    {
+      "principle_id": "ethical_conduct",
+      "principle_name": "Ethical Conduct",
+      "description": "Monitoring overall business conduct alignment with divine principles",
+      "overall_score": 88.60944218770288,
+      "factors": [
+        {
+          "name": "Leadership Integrity",
+          "score": 87.05101963772651,
+          "weight": 0.25
+        },
+        {
+          "name": "Decision Framework",
+          "score": 87.93274440499616,
+          "weight": 0.25
+        },
+        {
+          "name": "Stakeholder Treatment",
+          "score": 93.63303203744003,
+          "weight": 0.25
+        },
+        {
+          "name": "Social Responsibility",
+          "score": 85.82097267064881,
+          "weight": 0.25
+        }
+      ],
+      "timestamp": "2025-04-11T16:46:11.896132+00:00"
+    },
+    {
+      "principle_id": "divine_alignment",
+      "principle_name": "Divine Alignment",
+      "description": "Measuring overall alignment with divine governance frameworks",
+      "overall_score": 92.04779336066474,
+      "factors": [
+        {
+          "name": "Imperial Mandate Alignment",
+          "score": 91.87234238401915,
+          "weight": 0.3
+        },
+        {
+          "name": "Divine Guidance Integration",
+          "score": 92.10482102127413,
+          "weight": 0.3
+        },
+        {
+          "name": "Harmony Promotion",
+          "score": 92.7929013907431,
+          "weight": 0.2
+        },
+        {
+          "name": "Collective Elevation",
+          "score": 91.48032030464067,
+          "weight": 0.2
+        }
+      ],
+      "timestamp": "2025-04-11T16:46:11.896151+00:00"
+    }
+  ],
+  "timestamp": "2025-04-11T16:46:11.896163+00:00",
+  "scorecard_version": "1.0"
+}

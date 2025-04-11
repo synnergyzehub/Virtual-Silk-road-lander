@@ -1,0 +1,48 @@
+{
+  "id": "GEN-cd0efce5-ef00-44cf-a406-d012e1e1fd40",
+  "type": "enterprise",
+  "format": "genesis_v1",
+  "version": "1.0",
+  "issuer": {
+    "name": "Genesis Ecosystem",
+    "id": "GENESIS-ISSUER-001"
+  },
+  "holder": {
+    "id": "VOI-JEANS-001",
+    "name": "VOI Jeans Retail India PVT LTD",
+    "contact": "admin@voijeans.com"
+  },
+  "status": "active",
+  "issued_at": "2025-04-11T16:36:33.101451+00:00",
+  "expires_at": "2028-04-10T16:36:33.101451+00:00",
+  "permissions": [
+    "transaction_governance",
+    "channel_management",
+    "inventory_sync",
+    "financial_reporting",
+    "compliance_management"
+  ],
+  "governance_level": "enhanced",
+  "wto_compliance": true,
+  "metadata": {
+    "organization_size": "Enterprise",
+    "industry": "Retail",
+    "region": "Asia",
+    "country": "India",
+    "stores": 25,
+    "employees": 500
+  },
+  "divine_verification": {
+    "alignment_score": 92.0,
+    "verification_timestamp": "2025-04-11T16:36:34.124156+00:00",
+    "verification_authority": "Divine Governance Layer"
+  },
+  "signature": "3N1DawWjXKw420LnyRt7BXTWirFRlfqbgaUZGB2BVcc=",
+  "renewals": [
+    {
+      "timestamp": "2025-04-11T16:36:34.124156+00:00",
+      "previous_expiry": "2026-04-11T16:36:33.101451+00:00",
+      "new_expiry": "2028-04-10T16:36:33.101451+00:00"
+    }
+  ]
+}

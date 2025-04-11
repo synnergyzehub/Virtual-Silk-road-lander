@@ -1,99 +1,73 @@
 #!/usr/bin/env python3
 """
-Run the Secure Empire License API with configuration support for multi-entity deployment.
+Genesis Stack License API Runner
+
+Script to start the Genesis Stack license API service.
 """
 
 import os
-import sys
-import json
 import argparse
-import subprocess
+import logging
+from genesis_license_api import app
 
-def load_entity_config(entity_name):
-    """Load configuration for an entity."""
-    entity_dir_name = entity_name.lower().replace(' ', '-')
-    entity_config_dir = os.path.join('config', entity_dir_name)
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("license_api.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger("license_api_runner")
+
+def parse_arguments():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(description="Genesis Stack License API Runner")
     
-    if not os.path.exists(entity_config_dir):
-        print(f"Error: Configuration for entity '{entity_name}' not found.")
-        print(f"Expected directory: {entity_config_dir}")
-        return None
+    parser.add_argument(
+        "--host", 
+        default="0.0.0.0",
+        help="Host to run the server on (default: 0.0.0.0)"
+    )
     
-    # Load ports configuration
-    ports_file = os.path.join(entity_config_dir, 'ports.json')
-    if not os.path.exists(ports_file):
-        print(f"Error: Ports configuration for entity '{entity_name}' not found.")
-        print(f"Expected file: {ports_file}")
-        return None
+    parser.add_argument(
+        "--port", 
+        type=int, 
+        default=5001,
+        help="Port to run the server on (default: 5001)"
+    )
     
-    try:
-        with open(ports_file, 'r') as f:
-            ports = json.load(f)
-    except Exception as e:
-        print(f"Error loading ports configuration: {e}")
-        return None
+    parser.add_argument(
+        "--debug", 
+        action="store_true",
+        help="Run in debug mode"
+    )
     
-    # Load API configuration
-    api_file = os.path.join(entity_config_dir, 'api.json')
-    if not os.path.exists(api_file):
-        print(f"Error: API configuration for entity '{entity_name}' not found.")
-        print(f"Expected file: {api_file}")
-        return None
+    parser.add_argument(
+        "--api-key",
+        help="API key for authentication (default: from environment variable)"
+    )
     
-    try:
-        with open(api_file, 'r') as f:
-            api_config = json.load(f)
-    except Exception as e:
-        print(f"Error loading API configuration: {e}")
-        return None
-    
-    return {
-        "entity_name": entity_name,
-        "entity_dir_name": entity_dir_name,
-        "config_dir": entity_config_dir,
-        "port": ports.get("license_api_port", 5001),
-        "api_key": api_config.get("api_key")
-    }
+    return parser.parse_args()
 
 def main():
-    parser = argparse.ArgumentParser(description='Run the Secure Empire License API.')
-    parser.add_argument('--port', type=int, help='Port to run the API on (default: 5001 or from config)')
-    parser.add_argument('--entity', help='Entity name to load configuration for')
+    """Main entry point"""
+    args = parse_arguments()
     
-    args = parser.parse_args()
+    # Set environment variables from arguments
+    if args.api_key:
+        os.environ["GENESIS_API_KEY"] = args.api_key
+        
+    # Log startup information
+    logger.info(f"Starting Secure Empire License API on port {args.port}...")
     
-    # Default API key
-    api_key = os.getenv('EMPIRE_API_KEY', 'emperorkey123')
-    port = 5001
-    
-    # If entity is specified, load configuration
-    if args.entity:
-        entity_config = load_entity_config(args.entity)
-        if entity_config:
-            port = entity_config["port"]
-            api_key = entity_config["api_key"]
-    
-    # Override with command line arguments if provided
-    if args.port:
-        port = args.port
-    
-    # Export API key as environment variable
-    os.environ['EMPIRE_API_KEY'] = api_key
-    
-    print(f"Starting Secure Empire License API on port {port}...")
-    
-    # Run the secure_empire_license_api.py script
-    try:
-        result = subprocess.run(
-            ["python", "secure_empire_license_api.py", "--port", str(port)],
-            env=os.environ
-        )
-        if result.returncode != 0:
-            print(f"Error running Secure Empire License API: {result.returncode}")
-            sys.exit(result.returncode)
-    except Exception as e:
-        print(f"Error running Secure Empire License API: {e}")
-        sys.exit(1)
+    # Run the application
+    app.run(
+        host=args.host,
+        port=args.port,
+        debug=args.debug
+    )
 
 if __name__ == "__main__":
     main()

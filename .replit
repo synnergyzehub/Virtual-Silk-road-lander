@@ -57,23 +57,15 @@ args = "Subscription Demo Python"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Minimal Voi 8501"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Genesis Dashboard"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "License API"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "License Management"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Genesis Shell"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "License API"
 
 [[workflows.workflow]]
 name = "Streamlit New App"
@@ -225,50 +217,6 @@ args = "python -m streamlit run subscription_demo.py --server.port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
-name = "Minimal Voi 8501"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run minimal_voi.py"
-
-[[workflows.workflow]]
-name = "Genesis Dashboard"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run genesis_dashboard.py --server.port 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "License API"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python run_license_api.py"
-waitForPort = 5001
-
-[[workflows.workflow]]
 name = "License Management"
 author = "agent"
 
@@ -296,6 +244,21 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python run_genesis_shell.py"
+
+[[workflows.workflow]]
+name = "License API"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_license_api.py"
+waitForPort = 5001
 
 [[ports]]
 localPort = 5000
