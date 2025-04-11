@@ -1,0 +1,88 @@
+# Genesis Empowerment Matrix & Virtual Silk Road Core
+
+# --- CONFIG: Minimum Requirements for License Operability ---
+MIN_DATASETS_REQUIRED = 300
+DEPARTMENT_SCORE_THRESHOLD = 70.0  # Minimum average score per department
+
+# Governance level weights (optional)
+GOVERNANCE_WEIGHTS = {
+    "policy": 1.5,
+    "strategic": 1.2,
+    "operational": 1.0
+}
+
+# --- VIRTUAL SILK ROAD SIMULATION TRIGGERS ---
+# Game Mechanics: Each department is a 'city'; modules are 'checkpoints'; users are 'travelers'
+SILK_ROAD_STAGES = ["checkpoint_entry", "checkpoint_review", "assembly_ritual", "governance_grant", "operability_unlock"]
+
+# Sample department matrices (example: Sales)
+departments = {
+    "Sales": {
+        "South": {"transaction_volume": 2_00_00_000, "csat": 4.7, "level": "operational"},
+        "East": {"transaction_volume": 1_00_00_000, "csat": 3.9, "level": "strategic"},
+        "West": {"transaction_volume": 3_00_00_000, "csat": 4.1, "level": "policy"},
+    },
+    "Marketing": {
+        "National": {"transaction_volume": 1_50_00_000, "csat": 4.3, "level": "strategic"},
+        "Regional": {"transaction_volume": 90_00_000, "csat": 4.0, "level": "operational"},
+    }
+}
+
+# Calculate governance-based weight
+def calculate_weight(volume, level):
+    base = 1.0
+    if volume > 2_00_00_000:
+        base += 0.5
+    elif volume > 1_00_00_000:
+        base += 0.2
+    return base * GOVERNANCE_WEIGHTS.get(level, 1.0)
+
+# Compute weighted average CSAT per department
+def compute_department_score(dept_matrix):
+    total_weighted_score = 0
+    total_weight = 0
+    for region, data in dept_matrix.items():
+        weight = calculate_weight(data["transaction_volume"], data["level"])
+        total_weighted_score += weight * data["csat"]
+        total_weight += weight
+    return round(total_weighted_score / total_weight, 2)
+
+# Check if each department meets the threshold
+def evaluate_operability(departments, dataset_count):
+    dept_scores = {}
+    for dept, matrix in departments.items():
+        score = compute_department_score(matrix)
+        dept_scores[dept] = score
+
+    all_departments_valid = all(score >= DEPARTMENT_SCORE_THRESHOLD for score in dept_scores.values())
+    dataset_valid = dataset_count >= MIN_DATASETS_REQUIRED
+
+    stage = determine_silk_road_stage(dept_scores, dataset_valid)
+
+    return {
+        "departments": dept_scores,
+        "datasets": dataset_count,
+        "operable": all_departments_valid and dataset_valid,
+        "silk_road_stage": stage
+    }
+
+# Determine Silk Road game progression stage
+def determine_silk_road_stage(scores, dataset_valid):
+    avg_score = sum(scores.values()) / len(scores)
+    if not dataset_valid:
+        return SILK_ROAD_STAGES[0]  # checkpoint_entry
+    elif avg_score < 70:
+        return SILK_ROAD_STAGES[1]  # checkpoint_review
+    elif avg_score < 80:
+        return SILK_ROAD_STAGES[2]  # assembly_ritual
+    elif avg_score < 90:
+        return SILK_ROAD_STAGES[3]  # governance_grant
+    else:
+        return SILK_ROAD_STAGES[4]  # operability_unlock
+
+# --- SAMPLE USAGE ---
+dataset_collected = 327
+report = evaluate_operability(departments, dataset_collected)
+
+print("Empowerment Score Report:")
+print(report)

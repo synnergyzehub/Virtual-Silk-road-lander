@@ -1,0 +1,63 @@
+import React, { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+
+export default function DigitalMeRiskPanel() {
+  const [riskData, setRiskData] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/digitalme/ledger")
+      .then(res => res.json())
+      .then(data => {
+        const trend = Array.isArray(data) ? data.map(entry => ({
+          name: entry.timestamp.split("T")[0],
+          risk: entry.risk_score,
+          session: entry.session_id,
+          status: entry.action_status
+        })) : [data];
+        setRiskData(trend);
+      });
+  }, []);
+
+  const blockSession = (sessionId) => {
+    alert(`Block command issued for session: ${sessionId}`);
+    // Here you would normally trigger an API call to revoke or suspend the session
+  };
+
+  return (
+    <div className="p-8 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">DigitalMe Risk Intelligence</h1>
+      <Card>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={riskData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip />
+              <Line type="monotone" dataKey="risk" stroke="#e63946" activeDot={{ r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
+          <p className="mt-4 text-sm text-gray-600">Red spikes = high-risk actions. Review validation history and block sessions as needed.</p>
+
+          <div className="mt-4 space-y-2">
+            {riskData.map(entry => (
+              entry.risk > 70 && (
+                <div key={entry.session} className="flex justify-between items-center border p-3 rounded bg-red-50">
+                  <div>
+                    <p className="font-semibold">Session: {entry.session}</p>
+                    <p className="text-sm text-gray-600">Risk Score: {entry.risk} | Status: {entry.status}</p>
+                  </div>
+                  <Button variant="destructive" onClick={() => blockSession(entry.session)}>
+                    Block Session
+                  </Button>
+                </div>
+              )
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

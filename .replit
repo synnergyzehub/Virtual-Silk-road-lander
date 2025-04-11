@@ -59,6 +59,10 @@ args = "Subscription Demo Python"
 task = "workflow.run"
 args = "Minimal Voi 8501"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Genesis Dashboard"
+
 [[workflows.workflow]]
 name = "Streamlit New App"
 author = "agent"
@@ -222,12 +226,31 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "streamlit run minimal_voi.py"
 
+[[workflows.workflow]]
+name = "Genesis Dashboard"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run genesis_dashboard.py --server.port 5000"
+waitForPort = 5000
+
 [[ports]]
 localPort = 5000
 
 [[ports]]
 localPort = 8080
 externalPort = 80
+
+[[ports]]
+localPort = 8090
+externalPort = 3001
 
 [[ports]]
 localPort = 8501
