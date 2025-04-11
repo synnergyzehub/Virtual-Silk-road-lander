@@ -148,8 +148,8 @@ def main():
     
     # Start each service
     processes = []
-    for name, service in services.items():
-        print(f"Starting {name}...")
+    for service_name, service in services.items():
+        print(f"Starting {service_name}...")
         
         # Ensure log directory exists
         log_file = service.get("log_file")
@@ -170,8 +170,8 @@ def main():
             stderr=subprocess.STDOUT if log_redirect else None
         )
         
-        processes.append((name, process, log_redirect))
-        print(f"{name} started with PID {process.pid}")
+        processes.append((service_name, process, log_redirect))
+        print(f"{service_name} started with PID {process.pid}")
     
     # Register signal handlers
     def signal_handler(sig, frame):
