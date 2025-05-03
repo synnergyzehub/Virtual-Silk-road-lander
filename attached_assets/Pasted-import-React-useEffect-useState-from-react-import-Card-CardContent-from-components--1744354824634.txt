@@ -1,0 +1,69 @@
+import React, { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableHead, TableRow, TableCell, TableBody } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+
+export default function DigitalMeLedgerView() {
+  const [ledger, setLedger] = useState([]);
+  const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:5000/digitalme/ledger")
+      .then(res => res.json())
+      .then(setLedger);
+  }, []);
+
+  const filteredLedger = ledger.filter(entry =>
+    entry.license_id.toLowerCase().includes(filter.toLowerCase()) ||
+    entry.role.toLowerCase().includes(filter.toLowerCase()) ||
+    entry.geo_location.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  return (
+    <div className="p-8 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">DigitalMe Action Ledger</h1>
+      <Input
+        placeholder="Filter by license, role, or region..."
+        className="mb-4"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
+      <Card>
+        <CardContent>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Session ID</TableCell>
+                <TableCell>License</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell>Action</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Token</TableCell>
+                <TableCell>Geo</TableCell>
+                <TableCell>Validator</TableCell>
+                <TableCell>Risk</TableCell>
+                <TableCell>Timestamp</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredLedger.map((entry, i) => (
+                <TableRow key={i}>
+                  <TableCell>{entry.session_id}</TableCell>
+                  <TableCell>{entry.license_id}</TableCell>
+                  <TableCell>{entry.role}</TableCell>
+                  <TableCell>{entry.action}</TableCell>
+                  <TableCell>{entry.action_status}</TableCell>
+                  <TableCell>{entry.intent_token}</TableCell>
+                  <TableCell>{entry.geo_location}</TableCell>
+                  <TableCell>{entry.validated_by}</TableCell>
+                  <TableCell>{entry.risk_score}</TableCell>
+                  <TableCell>{entry.timestamp}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

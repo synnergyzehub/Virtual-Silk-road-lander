@@ -1,0 +1,10 @@
+{
+  "ESOM-VOI-JEANS-D2C-001": {
+    "total_sessions": 1,
+    "blocked_actions": 1,
+    "high_risk_count": 1,
+    "average_risk": 87.0,
+    "divine_override": false,
+    "score": 48.5
+  }
+}

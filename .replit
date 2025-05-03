@@ -17,84 +17,55 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Streamlit Server"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Streamlit Test"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Minimal Streamlit"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Streamlit New App"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "HSN Transaction App"
+args = "Voi Jeans Inventory"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Simple Test App"
+args = "Simple Test"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Streamlit Port 8080 Test"
+args = "Simple Test 8501"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Emperor OS Timeline"
+args = "Minimal Voi"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Test Streamlit App"
-
-[[workflows.workflow]]
-name = "Streamlit Server"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
+args = "EmpireOS Onboarding"
 
 [[workflows.workflow.tasks]]
-task = "packager.installForAll"
+task = "workflow.run"
+args = "Super Minimal 5000"
 
 [[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run app.py --server.port 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Streamlit Test"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
+task = "workflow.run"
+args = "Welcome Page Server"
 
 [[workflows.workflow.tasks]]
-task = "packager.installForAll"
+task = "workflow.run"
+args = "Subscription Demo"
 
 [[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run test_app.py --server.port 5000"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Minimal Streamlit"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
+task = "workflow.run"
+args = "Subscription Demo Python"
 
 [[workflows.workflow.tasks]]
-task = "packager.installForAll"
+task = "workflow.run"
+args = "License Management"
 
 [[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run minimal.py --server.port 5000"
-waitForPort = 5000
+task = "workflow.run"
+args = "Genesis Shell"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "License API"
 
 [[workflows.workflow]]
 name = "Streamlit New App"
@@ -112,7 +83,7 @@ args = "streamlit run new_app.py --server.port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
-name = "HSN Transaction App"
+name = "Voi Jeans Inventory"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -123,11 +94,11 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run app.py --server.port 8080"
-waitForPort = 8080
+args = "streamlit run voi_inventory_management.py --server.port 5000"
+waitForPort = 5000
 
 [[workflows.workflow]]
-name = "Simple Test App"
+name = "Simple Test"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -142,7 +113,7 @@ args = "streamlit run simple_test.py --server.port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
-name = "Streamlit Port 8080 Test"
+name = "Simple Test 8501"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -153,11 +124,11 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run port_test.py --server.port 8080"
-waitForPort = 8080
+args = "streamlit run simple_test.py"
+waitForPort = 8501
 
 [[workflows.workflow]]
-name = "Emperor OS Timeline"
+name = "Minimal Voi"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -168,11 +139,11 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run app.py --server.port 5000"
+args = "streamlit run minimal_voi.py --server.port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
-name = "Test Streamlit App"
+name = "EmpireOS Onboarding"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -183,15 +154,134 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run test_streamlit.py --server.port 5000"
+args = "streamlit run onboarding_minimal.py --server.port 5000"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Super Minimal 5000"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run super_minimal.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Welcome Page Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python web_server.py"
+
+[[workflows.workflow]]
+name = "Subscription Demo"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run subscription_demo.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Subscription Demo Python"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m streamlit run subscription_demo.py --server.port 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "License Management"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_license_management.py"
+waitForPort = 8505
+
+[[workflows.workflow]]
+name = "Genesis Shell"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_genesis_shell.py"
+
+[[workflows.workflow]]
+name = "License API"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_license_api.py"
+waitForPort = 5001
 
 [[ports]]
 localPort = 5000
 
 [[ports]]
+localPort = 5001
+externalPort = 3002
+
+[[ports]]
 localPort = 8080
 externalPort = 80
+
+[[ports]]
+localPort = 8090
+externalPort = 3001
+
+[[ports]]
+localPort = 8501
+externalPort = 3000
+
+[[ports]]
+localPort = 8505
+externalPort = 3003
 
 [objectStorage]
 defaultBucketID = "replit-objstore-e0a659ba-f686-4c68-abf4-46d864a64cea"

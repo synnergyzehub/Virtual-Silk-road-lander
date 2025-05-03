@@ -1,0 +1,37 @@
+{
+  "digitalme_id": "ede569358b0e901527aef15e0bc8be6e1974a831ae870ac115beb246bf2efa63",
+  "jurisdictional_filtering": {
+    "India / Karnataka": {
+      "required_compliance": [
+        "Zakat Reporting",
+        "Ethical Traceability",
+        "Digital Invoice"
+      ],
+      "ethics_filters": [
+        "No subcontracting without audit",
+        "AI-generated strategy must be human-approved"
+      ],
+      "geo_code": "IN-KA",
+      "restricted_actions": [
+        "auto-debit without consent",
+        "unverified SKU entry"
+      ],
+      "enforced_by": "DigitalMe + DivineFilterCore"
+    },
+    "Global": {
+      "required_compliance": [
+        "ECG Global Ethics Compliance",
+        "Multi-region legal harmonization"
+      ],
+      "ethics_filters": [
+        "No cross-border data use without regional consent"
+      ],
+      "geo_code": "GLB",
+      "restricted_actions": [
+        "Unlicensed realm governance",
+        "Trait override without quorum"
+      ],
+      "enforced_by": "DigitalMe + DivineCore"
+    }
+  }
+}

@@ -1,597 +1,721 @@
+#!/usr/bin/env python3
+"""
+Virtual Silk Road - SynergyzeOS Trading Platform
+
+This module provides a Streamlit-based interface for the Virtual Silk Road
+trading platform, which demonstrates the SynergyzeOS licensing ecosystem
+within the Genesis Stack.
+"""
+
+import os
+import json
+import time
+import requests
 import streamlit as st
 import pandas as pd
-import numpy as np
-import time
-import plotly.graph_objects as go
 import plotly.express as px
+import plotly.graph_objects as go
+from datetime import datetime, timedelta
 
-def show_virtual_silk_road():
-    """
-    Display the Emperor's private view of the Virtual Silk Road ecosystem.
-    This is a comprehensive visualization of the entire enterprise governance structure.
-    Only accessible to authenticated users with Emperor-level access.
-    """
-    
-    # Differentiate this from the public landing view with a special notice
-    st.info("⚠️ This is the Emperor's private governance view with special access controls. For the public Virtual Silk Road landing page, navigate to the public view.")
-    
-    # Emperor's header with special styling for authorized users
-    st.markdown(
-        """
-        <div style='background: linear-gradient(90deg, rgba(30,58,138,1) 0%, rgba(75,0,130,1) 100%); 
-        padding: 30px; border-radius: 10px; margin-bottom: 30px; text-align: center;'>
-            <h1 style='color: gold; margin: 0; font-size: 3rem;'>👑 Emperor's Command Center</h1>
-            <p style='color: white; margin: 15px 0 0 0; font-size: 1.5rem;'>Virtual Silk Road Governance Terminal</p>
-            <p style='color: rgba(255,255,255,0.7); margin: 10px 0 0 0;'>Authorized Access: Private View</p>
-        </div>
-        """, 
-        unsafe_allow_html=True
-    )
-    
-    # Emperor's dashboard tabs
-    tabs = st.tabs([
-        "🌐 Ecosystem Overview", 
-        "🔬 License Management", 
-        "📊 Governance Analytics",
-        "📅 Review Calendar"
-    ])
-    
-    # Tab 1: Ecosystem Overview
-    with tabs[0]:
-        st.header("Enterprise Ecosystem Digital Twin")
-        st.write("Complete visualization of the interconnected components in the Empire OS governance model.")
-        
-        # Simulate complex interactive visualization
-        eco_col1, eco_col2 = st.columns([2, 1])
-        
-        with eco_col1:
-            # Create network visualization
-            nodes = {'Manufacturing': 0, 'Retail': 1, 'Finance': 2, 'Logistics': 3, 
-                    'Marketing': 4, 'Compliance': 5, 'Emperor': 6, 'Software': 7}
-            
-            # Create connections (edges) between nodes
-            edges = []
-            for i in range(len(nodes)-1):
-                # Emperor node connects to all other nodes
-                edges.append((nodes['Emperor'], i))
-                
-                # Other connections
-                if i < len(nodes)-2:
-                    edges.append((i, i+1))
-            
-            # Create labels and positions for nodes
-            labels = list(nodes.keys())
-            pos = {}
-            
-            # Place Emperor node in center
-            pos[nodes['Emperor']] = [0, 0]
-            
-            # Place other nodes in a circle around Emperor
-            angle_step = 2 * np.pi / (len(nodes) - 1)
-            for i, node in enumerate([n for n in nodes.keys() if n != 'Emperor']):
-                angle = i * angle_step
-                pos[nodes[node]] = [0.5 * np.cos(angle), 0.5 * np.sin(angle)]
-            
-            # Create a graph using plotly
-            edge_x = []
-            edge_y = []
-            for edge in edges:
-                x0, y0 = pos[edge[0]]
-                x1, y1 = pos[edge[1]]
-                edge_x.extend([x0, x1, None])
-                edge_y.extend([y0, y1, None])
-                
-            edge_trace = go.Scatter(
-                x=edge_x, y=edge_y,
-                line=dict(width=1, color='rgba(150, 150, 150, 0.7)'),
-                hoverinfo='none',
-                mode='lines')
-            
-            node_x = []
-            node_y = []
-            node_color = []
-            node_size = []
-            
-            for node in nodes:
-                x, y = pos[nodes[node]]
-                node_x.append(x)
-                node_y.append(y)
-                # Emperor node is gold
-                if node == 'Emperor':
-                    node_color.append('gold')
-                    node_size.append(25)
-                else:
-                    node_color.append('steelblue')
-                    node_size.append(15)
-            
-            node_trace = go.Scatter(
-                x=node_x, y=node_y,
-                mode='markers+text',
-                text=labels,
-                textposition="top center",
-                marker=dict(
-                    showscale=False,
-                    color=node_color,
-                    size=node_size,
-                    line=dict(width=1, color='rgba(50, 50, 50, 0.8)')),
-                hoverinfo='text',
-                textfont=dict(size=11))
-            
-            # Create the figure
-            fig = go.Figure(data=[edge_trace, node_trace],
-                            layout=go.Layout(
-                                title="Empire OS Ecosystem Visualization",
-                                titlefont=dict(size=16),
-                                showlegend=False,
-                                hovermode='closest',
-                                margin=dict(b=20, l=5, r=5, t=40),
-                                annotations=[dict(
-                                    text="",
-                                    showarrow=False,
-                                    xref="paper", yref="paper")],
-                                xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                                yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                                height=500,
-                                plot_bgcolor='rgba(255, 255, 255, 0.95)')
-                            )
-            
-            st.plotly_chart(fig, use_container_width=True)
-        
-        with eco_col2:
-            st.subheader("System Status")
-            
-            # System status metrics
-            st.metric("Active Licenses", "324", "+12")
-            st.metric("API Requests (24h)", "1.2M", "-3%")
-            st.metric("System Health", "98.7%", "+0.5%")
-            
-            # Active administrators
-            st.subheader("Active Administrators")
-            admins = {
-                "Emperor": {"status": "Online", "last_active": "Now", "color": "gold"},
-                "CFO": {"status": "Online", "last_active": "5m ago", "color": "green"},
-                "CIO": {"status": "Away", "last_active": "1h ago", "color": "orange"},
-                "Marketing Officer": {"status": "Offline", "last_active": "3h ago", "color": "red"}
-            }
-            
-            # Display admin status with colored indicators
-            for admin, data in admins.items():
-                st.markdown(f"""
-                <div style='display: flex; align-items: center;'>
-                    <div style='width: 10px; height: 10px; border-radius: 50%; background-color: {data["color"]}; margin-right: 10px;'></div>
-                    <div style='flex-grow: 1;'><b>{admin}</b> <span style='color: gray; font-size: 0.8em;'>({data["status"]})</span></div>
-                    <div style='color: gray; font-size: 0.8em;'>{data["last_active"]}</div>
-                </div>
-                """, unsafe_allow_html=True)
-        
-        # Additional ecosystem metrics
-        st.subheader("Key Ecosystem Metrics")
-        
-        # Create three columns for metrics
-        metric_cols = st.columns(3)
-        
-        with metric_cols[0]:
-            st.markdown("""
-            <div style='background-color: rgba(30, 58, 138, 0.1); padding: 15px; border-radius: 5px; text-align: center;'>
-                <h3 style='margin-top: 0; color: #1E3A8A;'>$1.2M</h3>
-                <p style='margin-bottom: 0;'>Revenue from License Fees</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with metric_cols[1]:
-            st.markdown("""
-            <div style='background-color: rgba(75, 0, 130, 0.1); padding: 15px; border-radius: 5px; text-align: center;'>
-                <h3 style='margin-top: 0; color: #4B0082;'>27</h3>
-                <p style='margin-bottom: 0;'>Connected External Systems</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with metric_cols[2]:
-            st.markdown("""
-            <div style='background-color: rgba(0, 100, 0, 0.1); padding: 15px; border-radius: 5px; text-align: center;'>
-                <h3 style='margin-top: 0; color: #006400;'>98.3%</h3>
-                <p style='margin-bottom: 0;'>Governance Compliance Rate</p>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    # Tab 2: License Management
-    with tabs[1]:
-        st.header("License Management Console")
-        st.write("Emperor-level control over all license allocations, permissions, and restrictions.")
-        
-        # License management interface
-        license_types = [
-            "Manufacturing Access License", 
-            "Retail Distribution License",
-            "Empire OS Core License",
-            "Financial Oversight License",
-            "Marketing Portal License",
-            "Supply Chain Visualization License"
+# Set page configuration
+st.set_page_config(
+    page_title="Virtual Silk Road | SynergyzeOS",
+    page_icon="🧠",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Constants
+LICENSE_API_URL = "http://localhost:5001"
+LICENSE_API_KEY = "emperorkey123"  # Default key for development
+
+def check_license_status(license_id):
+    """Check the status of a license with the License API."""
+    try:
+        response = requests.get(
+            f"{LICENSE_API_URL}/api/license/verify/{license_id}",
+            headers={"Authorization": f"Bearer {LICENSE_API_KEY}"}
+        )
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {"valid": False, "message": f"Error: {response.status_code}"}
+    except Exception as e:
+        return {"valid": False, "message": f"Error connecting to License API: {e}"}
+
+def get_all_licenses():
+    """Get all licenses from the License API."""
+    try:
+        response = requests.get(
+            f"{LICENSE_API_URL}/api/license/list",
+            headers={"Authorization": f"Bearer {LICENSE_API_KEY}"}
+        )
+        if response.status_code == 200:
+            return response.json().get("licenses", [])
+        else:
+            st.error(f"Error fetching licenses: {response.status_code}")
+            return []
+    except Exception as e:
+        st.error(f"Error connecting to License API: {e}")
+        return []
+
+def load_sample_data():
+    """Load sample trading data if not available from API."""
+    # Generated trading data with rich structure
+    return {
+        "trade_routes": [
+            {"id": "TR001", "name": "Silk Road Express", "origin": "Beijing", "destination": "Istanbul", "status": "active"},
+            {"id": "TR002", "name": "Spice Route", "origin": "Mumbai", "destination": "Alexandria", "status": "active"},
+            {"id": "TR003", "name": "Tea Caravan", "origin": "Chengdu", "destination": "Moscow", "status": "pending"},
+            {"id": "TR004", "name": "Diamond Path", "origin": "Johannesburg", "destination": "Amsterdam", "status": "active"},
+            {"id": "TR005", "name": "Incense Trail", "origin": "Muscat", "destination": "Damascus", "status": "inactive"}
+        ],
+        "trade_goods": [
+            {"id": "TG001", "name": "Premium Silk", "origin": "China", "value_per_unit": 120, "units": "meters"},
+            {"id": "TG002", "name": "Saffron", "origin": "Iran", "value_per_unit": 200, "units": "grams"},
+            {"id": "TG003", "name": "Porcelain", "origin": "China", "value_per_unit": 50, "units": "pieces"},
+            {"id": "TG004", "name": "Spices", "origin": "India", "value_per_unit": 80, "units": "kilograms"},
+            {"id": "TG005", "name": "Tea", "origin": "China", "value_per_unit": 40, "units": "kilograms"},
+            {"id": "TG006", "name": "Diamonds", "origin": "Africa", "value_per_unit": 5000, "units": "carats"},
+            {"id": "TG007", "name": "Incense", "origin": "Arabia", "value_per_unit": 60, "units": "kilograms"}
+        ],
+        "trading_partners": [
+            {"id": "TP001", "name": "Imperial Trading Co.", "region": "China", "reputation": 95},
+            {"id": "TP002", "name": "Ottoman Merchants Guild", "region": "Turkey", "reputation": 88},
+            {"id": "TP003", "name": "Venetian Exchange", "region": "Italy", "reputation": 92},
+            {"id": "TP004", "name": "Mughal Traders Association", "region": "India", "reputation": 85},
+            {"id": "TP005", "name": "Russian Fur Company", "region": "Russia", "reputation": 78}
         ]
-        
-        # License status table
-        license_data = {
-            "License Type": license_types,
-            "Active Instances": [42, 156, 3, 18, 24, 81],
-            "Usage %": [78, 92, 100, 45, 63, 87],
-            "Monthly Cost": ["$4,200", "$15,600", "$30,000", "$1,800", "$2,400", "$8,100"],
-            "Status": ["✅ Active", "✅ Active", "✅ Active", "⚠️ Underutilized", "✅ Active", "✅ Active"]
-        }
-        
-        df_licenses = pd.DataFrame(license_data)
-        
-        # Style the dataframe
-        st.dataframe(df_licenses, use_container_width=True)
-        
-        # License allocation tools
-        st.subheader("License Allocation Controls")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            # License allocation form
-            selected_license = st.selectbox("Select License Type", license_types)
-            entity_name = st.text_input("Entity Name")
-            duration = st.radio("License Duration", ["1 Month", "6 Months", "1 Year", "Perpetual"])
-            permissions = st.multiselect("Permissions", ["View", "Edit", "Delete", "Admin", "API Access"])
-            
-        with col2:
-            # Cost calculator
-            st.subheader("Cost Calculator")
-            
-            # Map selection to a base price
-            base_prices = {
-                "Manufacturing Access License": 100,
-                "Retail Distribution License": 100,
-                "Empire OS Core License": 10000,
-                "Financial Oversight License": 100,
-                "Marketing Portal License": 100,
-                "Supply Chain Visualization License": 100
-            }
-            
-            # Map duration to a multiplier
-            duration_multipliers = {
-                "1 Month": 1,
-                "6 Months": 5.5,
-                "1 Year": 10,
-                "Perpetual": 30
-            }
-            
-            # Calculate cost based on license type, duration, and permissions
-            base_price = base_prices.get(selected_license, 100)
-            duration_multiplier = duration_multipliers.get(duration, 1)
-            permission_cost = len(permissions) * 20  # $20 per permission
-            
-            total_cost = base_price * duration_multiplier + permission_cost
-            
-            # Display calculation
-            st.metric("License Cost", f"${total_cost:,.2f}")
-            
-            # Issue button
-            if st.button("Issue License", type="primary"):
-                st.success(f"License for {entity_name} has been issued successfully!")
-                
-        # License activation history
-        st.subheader("Recent License Activations")
-        
-        # Sample activation data
-        activation_data = {
-            "Entity": ["VOI Jeans Factory #3", "Retail Store #42", "Finance Department", "Marketing Team Alpha"],
-            "License Type": ["Manufacturing Access", "Retail Distribution", "Financial Oversight", "Marketing Portal"],
-            "Activated On": ["2025-03-30", "2025-03-28", "2025-03-25", "2025-03-22"],
-            "Activated By": ["Emperor", "CIO", "CFO", "Marketing Officer"]
-        }
-        
-        df_activations = pd.DataFrame(activation_data)
-        st.table(df_activations)
+    }
+
+def load_trade_data():
+    """Load historical trade data."""
+    # Generate sample historical trade data
+    dates = pd.date_range(end=datetime.now(), periods=60, freq='D')
     
-    # Tab 3: Governance Analytics
-    with tabs[2]:
-        st.header("Governance Analytics")
-        st.write("Comprehensive analytics on governance metrics across the Empire OS ecosystem.")
+    # Create data for multiple trade goods
+    goods = ['Silk', 'Spices', 'Tea', 'Porcelain', 'Diamonds']
+    data = []
+    
+    for good in goods:
+        # Base value with randomness
+        base_value = {
+            'Silk': 100,
+            'Spices': 80,
+            'Tea': 60,
+            'Porcelain': 90,
+            'Diamonds': 500
+        }[good]
         
-        # Time-based filter for analytics
-        time_range = st.radio("Time Range", ["Last 7 Days", "Last 30 Days", "Last Quarter", "Last Year"], horizontal=True)
-        
-        # Create analytics dashboard
-        chart_col1, chart_col2 = st.columns(2)
-        
-        with chart_col1:
-            # Compliance rate by department
-            st.subheader("Compliance Rate by Department")
+        # Add some trends and seasonality
+        for date in dates:
+            value = base_value
             
-            dept_data = {
-                "Department": ["Manufacturing", "Retail", "Finance", "Logistics", "Marketing", "Technology"],
-                "Compliance Rate": [97, 94, 99, 92, 88, 96]
-            }
+            # Add trend
+            value += (date.dayofyear / 365) * 20
             
-            fig = px.bar(
-                dept_data, 
-                x="Department", 
-                y="Compliance Rate",
-                title="Department Compliance (%)",
-                color="Compliance Rate",
-                color_continuous_scale=px.colors.sequential.Viridis,
-                text="Compliance Rate"
-            )
+            # Add weekly pattern
+            value += (date.dayofweek % 7) * 2
             
-            fig.update_traces(texttemplate='%{text}%', textposition='outside')
-            fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
+            # Add some randomness
+            value += pd.np.random.normal(0, 10)
             
-            st.plotly_chart(fig, use_container_width=True)
+            # Ensure no negative values
+            value = max(value, 0)
             
-        with chart_col2:
-            # API usage over time
-            st.subheader("API Usage Trends")
-            
-            # Generate some sample data
-            dates = pd.date_range(end=pd.Timestamp.now(), periods=14, freq='D')
-            api_calls = np.random.randint(800, 1200, size=14) * 1000
-            
-            # Create a dataframe
-            api_data = pd.DataFrame({
-                'Date': dates,
-                'API Calls': api_calls
+            data.append({
+                'Date': date,
+                'Good': good,
+                'Value': round(value, 2),
+                'Volume': round(pd.np.random.randint(50, 200) * (1 + date.dayofyear / 1000), 0)
             })
-            
-            fig = px.line(
-                api_data, 
-                x='Date', 
-                y='API Calls', 
-                title='Daily API Calls (14-day trend)',
-                markers=True
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
+    
+    return pd.DataFrame(data)
+
+def render_license_status():
+    """Render the license status section."""
+    st.subheader("SynergyzeOS License Status")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        # License verification
+        license_id = st.text_input("Enter License ID:", value="SYN-SILK-GLOBAL-250411")
+        if st.button("Verify License"):
+            with st.spinner("Verifying license..."):
+                license_status = check_license_status(license_id)
+                if license_status.get("valid"):
+                    st.success(f"License {license_id} is valid until {license_status.get('expiry_date')}")
+                    st.json(license_status)
+                else:
+                    st.error(f"License validation failed: {license_status.get('message')}")
+    
+    with col2:
+        # License health indicator
+        st.metric(
+            label="License Health",
+            value="98%",
+            delta="2.3%",
+            delta_color="normal"
+        )
         
-        # Second row of charts
-        chart_col3, chart_col4 = st.columns(2)
+        # Active modules
+        st.write("Active Modules:")
+        st.caption("✅ Commerce Engine")
+        st.caption("✅ Governance Layer")
+        st.caption("✅ Identity Verification")
+        st.caption("✅ Trade Routes")
+
+def render_trade_routes(data):
+    """Render the trade routes section."""
+    st.subheader("Silk Road Trade Routes")
+    
+    # Convert trade routes to DataFrame
+    routes_df = pd.DataFrame(data["trade_routes"])
+    
+    # Create world map of trade routes
+    fig = go.Figure()
+    
+    # Define route coordinates (simplified for demo)
+    route_coords = {
+        "Beijing": (116.4, 39.9),
+        "Istanbul": (28.9, 41.0),
+        "Mumbai": (72.8, 19.1),
+        "Alexandria": (29.9, 31.2),
+        "Chengdu": (104.0, 30.7),
+        "Moscow": (37.6, 55.7),
+        "Johannesburg": (28.0, -26.2),
+        "Amsterdam": (4.9, 52.4),
+        "Muscat": (58.4, 23.6),
+        "Damascus": (36.3, 33.5)
+    }
+    
+    # Add traces for each route
+    for _, route in routes_df.iterrows():
+        if route["status"] == "active":
+            line_color = "rgba(0, 128, 0, 0.7)"
+        elif route["status"] == "pending":
+            line_color = "rgba(255, 165, 0, 0.7)"
+        else:
+            line_color = "rgba(169, 169, 169, 0.5)"
         
-        with chart_col3:
-            # License usage by type
-            st.subheader("License Utilization by Type")
-            
-            license_usage = {
-                "License Type": ["Manufacturing", "Retail", "Financial", "Marketing", "Supply Chain"],
-                "Allocated": [50, 200, 20, 30, 100],
-                "Active": [42, 156, 18, 24, 81]
-            }
-            
-            df_usage = pd.DataFrame(license_usage)
-            df_usage["Utilization"] = (df_usage["Active"] / df_usage["Allocated"] * 100).round(1)
-            
-            fig = px.bar(
-                df_usage,
-                x="License Type",
-                y=["Active", "Allocated"],
-                title="License Allocation vs. Usage",
-                barmode="overlay",
-                opacity=0.7
-            )
-            
-            # Add percentage labels
-            for i, row in df_usage.iterrows():
-                fig.add_annotation(
-                    x=row["License Type"],
-                    y=row["Active"],
-                    text=f"{row['Utilization']}%",
-                    showarrow=False,
-                    yshift=10
-                )
-            
-            st.plotly_chart(fig, use_container_width=True)
-            
-        with chart_col4:
-            # System health metrics
-            st.subheader("System Health")
-            
-            # Create a gauge chart for system health
-            fig = go.Figure(go.Indicator(
-                mode = "gauge+number",
-                value = 98.7,
-                domain = {'x': [0, 1], 'y': [0, 1]},
-                title = {'text': "System Health Score"},
-                gauge = {
-                    'axis': {'range': [None, 100]},
-                    'bar': {'color': "darkgreen"},
-                    'steps' : [
-                        {'range': [0, 50], 'color': "red"},
-                        {'range': [50, 80], 'color': "orange"},
-                        {'range': [80, 90], 'color': "yellow"},
-                        {'range': [90, 100], 'color': "lightgreen"}
-                    ],
-                    'threshold': {
-                        'line': {'color': "green", 'width': 4},
-                        'thickness': 0.75,
-                        'value': 98.7
-                    }
-                }
+        # Get coordinates
+        origin_coords = route_coords.get(route["origin"])
+        dest_coords = route_coords.get(route["destination"])
+        
+        if origin_coords and dest_coords:
+            # Add route line
+            fig.add_trace(go.Scattergeo(
+                lon=[origin_coords[0], dest_coords[0]],
+                lat=[origin_coords[1], dest_coords[1]],
+                mode="lines",
+                line=dict(width=2, color=line_color),
+                name=route["name"],
+                hoverinfo="text",
+                text=f"{route['name']}: {route['origin']} to {route['destination']} ({route['status']})"
             ))
             
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Compliance issues table
-        st.subheader("Active Compliance Issues")
-        
-        # Sample compliance issues
-        compliance_issues = {
-            "Issue ID": ["GOV-2324", "GOV-2310", "GOV-2298"],
-            "Department": ["Retail", "Marketing", "Manufacturing"],
-            "Description": [
-                "Missing quarterly retail inventory reconciliation",
-                "Unapproved marketing assets in circulation",
-                "Production process change without proper documentation"
-            ],
-            "Severity": ["Medium", "Low", "High"],
-            "Status": ["In Review", "Assigned", "In Progress"],
-            "Due Date": ["2025-04-10", "2025-04-15", "2025-04-05"]
-        }
-        
-        df_issues = pd.DataFrame(compliance_issues)
-        
-        # Apply color coding for severity
-        def color_severity(val):
-            color_map = {"Low": "green", "Medium": "orange", "High": "red"}
-            return f"background-color: {color_map.get(val, 'white')}; color: white;"
-        
-        # Display styled table
-        st.dataframe(df_issues, use_container_width=True)
+            # Add origin point
+            fig.add_trace(go.Scattergeo(
+                lon=[origin_coords[0]],
+                lat=[origin_coords[1]],
+                mode="markers",
+                marker=dict(size=8, color="red"),
+                name=route["origin"],
+                hoverinfo="text",
+                text=route["origin"],
+                showlegend=False
+            ))
+            
+            # Add destination point
+            fig.add_trace(go.Scattergeo(
+                lon=[dest_coords[0]],
+                lat=[dest_coords[1]],
+                mode="markers",
+                marker=dict(size=8, color="blue"),
+                name=route["destination"],
+                hoverinfo="text",
+                text=route["destination"],
+                showlegend=False
+            ))
     
-    # Tab 4: Review Calendar
-    with tabs[3]:
-        st.header("Governance Review Calendar")
-        st.write("Schedule and tracking for governance reviews conducted by the Emperor and the council of ministers.")
-        
-        # Filter by month
-        current_month = pd.Timestamp.now().strftime("%B %Y")
-        selected_month = st.selectbox("Select Month", [current_month, "May 2025", "June 2025", "July 2025"])
-        
-        # Create schedule calendar
-        st.subheader(f"Review Schedule: {selected_month}")
-        
-        # Sample review schedule
-        review_data = {
-            "Date": ["2025-04-05", "2025-04-12", "2025-04-19", "2025-04-26"],
-            "Review Type": [
-                "Manufacturing Governance",
-                "Retail Distribution Compliance",
-                "Financial Systems Review",
-                "Full Council of Ministers Review"
-            ],
-            "Led By": ["Emperor & Manufacturing Minister", "Retail Minister", "CFO", "Emperor"],
-            "Status": ["Scheduled", "Scheduled", "Scheduled", "Tentative"]
-        }
-        
-        df_reviews = pd.DataFrame(review_data)
-        
-        # Display the schedule
-        st.table(df_reviews)
-        
-        # Review process visualization
-        st.subheader("Review Process Workflow")
-        
-        # Timeline data
-        timeline_data = {
-            "Step": [
-                "Data Collection",
-                "Preliminary Analysis",
-                "Minister Review",
-                "Emperor Review",
-                "Action Items"
-            ],
-            "Duration (days)": [3, 2, 1, 1, 2],
-            "Responsible": [
-                "Department Heads",
-                "Ministers & Advisors",
-                "Council of Ministers",
-                "Emperor",
-                "All Stakeholders"
-            ]
-        }
-        
-        # Display review process
-        st.table(timeline_data)
+    # Update map layout
+    fig.update_geos(
+        projection_type="natural earth",
+        showcoastlines=True,
+        coastlinecolor="black",
+        showland=True,
+        landcolor="lightgreen",
+        showocean=True,
+        oceancolor="lightblue",
+        showcountries=True,
+        countrycolor="black"
+    )
     
-    # Marketing message and competitive positioning
-    st.subheader("🌐 Market Democratization Strategy")
+    fig.update_layout(
+        height=500,
+        margin=dict(l=0, r=0, t=10, b=0),
+        legend=dict(
+            y=0.99,
+            x=0.01,
+            bgcolor="rgba(255, 255, 255, 0.8)",
+            bordercolor="black",
+            borderwidth=1
+        )
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Route status table
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        # More detailed route information
+        st.dataframe(routes_df)
+    
+    with col2:
+        # Route status summary
+        status_counts = routes_df['status'].value_counts().reset_index()
+        status_counts.columns = ['Status', 'Count']
+        
+        fig = px.pie(
+            status_counts,
+            values='Count',
+            names='Status',
+            color='Status',
+            color_discrete_map={
+                'active': 'green',
+                'pending': 'orange',
+                'inactive': 'gray'
+            },
+            title="Route Status Distribution"
+        )
+        
+        fig.update_traces(textposition='inside', textinfo='percent+label')
+        fig.update_layout(margin=dict(l=0, r=0, t=30, b=0), showlegend=False)
+        
+        st.plotly_chart(fig, use_container_width=True)
+
+def render_trade_goods(data):
+    """Render the trade goods section."""
+    st.subheader("Traded Goods")
+    
+    # Convert trade goods to DataFrame
+    goods_df = pd.DataFrame(data["trade_goods"])
+    
+    # Trade goods visualization
+    col1, col2 = st.columns([3, 2])
+    
+    with col1:
+        # Bar chart of trade goods by value
+        fig = px.bar(
+            goods_df, 
+            x='name', 
+            y='value_per_unit',
+            color='origin',
+            title="Trade Goods Value Comparison",
+            labels={'name': 'Good', 'value_per_unit': 'Value per Unit', 'origin': 'Origin'},
+            hover_data=['units']
+        )
+        
+        fig.update_layout(xaxis={'categoryorder': 'total descending'})
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        # Trade goods table
+        st.dataframe(goods_df)
+        
+        # Add ability to trade goods (simulated)
+        st.write("### Execute Trade")
+        
+        good = st.selectbox("Select Good:", options=goods_df['name'].tolist())
+        quantity = st.number_input("Quantity:", min_value=1, max_value=1000, value=10)
+        
+        selected_good = goods_df[goods_df['name'] == good].iloc[0]
+        trade_value = selected_good['value_per_unit'] * quantity
+        
+        # Calculate trade fee based on SynergyzeOS license
+        trade_fee = trade_value * 0.02  # 2% fee
+        
+        st.write(f"Trade Value: ${trade_value:,.2f}")
+        st.write(f"Trade Fee: ${trade_fee:,.2f}")
+        
+        if st.button("Execute Trade"):
+            # Verify license for commerce operation
+            license_status = check_license_status("SYN-SILK-GLOBAL-250411")
+            
+            if license_status.get("valid"):
+                st.success(f"Trade executed: {quantity} {selected_good['units']} of {good}")
+                
+                # Simulate NPU governance check
+                st.info("✅ SynergyzeOS License validated by NPU node")
+                st.info("✅ Trade conforms to Ethical Commerce guidelines")
+                st.info("✅ Divine Alignment Layer verification passed")
+            else:
+                st.error("Trade failed: Invalid SynergyzeOS license")
+                st.info("❌ License validation failed")
+                st.info("❌ Unable to verify with NPU node")
+
+def render_market_trends():
+    """Render market trends based on historical data."""
+    st.subheader("Market Trends")
+    
+    # Load historical trade data
+    df = load_trade_data()
+    
+    # Time series chart
+    goods = df['Good'].unique()
+    selected_goods = st.multiselect("Select Goods to Display:", options=goods, default=goods[:3])
+    
+    if selected_goods:
+        filtered_df = df[df['Good'].isin(selected_goods)]
+        
+        # Create line chart
+        fig = px.line(
+            filtered_df,
+            x='Date',
+            y='Value',
+            color='Good',
+            title="Historical Prices of Trade Goods",
+            labels={'Value': 'Value per Unit', 'Date': 'Date'}
+        )
+        
+        fig.update_layout(
+            xaxis_title="Date",
+            yaxis_title="Value",
+            legend_title="Trade Good",
+            hovermode="x unified"
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Volume chart
+        fig2 = px.bar(
+            filtered_df,
+            x='Date',
+            y='Volume',
+            color='Good',
+            title="Trading Volume Over Time",
+            labels={'Volume': 'Volume (Units)', 'Date': 'Date'}
+        )
+        
+        fig2.update_layout(
+            xaxis_title="Date",
+            yaxis_title="Volume",
+            legend_title="Trade Good",
+            hovermode="x unified"
+        )
+        
+        st.plotly_chart(fig2, use_container_width=True)
+    else:
+        st.warning("Please select at least one trade good to display.")
+
+def render_governance_compliance(data):
+    """Render governance compliance information."""
+    st.subheader("Empire Computational Governance")
+    
+    # Convert trading partners to DataFrame
+    partners_df = pd.DataFrame(data["trading_partners"])
     
     col1, col2 = st.columns([2, 3])
     
     with col1:
-        st.markdown("""
-        ### Why Virtual Silk Road?
+        # Partner reputation gauge chart
+        fig = go.Figure()
         
-        - **Cost-effective Governance**
-          *At a fraction of competing solutions*
-          
-        - **Unified Ecosystem View**
-          *No more siloed information*
-          
-        - **Real-time Decision Making**
-          *Immediate insights across operations*
-          
-        - **Complete API Integration**
-          *Connect to any existing system*
-          
-        - **Modular License Structure**
-          *Pay only for what you need*
-        """)
+        for _, partner in partners_df.iterrows():
+            fig.add_trace(go.Indicator(
+                mode="gauge+number",
+                value=partner["reputation"],
+                title={"text": partner["name"]},
+                domain={"x": [0, 1], "y": [0, 0.2 * (5 - _)]},
+                gauge={
+                    "axis": {"range": [0, 100]},
+                    "bar": {"color": "darkblue"},
+                    "steps": [
+                        {"range": [0, 50], "color": "red"},
+                        {"range": [50, 75], "color": "orange"},
+                        {"range": [75, 90], "color": "lightgreen"},
+                        {"range": [90, 100], "color": "green"}
+                    ],
+                    "threshold": {
+                        "line": {"color": "black", "width": 4},
+                        "thickness": 0.75,
+                        "value": 90
+                    }
+                }
+            ))
+        
+        fig.update_layout(height=600, margin=dict(l=50, r=50, t=30, b=30))
+        st.plotly_chart(fig, use_container_width=True)
     
     with col2:
-        # Comparison table
-        st.markdown("### Competitive Advantage")
+        # Computational governance visualization
+        st.write("### NPU Governance Layer")
+        st.markdown("""
+        The Empire Computational Governance layer uses dedicated Neural Processing Units (NPUs) 
+        to enforce trading rules and ethical standards through the Divine Alignment Layer.
         
-        comparison_data = {
-            'Feature': [
-                'Unified Governance View',
-                'Real-time Supply Chain Insights',
-                'HSN Code Integration',
-                'Emperor-level Oversight',
-                'Marketing & Sales Portal',
-                'Custom License Templates',
-                'API-driven Architecture',
-                'ROI Analytics'
+        Each transaction is verified against:
+        - **Ethical Commerce Standards**: Ensuring fair trade practices
+        - **Jurisdictional Compliance**: Meeting local trade regulations
+        - **Divine Alignment**: Conformance to ethical principles
+        - **License Validation**: SynergyzeOS license verification
+        """)
+        
+        # Compliance metrics
+        metrics = [
+            {"name": "Ethical Commerce", "value": 98.2, "threshold": 95},
+            {"name": "Jurisdictional Compliance", "value": 100.0, "threshold": 100},
+            {"name": "Divine Alignment", "value": 87.5, "threshold": 80},
+            {"name": "License Validation", "value": 100.0, "threshold": 100}
+        ]
+        
+        metrics_df = pd.DataFrame(metrics)
+        
+        fig = go.Figure()
+        
+        fig.add_trace(go.Bar(
+            x=metrics_df["name"],
+            y=metrics_df["value"],
+            marker_color=[
+                "green" if val >= threshold else "orange"
+                for val, threshold in zip(metrics_df["value"], metrics_df["threshold"])
             ],
-            'Virtual Silk Road': [
-                '✅ Included',
-                '✅ Included',
-                '✅ Included',
-                '✅ Included',
-                '✅ Included',
-                '✅ Included',
-                '✅ Included',
-                '✅ Included'
-            ],
-            'Competitors': [
-                '✅ $20,000+',
-                '❌ Extra Module',
-                '❌ Not Available',
-                '❌ Limited Access',
-                '❌ Separate System',
-                '❌ Fixed Templates',
-                '⚠️ Limited APIs',
-                '⚠️ Basic Only'
+            text=metrics_df["value"].apply(lambda x: f"{x}%"),
+            textposition="auto"
+        ))
+        
+        # Add threshold lines
+        for i, row in metrics_df.iterrows():
+            fig.add_shape(
+                type="line",
+                x0=i-0.4, x1=i+0.4,
+                y0=row["threshold"], y1=row["threshold"],
+                line=dict(color="red", width=2, dash="dash")
+            )
+        
+        fig.update_layout(
+            title="Governance Compliance Metrics",
+            xaxis_title="Metric",
+            yaxis_title="Compliance (%)",
+            yaxis_range=[0, 105],
+            showlegend=False
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+
+def main():
+    """Main function to run the Virtual Silk Road app."""
+    # Sidebar
+    with st.sidebar:
+        st.image("https://via.placeholder.com/150x150.png?text=SynergyzeOS", width=150)
+        st.title("Virtual Silk Road")
+        st.caption("SynergyzeOS Trading Platform")
+        
+        st.write("---")
+        
+        # Navigation
+        page = st.radio(
+            "Navigation",
+            ["Dashboard", "Trading Floor", "Route Management", "License Management", "Governance"]
+        )
+        
+        st.write("---")
+        
+        # License info
+        st.write("### SynergyzeOS License")
+        st.info("License: SYN-SILK-GLOBAL-250411")
+        st.info("NPU Node: NPU-SILK-001")
+        st.info("Status: Active")
+        
+        # Governance reminder
+        st.write("### ECG Oversight")
+        st.warning("All trades are validated through the Empire Computational Governance (ECG) layer running on dedicated NPU hardware.")
+    
+    # Page header
+    st.title("Virtual Silk Road Trading Platform")
+    st.caption("Powered by SynergyzeOS on the Genesis Stack")
+    
+    # Load data
+    data = load_sample_data()
+    
+    # Render selected page
+    if page == "Dashboard":
+        # Overview metrics
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric(
+                label="Trade Routes",
+                value=len(data["trade_routes"]),
+                delta="1",
+                delta_color="normal"
+            )
+        
+        with col2:
+            st.metric(
+                label="Active Partners",
+                value=len(data["trading_partners"]),
+                delta="2",
+                delta_color="normal"
+            )
+        
+        with col3:
+            st.metric(
+                label="Trade Goods",
+                value=len(data["trade_goods"]),
+                delta=None
+            )
+        
+        with col4:
+            st.metric(
+                label="Divine Alignment",
+                value="87.5%",
+                delta="3.2%",
+                delta_color="normal"
+            )
+        
+        # License status
+        render_license_status()
+        
+        # Trade routes map
+        render_trade_routes(data)
+        
+        # Market trends
+        render_market_trends()
+    
+    elif page == "Trading Floor":
+        render_trade_goods(data)
+        render_market_trends()
+    
+    elif page == "Route Management":
+        render_trade_routes(data)
+    
+    elif page == "License Management":
+        st.header("SynergyzeOS License Management")
+        
+        # Display license information
+        licenses = get_all_licenses()
+        
+        if licenses:
+            st.write("### Available Licenses")
+            licenses_df = pd.DataFrame(licenses)
+            st.dataframe(licenses_df)
+        else:
+            st.warning("No licenses available or unable to connect to License API.")
+            
+            # Show sample license data
+            st.write("### Sample License Data")
+            sample_licenses = [
+                {
+                    "license_id": "SYN-SILK-GLOBAL-250411",
+                    "entity_name": "Silk Road Trading Co.",
+                    "issue_date": "2025-04-11",
+                    "expiry_date": "2026-04-10",
+                    "status": "active",
+                    "modules": ["commerce", "governance", "identity", "trading"]
+                }
             ]
+            st.dataframe(pd.DataFrame(sample_licenses))
+        
+        # License request form
+        st.write("### Request New License")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            entity_name = st.text_input("Entity Name:", value="Silk Road Trading Co.")
+            license_type = st.selectbox("License Type:", ["Standard", "Premium", "Enterprise"])
+            
+        with col2:
+            region = st.text_input("Region:", value="GLOBAL")
+            modules = st.multiselect("Modules:", 
+                ["Commerce", "Governance", "Identity", "Trading", "Analytics"],
+                default=["Commerce", "Governance", "Identity", "Trading"]
+            )
+        
+        if st.button("Request License"):
+            with st.spinner("Processing license request..."):
+                # Simulate processing time
+                time.sleep(2)
+                st.success("License request submitted for approval by ECG team.")
+                st.info("Your license will be reviewed by the Emperor's Computational Governance team within 24 hours.")
+                st.info("You will be notified once your license is approved and assigned to an NPU node.")
+    
+    elif page == "Governance":
+        render_governance_compliance(data)
+        
+        # Add interactive governance visualization
+        st.write("### NPU Node Assignment")
+        st.markdown("""
+        Your trading operations are governed by dedicated Neural Processing Units (NPUs)
+        that enforce computational governance rules and ethical standards.
+        
+        Current Assignment:
+        - **NPU Node**: NPU-SILK-001
+        - **Region**: GLOBAL
+        - **Divine Alignment Score**: 87.5%
+        """)
+        
+        # NPU health visualization
+        npu_health = {
+            "CPU": 32,
+            "Memory": 64,
+            "Storage": 1024,
+            "Temperature": 45,
+            "Uptime": 732,
+            "Governance Rules": 128
         }
         
-        # Create DataFrame
-        df_comparison = pd.DataFrame(comparison_data)
+        st.write("### NPU Node Health")
         
-        # Display comparison
-        st.dataframe(df_comparison, hide_index=True)
+        col1, col2, col3 = st.columns(3)
         
-        # Pricing advantage message
-        st.markdown("""
-        <div style="background-color: rgba(50, 205, 50, 0.1); padding: 10px; border-radius: 5px; border-left: 3px solid #32CD32; margin-top: 10px;">
-            <b style="color: #32CD32;">💰 Price Advantage:</b> Our modular licensing approach provides enterprise-grade governance at 60-80% less than competing solutions.
-        </div>
-        """, unsafe_allow_html=True)
-
-    # Marketing call-to-action
-    st.markdown("""
-    <div style="background: linear-gradient(90deg, rgba(75,0,130,0.8) 0%, rgba(123,104,238,0.8) 100%); 
-                padding: 25px; border-radius: 10px; margin-top: 20px; text-align: center; color: white;">
-        <h2 style="color: white; margin-top: 0;">Ready to Transform Your Enterprise Governance?</h2>
-        <p style="font-size: 1.2em; margin: 15px 0;">
-            Contact our Marketing Officer to discover the perfect license package for your organization.
-        </p>
-        <div style="margin-top: 20px;">
-            <span style="background-color: white; color: #4B0082; padding: 10px 20px; border-radius: 30px; font-weight: bold; display: inline-block;">
-                Request Demo & Pricing ➔
-            </span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+        with col1:
+            st.metric("CPU Cores", npu_health["CPU"])
+            st.metric("Memory (GB)", npu_health["Memory"])
+        
+        with col2:
+            st.metric("Storage (GB)", npu_health["Storage"])
+            st.metric("Temperature (°C)", npu_health["Temperature"])
+        
+        with col3:
+            st.metric("Uptime (hours)", npu_health["Uptime"])
+            st.metric("Governance Rules", npu_health["Governance Rules"])
+        
+        # Governance rules visualization
+        st.write("### Active Governance Rules")
+        
+        governance_rules = [
+            {"id": "GR001", "name": "Ethical Commerce", "severity": "Critical", "status": "Active"},
+            {"id": "GR002", "name": "Fair Trade Practices", "severity": "High", "status": "Active"},
+            {"id": "GR003", "name": "Data Sovereignty", "severity": "Critical", "status": "Active"},
+            {"id": "GR004", "name": "License Validation", "severity": "Critical", "status": "Active"},
+            {"id": "GR005", "name": "Trade Route Validation", "severity": "Medium", "status": "Active"},
+            {"id": "GR006", "name": "Partner Reputation Check", "severity": "High", "status": "Active"},
+            {"id": "GR007", "name": "Transaction Limits", "severity": "Medium", "status": "Active"},
+            {"id": "GR008", "name": "Jurisdictional Compliance", "severity": "High", "status": "Active"}
+        ]
+        
+        rules_df = pd.DataFrame(governance_rules)
+        
+        # Apply color to severity
+        def color_severity(val):
+            color_map = {
+                "Critical": "background-color: red; color: white",
+                "High": "background-color: orange; color: black",
+                "Medium": "background-color: yellow; color: black",
+                "Low": "background-color: green; color: white"
+            }
+            return color_map.get(val, "")
+        
+        st.dataframe(rules_df.style.applymap(color_severity, subset=["severity"]))
     
-    # Final Emperor's view message
-    st.markdown("""
-    <div style="background-color: rgba(70, 130, 180, 0.1); padding: 20px; border-radius: 5px; border-left: 5px solid steelblue; margin-top: 20px;">
-        <h3 style="color: steelblue; margin-top: 0;">Emperor's Command Center</h3>
-        <p>This visualization provides the Emperor with complete oversight of the entire ecosystem. 
-        From here, the Emperor can monitor all activities, issue directives, and ensure the prosperity 
-        of the empire through the Virtual Silk Road.</p>
-        <p><b>For Marketing Teams:</b> Demonstrate this comprehensive view to showcase how your organization's 
-        leadership can gain unprecedented visibility across all operations, enabling faster decision-making 
-        and strategic advantage over competitors still using fragmented systems.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    # Footer
+    st.write("---")
+    st.caption("© 2025 SynergyzeOS Trading Platform | Powered by Genesis Stack and NPU Governance")
+    st.caption("License validation provided by Empire Computational Governance (ECG) through the SynergyzeOS platform.")
+
+if __name__ == "__main__":
+    main()

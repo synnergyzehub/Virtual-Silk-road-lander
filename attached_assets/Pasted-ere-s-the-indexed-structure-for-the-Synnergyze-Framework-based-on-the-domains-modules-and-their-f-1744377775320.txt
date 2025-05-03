@@ -1,0 +1,110 @@
+ere’s the indexed structure for the Synnergyze Framework, based on the domains, modules, and their functionalities:
+ 
+Indexed Structure
+ 
+1. Core Hub: brand.synnergyze.com
+​•​Primary Index: CoreHubIndex
+​•​Fields:
+​•​UserID (Primary Key)
+​•​Role (Admin, Manager, Employee)
+​•​ModuleAccess (Array of accessible modules)
+​•​LastLoginTimestamp
+​•​APIAccessKey
+​•​Use Cases:
+​•​Authenticate users and manage access control.
+​•​Monitor API usage across all modules.
+ 
+2. Subdomains and Modules
+ 
+a. Woven Supply: woven.synnergyze.com
+​•​Primary Index: VendorIndex
+​•​Fields:
+​•​VendorID (Primary Key)
+​•​LicenseID (Foreign Key)
+​•​PerformanceScore
+​•​ComplianceStatus
+​•​ProcurementValue
+​•​Workflow Index: ProcurementWorkflowIndex
+​•​Fields:
+​•​WorkflowID (Primary Key)
+​•​VendorID (Foreign Key)
+​•​TaskName
+​•​Timestamp
+​•​CompletionStatus
+​•​Use Cases:
+​•​Track vendor performance and procurement workflows.
+​•​Ensure compliance and timely task completion.
+ 
+b. Commune Connect: commune.synnergyze.com
+​•​Primary Index: CollaborationIndex
+​•​Fields:
+​•​TeamID (Primary Key)
+​•​UserID (Foreign Key)
+​•​TaskID (Foreign Key)
+​•​Deadline
+​•​CompletionStatus
+​•​Activity Log Index: ActivityLogIndex
+​•​Fields:
+​•​LogID (Primary Key)
+​•​TeamID (Foreign Key)
+​•​ActionPerformed
+​•​Timestamp
+​•​Use Cases:
+​•​Monitor team collaboration and task progress.
+​•​Log user activity for compliance and productivity tracking.
+ 
+c. Last Smile: lastmile.synnergyze.com
+​•​Primary Index: LogisticsIndex
+​•​Fields:
+​•​FleetID (Primary Key)
+​•​DeliveryID (Foreign Key)
+​•​RouteEfficiency
+​•​SustainabilityScore
+​•​FleetStatus
+​•​Delivery Workflow Index: DeliveryWorkflowIndex
+​•​Fields:
+​•​WorkflowID (Primary Key)
+​•​FleetID (Foreign Key)
+​•​TaskName
+​•​Timestamp
+​•​CompletionStatus
+​•​Use Cases:
+​•​Optimize fleet routes and track delivery progress.
+​•​Ensure sustainability metrics are met.
+ 
+d. Sync Up: apps.synnergyze.com
+​•​Primary Index: AppMarketplaceIndex
+​•​Fields:
+​•​AppID (Primary Key)
+​•​LicenseID (Foreign Key)
+​•​UserRatings
+​•​UsageFrequency
+​•​APIKey
+​•​App Performance Index: AppPerformanceIndex
+​•​Fields:
+​•​MetricID (Primary Key)
+​•​AppID (Foreign Key)
+​•​KPI
+​•​Value
+​•​Timestamp
+​•​Use Cases:
+​•​Track app usage and performance.
+​•​Recommend apps based on user activity.
+ 
+e. OMS: oms.synnergyze.com
+​•​Primary Index: OrderIndex
+​•​Fields:
+​•​OrderID (Primary Key)
+​•​LicenseID (Foreign Key)
+​•​OrderStatus
+​•​TotalValue
+​•​Timestamp
+​•​Inventory Index: InventoryIndex
+​•​Fields:
+​•​SKU (Primary Key)
+​•​StockLevel
+​•​ReorderPoint
+​•​LastUpdated
+​•​Use Cases:
+​•​Manage B2B/B2C orders and track inventory levels.
+​•​Automate reorder triggers for low stock

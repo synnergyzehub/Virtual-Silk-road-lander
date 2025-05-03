@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empire OS Subscription Demo</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2a4a7f;
+            --accent-color: #ffd700;
+            --text-color: #333;
+            --light-text: #fff;
+            --success-color: #27ae60;
+            --info-color: #2980b9;
+            --warning-color: #f39c12;
+            --danger-color: #c0392b;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            background-color: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 2rem 1rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        
+        .logo-emoji {
+            font-size: 3rem;
+        }
+        
+        .subscription-banner {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+        }
+        
+        .subscription-banner.free {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .subscription-banner.basic {
+            border-left: 4px solid var(--info-color);
+        }
+        
+        .subscription-banner.premium {
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .subscription-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #e5c100;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3a5a8f;
+        }
+        
+        .navigation {
+            margin: 1.5rem 0;
+        }
+        
+        .nav-title {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .nav-items {
+            list-style: none;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .nav-item:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .nav-item.active {
+            background-color: var(--secondary-color);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: rgba(255,255,255,0.2);
+            margin: 1.5rem 0;
+        }
+        
+        .client-info {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+        }
+        
+        .title {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-weight: normal;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .visualization-container {
+            width: 100%;
+            height: 500px;
+            background-color: #f5f7fa;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .flow-visualization {
+            width: 90%;
+            height: 90%;
+        }
+        
+        .info-box {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+        
+        .info-box.free {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .info-box.basic {
+            background-color: rgba(41, 128, 185, 0.1);
+            border-left: 4px solid var(--info-color);
+        }
+        
+        .info-box.premium {
+            background-color: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .flow-stage {
+            display: flex;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .stage-node {
+            width: 150px;
+            height: 100px;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stage-connector {
+            height: 10px;
+            background-color: var(--accent-color);
+            flex: 1;
+            position: relative;
+            top: 45px;
+            z-index: 1;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .metric-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .metric-title {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-description {
+            font-size: 0.9rem;
+            text-align: center;
+            color: #666;
+        }
+        
+        .insights-section {
+            margin: 2rem 0;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .insight-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .insight-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .insight-stats {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .insight-stat {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .divine-alignment {
+            margin: 2rem 0;
+        }
+        
+        .divine-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        .divine-dimensions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+        
+        .dimension-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .dimension-title {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .dimension-score {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .recommendation-card {
+            background-color: rgba(41, 128, 185, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--info-color);
+        }
+        
+        .recommendation-head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .recommendation-dimension {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .recommendation-score {
+            font-weight: bold;
+            color: var(--info-color);
+        }
+        
+        .recommendation-text {
+            margin-bottom: 0.5rem;
+        }
+        
+        .recommendation-potential {
+            font-weight: bold;
+            color: var(--success-color);
+        }
+        
+        .pricing-section {
+            margin: 2rem 0;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .pricing-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card.free {
+            border-top: 5px solid var(--warning-color);
+        }
+        
+        .pricing-card.basic {
+            border-top: 5px solid var(--info-color);
+        }
+        
+        .pricing-card.premium {
+            border-top: 5px solid var(--success-color);
+        }
+        
+        .pricing-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-subtitle {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-period {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-description {
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-features {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-item {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-icon {
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .feature-icon.yes {
+            color: var(--success-color);
+        }
+        
+        .feature-icon.no {
+            color: var(--danger-color);
+        }
+        
+        .current-plan {
+            background-color: var(--success-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+        
+        .form-section {
+            margin: 2rem 0;
+        }
+        
+        .contact-form {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .success-message {
+            background-color: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            display: none;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table th, 
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .feature-access {
+            font-weight: bold;
+        }
+        
+        .access-none {
+            color: var(--danger-color);
+        }
+        
+        .access-limited {
+            color: var(--warning-color);
+        }
+        
+        .access-partial {
+            color: var(--info-color);
+        }
+        
+        .access-full {
+            color: var(--success-color);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .divine-dimensions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dimension-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo-container">
+                <div class="logo-emoji">🏛️👑</div>
+                <div class="logo-text">Empire OS</div>
+            </div>
+            
+            <!-- Subscription Banner (Free Demo) -->
+            <div class="subscription-banner free">
+                <strong>💎 Free Demo Mode 💎</strong>
+                <p>You are currently using the free demo version with limited access. Upgrade to unlock full features and comprehensive insights.</p>
+                <div class="subscription-buttons">
+                    <button class="btn btn-primary" onclick="switchTab('subscription-plans')">Upgrade</button>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <!-- Navigation -->
+            <div class="navigation">
+                <div class="nav-title">Navigation</div>
+                <ul class="nav-items">
+                    <li class="nav-item active" onclick="switchTab('flow-visualization')">Flow Visualization</li>
+                    <li class="nav-item" onclick="switchTab('factory-analysis')">Factory Analysis</li>
+                    <li class="nav-item" onclick="switchTab('distribution-analysis')">Distribution Analysis</li>
+                    <li class="nav-item" onclick="switchTab('store-analysis')">Store Analysis</li>
+                    <li class="nav-item" onclick="switchTab('consumer-analysis')">Consumer Analysis</li>
+                    <li class="nav-item" onclick="switchTab('subscription-plans')">Subscription Plans</li>
+                </ul>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <!-- Client Info -->
+            <div class="client-info">
+                Demo Client ID: DEMO12345
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="title">Empire OS Divine Mechanics</h1>
+                <h2 class="subtitle">Data Flow Visualization & Governance Demo</h2>
+            </div>
+            
+            <!-- Flow Visualization Tab -->
+            <div id="flow-visualization" class="content-tab">
+                <div class="card">
+                    <h2 class="card-title">Data Flow Visualization</h2>
+                    <p>This visualization shows how data flows through your supply chain from factory production to consumer experience. The width of each connection represents the volume of data flowing between stages.</p>
+                    
+                    <div class="visualization-container">
+                        <div class="flow-stage">
+                            <div class="stage-node">Factory Production</div>
+                            <div class="stage-connector"></div>
+                            <div class="stage-node">Distribution Network</div>
+                            <div class="stage-connector"></div>
+                            <div class="stage-node">Retail Operations</div>
+                            <div class="stage-connector"></div>
+                            <div class="stage-node">Consumer Experience</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box free">
+                        <strong>Free Demo Limitations:</strong> You're viewing a simplified visualization with limited connections and basic metrics. Upgrade for a comprehensive view.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Factory Analysis Tab -->
+            <div id="factory-analysis" class="content-tab" style="display: none;">
+                <div class="card">
+                    <h2 class="card-title">Factory Production</h2>
+                    <p>Raw materials to finished products</p>
+                    
+                    <h3>Metrics Over Time</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-title">Production Efficiency</div>
+                            <div class="metric-value">78%</div>
+                            <div class="metric-description">Overall manufacturing efficiency score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Quality Rating</div>
+                            <div class="metric-value">85%</div>
+                            <div class="metric-description">Product quality assessment</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Resource Consumption</div>
+                            <div class="metric-value">72%</div>
+                            <div class="metric-description">Optimal resource utilization</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Divine Alignment</div>
+                            <div class="metric-value">68%</div>
+                            <div class="metric-description">Alignment with divine principles</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box free">
+                        <strong>Free Demo Limitations:</strong> You're viewing basic metrics only. Upgrade to see detailed insights and recommendations.
+                    </div>
+                    
+                    <div class="divine-alignment">
+                        <h3>Divine Alignment Analysis</h3>
+                        <div class="divine-score">68%</div>
+                        
+                        <p class="upgrade-message">Upgrade to Basic or Premium to see detailed divine alignment dimensions and recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Distribution Analysis Tab -->
+            <div id="distribution-analysis" class="content-tab" style="display: none;">
+                <div class="card">
+                    <h2 class="card-title">Distribution Network</h2>
+                    <p>Warehouse operations and logistics</p>
+                    
+                    <h3>Metrics Over Time</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-title">Logistics Efficiency</div>
+                            <div class="metric-value">82%</div>
+                            <div class="metric-description">Overall logistics operation score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Inventory Turnover</div>
+                            <div class="metric-value">76%</div>
+                            <div class="metric-description">Rate of inventory movement</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Delivery Time</div>
+                            <div class="metric-value">89%</div>
+                            <div class="metric-description">On-time delivery performance</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Divine Alignment</div>
+                            <div class="metric-value">72%</div>
+                            <div class="metric-description">Alignment with divine principles</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box free">
+                        <strong>Free Demo Limitations:</strong> You're viewing basic metrics only. Upgrade to see detailed insights and recommendations.
+                    </div>
+                    
+                    <div class="divine-alignment">
+                        <h3>Divine Alignment Analysis</h3>
+                        <div class="divine-score">72%</div>
+                        
+                        <p class="upgrade-message">Upgrade to Basic or Premium to see detailed divine alignment dimensions and recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Store Analysis Tab -->
+            <div id="store-analysis" class="content-tab" style="display: none;">
+                <div class="card">
+                    <h2 class="card-title">Retail Operations</h2>
+                    <p>Store-level inventory and sales</p>
+                    
+                    <h3>Metrics Over Time</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-title">Sales Velocity</div>
+                            <div class="metric-value">79%</div>
+                            <div class="metric-description">Rate of sales performance</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Shelf Efficiency</div>
+                            <div class="metric-value">74%</div>
+                            <div class="metric-description">Optimal shelf space utilization</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Markdown Rate</div>
+                            <div class="metric-value">83%</div>
+                            <div class="metric-description">Discount optimization score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Divine Alignment</div>
+                            <div class="metric-value">75%</div>
+                            <div class="metric-description">Alignment with divine principles</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box free">
+                        <strong>Free Demo Limitations:</strong> You're viewing basic metrics only. Upgrade to see detailed insights and recommendations.
+                    </div>
+                    
+                    <div class="divine-alignment">
+                        <h3>Divine Alignment Analysis</h3>
+                        <div class="divine-score">75%</div>
+                        
+                        <p class="upgrade-message">Upgrade to Basic or Premium to see detailed divine alignment dimensions and recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Consumer Analysis Tab -->
+            <div id="consumer-analysis" class="content-tab" style="display: none;">
+                <div class="card">
+                    <h2 class="card-title">Consumer Experience</h2>
+                    <p>Post-purchase customer journey</p>
+                    
+                    <h3>Metrics Over Time</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-title">Customer Satisfaction</div>
+                            <div class="metric-value">86%</div>
+                            <div class="metric-description">Overall satisfaction score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Return Rate</div>
+                            <div class="metric-value">92%</div>
+                            <div class="metric-description">Low return rate (good)</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Repeat Purchase</div>
+                            <div class="metric-value">71%</div>
+                            <div class="metric-description">Customer loyalty indicator</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Divine Alignment</div>
+                            <div class="metric-value">78%</div>
+                            <div class="metric-description">Alignment with divine principles</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box free">
+                        <strong>Free Demo Limitations:</strong> You're viewing basic metrics only. Upgrade to see detailed insights and recommendations.
+                    </div>
+                    
+                    <div class="divine-alignment">
+                        <h3>Divine Alignment Analysis</h3>
+                        <div class="divine-score">78%</div>
+                        
+                        <p class="upgrade-message">Upgrade to Basic or Premium to see detailed divine alignment dimensions and recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subscription Plans Tab -->
+            <div id="subscription-plans" class="content-tab" style="display: none;">
+                <div class="card">
+                    <h2 class="card-title">Empire OS Subscription Plans</h2>
+                    <p>Choose the right subscription plan to unlock the full potential of the Empire OS divine mechanics and data governance platform.</p>
+                    
+                    <div class="pricing-section">
+                        <div class="pricing-grid">
+                            <!-- Free Demo Tier -->
+                            <div class="pricing-card free">
+                                <h3 class="pricing-title">Free Demo</h3>
+                                <p class="pricing-subtitle">Experience the basics</p>
+                                <div class="pricing-price">$0</div>
+                                <p class="pricing-period">/month</p>
+                                <p class="pricing-description">Experience the power of data visualization and divine mechanics with our free demo.</p>
+                                <div class="pricing-features">
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Limited data flow visualization</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Basic divine alignment score</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Sample insights demonstration</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon no">❌</span>
+                                        <span>No data integration</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon no">❌</span>
+                                        <span>No custom reporting</span>
+                                    </div>
+                                </div>
+                                <div class="current-plan">Current Plan</div>
+                            </div>
+                            
+                            <!-- Basic Tier -->
+                            <div class="pricing-card basic">
+                                <h3 class="pricing-title">Basic</h3>
+                                <p class="pricing-subtitle">Organize your data</p>
+                                <div class="pricing-price">$499</div>
+                                <p class="pricing-period">/month</p>
+                                <p class="pricing-description">Organize your data and gain basic insights with our simplified integration and reporting.</p>
+                                <div class="pricing-features">
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Enhanced data flow visualization</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Partial divine alignment analysis</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Data integration for one stream</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Monthly insights report</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon no">❌</span>
+                                        <span>No multi-source integration</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary">Upgrade to Basic</button>
+                            </div>
+                            
+                            <!-- Premium Tier -->
+                            <div class="pricing-card premium">
+                                <h3 class="pricing-title">Premium</h3>
+                                <p class="pricing-subtitle">Full divine governance</p>
+                                <div class="pricing-price">$1,999</div>
+                                <p class="pricing-period">/month</p>
+                                <p class="pricing-description">Unlock the full potential of divine governance with complete data integration and advanced analytics.</p>
+                                <div class="pricing-features">
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Complete data flow visualization</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Comprehensive divine governance</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Multi-source data integration</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Advanced analytics and insights</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon yes">✅</span>
+                                        <span>Custom reporting and recommendations</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary">Upgrade to Premium</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <!-- Feature Comparison Table -->
+                    <h3>Feature Comparison</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Free Demo</th>
+                                <th>Basic</th>
+                                <th>Premium</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Factory Visualization</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Distribution Visualization</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Retail Visualization</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Consumer Visualization</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Basic Insights</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Advanced Analytics</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Predictive Insights</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Data Import</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Data Export</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Multi-Source Integration</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>RiverOS Simulation</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Divine Alignment Score</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-partial">⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Governance Recommendations</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Standard Reports</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Custom Reports</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Automated Reporting</td>
+                                <td class="feature-access access-none">❌</td>
+                                <td class="feature-access access-limited">⭐</td>
+                                <td class="feature-access access-full">⭐⭐⭐</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="divider"></div>
+                    
+                    <!-- Contact Form -->
+                    <div class="form-section">
+                        <h3>Contact Us for Enterprise Licenses</h3>
+                        <div class="contact-form">
+                            <div class="form-group">
+                                <label class="form-label" for="company-name">Company Name</label>
+                                <input type="text" id="company-name" class="form-input" placeholder="Your company name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="contact-name">Contact Name</label>
+                                <input type="text" id="contact-name" class="form-input" placeholder="Your name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email Address</label>
+                                <input type="email" id="email" class="form-input" placeholder="your.email@company.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="phone">Phone Number</label>
+                                <input type="tel" id="phone" class="form-input" placeholder="Your phone number">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="tier">Interested in Tier</label>
+                                <select id="tier" class="form-select">
+                                    <option value="basic">Basic</option>
+                                    <option value="premium">Premium</option>
+                                    <option value="enterprise">Enterprise (Custom)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="message">Additional Information</label>
+                                <textarea id="message" class="form-textarea" placeholder="Tell us about your specific needs..."></textarea>
+                            </div>
+                            
+                            <button class="btn btn-primary" onclick="showSuccess()">Request Information</button>
+                            
+                            <div id="success-message" class="success-message">
+                                Thank you for your interest! Our ECG licensing team will contact you shortly.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Function to switch tabs
+        function switchTab(tabId) {
+            // Hide all tabs
+            var tabs = document.getElementsByClassName('content-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = 'none';
+            }
+            
+            // Show the selected tab
+            document.getElementById(tabId).style.display = 'block';
+            
+            // Update active nav item
+            var navItems = document.getElementsByClassName('nav-item');
+            for (var i = 0; i < navItems.length; i++) {
+                navItems[i].classList.remove('active');
+                if (navItems[i].innerText.toLowerCase().includes(tabId.replace(/-/g, ' '))) {
+                    navItems[i].classList.add('active');
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Function to show success message
+        function showSuccess() {
+            var successMessage = document.getElementById('success-message');
+            successMessage.style.display = 'block';
+            
+            // Scroll to success message
+            successMessage.scrollIntoView({ behavior: 'smooth' });
+            
+            // Clear form
+            document.getElementById('company-name').value = '';
+            document.getElementById('contact-name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('message').value = '';
+        }
+    </script>
+</body>
+</html>

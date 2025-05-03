@@ -1,0 +1,133 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+export default function LicenseBuilder() {
+  const [licenseId, setLicenseId] = useState('');
+  const [owner, setOwner] = useState('');
+  const [scope, setScope] = useState('');
+  const [result, setResult] = useState(null);
+  const [validateId, setValidateId] = useState('');
+  const [validateModule, setValidateModule] = useState('');
+  const [validationResult, setValidationResult] = useState(null);
+  const [auditId, setAuditId] = useState('');
+  const [auditLog, setAuditLog] = useState(null);
+  const [dalScope, setDalScope] = useState('');
+  const [dalResult, setDalResult] = useState(null);
+
+  const createLicense = async () => {
+    try {
+      const response = await axios.post('/license/create', {
+        license_id: licenseId,
+        owner,
+        scope: scope.split(',').map(s => s.trim())
+      });
+      setResult(response.data);
+    } catch (err) {
+      setResult(err.response?.data || { error: 'Server error' });
+    }
+  };
+
+  const validateLicense = async () => {
+    try {
+      const response = await axios.post('/license/validate', {
+        license_id: validateId,
+        module: validateModule
+      });
+      setValidationResult(response.data);
+    } catch (err) {
+      setValidationResult(err.response?.data || { error: 'Validation error' });
+    }
+  };
+
+  const fetchAuditLog = async () => {
+    try {
+      const response = await axios.get(`/license/${auditId}/audit`);
+      setAuditLog(response.data);
+    } catch (err) {
+      setAuditLog(err.response?.data || { error: 'Audit fetch error' });
+    }
+  };
+
+  const alignWithDAL = () => {
+    const ethicalKeywords = ['trust', 'sustainability', 'inclusion', 'authenticity'];
+    const scopeArray = dalScope.split(',').map(s => s.trim().toLowerCase());
+    const alignment = scopeArray.filter(tag => ethicalKeywords.includes(tag));
+    const misalignment = scopeArray.filter(tag => !ethicalKeywords.includes(tag));
+    setDalResult({ aligned: alignment, misaligned: misalignment });
+  };
+
+  return (
+    <div className="p-6 max-w-xl mx-auto rounded-2xl shadow-lg bg-white">
+      <h2 className="text-2xl font-bold mb-4">Empire License Builder</h2>
+      <div className="mb-3">
+        <label className="block text-sm font-medium">License ID</label>
+        <input className="w-full border rounded p-2" value={licenseId} onChange={e => setLicenseId(e.target.value)} />
+      </div>
+      <div className="mb-3">
+        <label className="block text-sm font-medium">Owner</label>
+        <input className="w-full border rounded p-2" value={owner} onChange={e => setOwner(e.target.value)} />
+      </div>
+      <div className="mb-3">
+        <label className="block text-sm font-medium">Scope (comma-separated)</label>
+        <input className="w-full border rounded p-2" value={scope} onChange={e => setScope(e.target.value)} />
+      </div>
+      <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={createLicense}>Create License</button>
+
+      {result && (
+        <div className="mt-4 p-4 border rounded bg-gray-100">
+          <pre>{JSON.stringify(result, null, 2)}</pre>
+        </div>
+      )}
+
+      <h3 className="text-xl font-semibold mt-8">Validate License Scope</h3>
+      <div className="mb-3 mt-2">
+        <label className="block text-sm font-medium">License ID</label>
+        <input className="w-full border rounded p-2" value={validateId} onChange={e => setValidateId(e.target.value)} />
+      </div>
+      <div className="mb-3">
+        <label className="block text-sm font-medium">Module Name</label>
+        <input className="w-full border rounded p-2" value={validateModule} onChange={e => setValidateModule(e.target.value)} />
+      </div>
+      <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={validateLicense}>Validate License</button>
+
+      {validationResult && (
+        <div className="mt-4 p-4 border rounded bg-green-100">
+          <pre>{JSON.stringify(validationResult, null, 2)}</pre>
+        </div>
+      )}
+
+      <h3 className="text-xl font-semibold mt-8">Audit Log Viewer</h3>
+      <div className="mb-3 mt-2">
+        <label className="block text-sm font-medium">License ID</label>
+        <input className="w-full border rounded p-2" value={auditId} onChange={e => setAuditId(e.target.value)} />
+      </div>
+      <button className="bg-purple-600 text-white px-4 py-2 rounded" onClick={fetchAuditLog}>Fetch Audit Log</button>
+
+      {auditLog && (
+        <div className="mt-4 p-4 border rounded bg-purple-100">
+          <pre>{JSON.stringify(auditLog, null, 2)}</pre>
+        </div>
+      )}
+
+      <h3 className="text-xl font-semibold mt-8">DAL Aligner</h3>
+      <div className="mb-3">
+        <label className="block text-sm font-medium">Enter Scope Tags (comma-separated)</label>
+        <input className="w-full border rounded p-2" value={dalScope} onChange={e => setDalScope(e.target.value)} />
+      </div>
+      <button className="bg-yellow-600 text-white px-4 py-2 rounded" onClick={alignWithDAL}>Check DAL Alignment</button>
+
+      {dalResult && (
+        <div className="mt-4 p-4 border rounded bg-yellow-100">
+          <h4 className="font-bold">Aligned:</h4>
+          <ul className="list-disc list-inside">
+            {dalResult.aligned.map((item, index) => <li key={index}>{item}</li>)}
+          </ul>
+          <h4 className="font-bold mt-2">Misaligned:</h4>
+          <ul className="list-disc list-inside">
+            {dalResult.misaligned.map((item, index) => <li key={index}>{item}</li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}

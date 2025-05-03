@@ -1,0 +1,22 @@
+{
+  "license_api": {
+    "command": "python run_license_api.py --entity ENT-SILK-GLOB-250411 --port 5301",
+    "port": 5301,
+    "log_file": "logs/silkroadtrade/license_api.log"
+  },
+  "license_management": {
+    "command": "python run_license_management.py --entity ENT-SILK-GLOB-250411 --port 8305",
+    "port": 8305,
+    "log_file": "logs/silkroadtrade/license_management.log"
+  },
+  "welcome_server": {
+    "command": "python web_server.py --entity ENT-SILK-GLOB-250411 --port 8390",
+    "port": 8390,
+    "log_file": "logs/silkroadtrade/welcome_server.log"
+  },
+  "dashboard": {
+    "command": "streamlit run genesis_dashboard.py --server.port 5350 -- --entity ENT-SILK-GLOB-250411",
+    "port": 5350,
+    "log_file": "logs/silkroadtrade/dashboard.log"
+  }
+}

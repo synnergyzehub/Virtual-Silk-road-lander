@@ -1,0 +1,2 @@
+timestamp,user.role,user.realm,user.emotion,user.biometricAuth,user.walletLinked,transaction.type,transaction.model,transaction.quantity,transaction.urgency,transaction.impact,result.status,result.outcome,result.advice
+2025-04-03T20:51:55.240634,factory-operator,RealmOne,purposeful,True,True,license-request,CMP,10000,medium,medium,Conditional,Initial batch limited to 500 units,Trial rollout advised to ensure traceability and ESG impact.

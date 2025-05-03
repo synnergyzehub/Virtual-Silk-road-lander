@@ -1,0 +1,9 @@
+License Type,Primary APIs Accessed
+Manufacturer License,"Auth API, License API, KYC API, Procurement API, MES API, Financial API, Compliance API"
+Brand License,"Auth API, License API, KYC API, Sales API, Inventory API, Financial API, Compliance API"
+Retailer License,"Auth API, License API, Sales API, Inventory API, Financial API, Compliance API"
+Vendor/Supplier License,"Auth API, License API, Procurement API, Compliance API"
+Public/Freelance License,"Auth API, Public Ecosystem API"
+Internal Company License,"Auth API, Governance API, System Health API, Compliance API"
+Logistics & 3PL License,"Auth API, License API, Logistics API, Financial API, Compliance API"
+Financial Institution License,"Auth API, License API, Financial API, SCF API, Compliance API"

@@ -1,0 +1,51 @@
+{
+  "digitalme_id": "ede569358b0e901527aef15e0bc8be6e1974a831ae870ac115beb246bf2efa63",
+  "bound_licenses": [
+    {
+      "license_id": "ESOM-VOI-JEANS-D2C-001",
+      "brand": "Voi Jeans",
+      "region": "India / Karnataka",
+      "modules": [
+        "Manufacturing",
+        "Commerce",
+        "Design",
+        "Strategy"
+      ],
+      "status": "active",
+      "role_map": {
+        "role_type": "Founder",
+        "power_scope": [
+          "read",
+          "write",
+          "approve",
+          "issue",
+          "strategize"
+        ],
+        "granted_by": "ECG Root Console",
+        "approved_at": "2025-04-11T06:53:02.594158Z"
+      }
+    },
+    {
+      "license_id": "ESOM-ECG-INTEL-CORE-0001",
+      "brand": "ECG Intelligence Core",
+      "region": "Global",
+      "modules": [
+        "Governance",
+        "Ethics Filter",
+        "AI Interface"
+      ],
+      "status": "active",
+      "role_map": {
+        "role_type": "Root Governor",
+        "power_scope": [
+          "override",
+          "suspend",
+          "allocate",
+          "score"
+        ],
+        "granted_by": "Genesis Founder's Console",
+        "approved_at": "2025-04-11T06:53:02.594168Z"
+      }
+    }
+  ]
+}

@@ -1,545 +1,890 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
 import plotly.express as px
+import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import random
+import json
+import os
 
 def show_emperor_timeline():
     """
-    Display the Emperor's Timeline for governance decisions and license management.
-    This is a crucial governance tool in the ECG layer for tracking and managing licenses.
+    Display the Emperor Timeline component - part of the ECG governance layer
+    where licenses are issued and enterprise governance is tracked.
     """
+    st.title("Emperor Timeline - ECG Governance Layer")
+    st.subheader("License and Governance Timeline Visualization")
     
-    # Emperor's header with special styling for the timeline view
-    st.markdown(
-        """
-        <div style='background: linear-gradient(90deg, rgba(75,0,130,1) 0%, rgba(128,0,128,1) 100%); 
-        padding: 30px; border-radius: 10px; margin-bottom: 20px; text-align: center;'>
-            <h1 style='color: gold; margin: 0; font-size: 2.8rem;'>👑 Emperor's Timeline</h1>
-            <p style='color: white; margin: 10px 0 0 0; font-size: 1.5rem;'>ECG Governance & License Management</p>
-            <p style='color: rgba(255,255,255,0.7); margin: 5px 0 0 0;'>Historical Decisions & Future Planning</p>
-        </div>
-        """, 
-        unsafe_allow_html=True
+    # Create sidebar for navigation
+    st.sidebar.title("Empire OS Navigation")
+    page = st.sidebar.selectbox(
+        "Choose Visualization",
+        ["License Timeline", "License Calendar", "Governance Timeline", "Integration Timeline", "Compliance Dashboard"]
     )
     
-    # Timeline tabs for different timeline views
-    tabs = st.tabs([
-        "📜 Governance Timeline", 
-        "⚖️ License Activities", 
-        "🔄 Decision Workflows",
-        "📊 Impact Analysis"
-    ])
-    
-    # Generate timeline data
-    timeline_data = generate_timeline_data()
-    license_data = generate_license_data()
-    
-    # Tab 1: Governance Timeline
-    with tabs[0]:
-        st.header("Imperial Governance Timeline")
-        st.write("Historical record of all governance decisions and their impacts across the Empire.")
-        
-        # Filter options
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            category_filter = st.multiselect(
-                "Filter by Category", 
-                options=["Policy", "License", "Financial", "Technology", "Partnership"],
-                default=["Policy", "License", "Financial", "Technology", "Partnership"]
-            )
-        with col2:
-            impact_filter = st.multiselect(
-                "Filter by Impact Level",
-                options=["High", "Medium", "Low"],
-                default=["High", "Medium", "Low"]
-            )
-        with col3:
-            date_range = st.date_input(
-                "Date Range",
-                value=(
-                    datetime.now() - timedelta(days=90),
-                    datetime.now() + timedelta(days=30)
-                ),
-                max_value=datetime.now() + timedelta(days=365)
-            )
-        
-        # Filter the timeline data
-        filtered_data = timeline_data[
-            (timeline_data['category'].isin(category_filter)) &
-            (timeline_data['impact'].isin(impact_filter)) &
-            (timeline_data['date'] >= pd.Timestamp(date_range[0])) &
-            (timeline_data['date'] <= pd.Timestamp(date_range[1]))
-        ]
-        
-        # Create the timeline visualization
-        if len(filtered_data) > 0:
-            fig = create_timeline_visualization(filtered_data)
-            st.plotly_chart(fig, use_container_width=True)
-            
-            # Timeline details table
-            st.subheader("Timeline Event Details")
-            st.dataframe(
-                filtered_data[['date', 'title', 'category', 'impact', 'description']],
-                use_container_width=True,
-                column_config={
-                    "date": st.column_config.DateColumn("Date"),
-                    "title": st.column_config.TextColumn("Event"),
-                    "category": st.column_config.TextColumn("Category"),
-                    "impact": st.column_config.TextColumn("Impact"),
-                    "description": st.column_config.TextColumn("Description"),
-                }
-            )
-        else:
-            st.warning("No timeline events match your filter criteria.")
-    
-    # Tab 2: License Activities
-    with tabs[1]:
-        st.header("License Activity Monitor")
-        st.write("Track all license-related activities across the Empire.")
-        
-        # License activity metrics
-        license_metrics = st.columns(4)
-        with license_metrics[0]:
-            st.metric("Active Licenses", "243", "+12")
-        with license_metrics[1]:
-            st.metric("Pending Approval", "18", "-5")
-        with license_metrics[2]:
-            st.metric("Recently Issued", "28", "+4")
-        with license_metrics[3]:
-            st.metric("Compliance Score", "92%", "+3%")
-        
-        # License type distribution
-        st.subheader("License Distribution by Type")
-        license_type_fig = px.pie(
-            license_data, 
-            values='count', 
-            names='license_type', 
-            color='license_type',
-            color_discrete_map={
-                'Manufacturer': '#4B0082',
-                'Retailer': '#9370DB',
-                'Brand': '#800080',
-                'Distributor': '#BA55D3',
-                'Financial': '#8A2BE2'
-            },
-            hole=0.4
+    # Filtering options
+    st.sidebar.subheader("Filter Options")
+    if page == "License Timeline":
+        time_range = st.sidebar.selectbox(
+            "Time Range",
+            ["Last 7 Days", "Last 30 Days", "Last Quarter", "Year to Date", "All Time"]
         )
-        license_type_fig.update_traces(textposition='inside', textinfo='percent+label')
-        st.plotly_chart(license_type_fig, use_container_width=True)
+        license_data = generate_license_data(time_range)
+        show_license_timeline(license_data)
         
-        # License activity stream
-        st.subheader("Recent License Activity Stream")
-        license_activity = generate_license_activity()
+    elif page == "License Calendar":
+        time_range = st.sidebar.selectbox(
+            "Time Range",
+            ["Current Month", "Last 3 Months", "Year to Date"]
+        )
+        license_data = generate_license_data(time_range)
+        show_license_calendar(license_data)
         
-        for activity in license_activity:
-            activity_color = "green" if activity["activity_type"] == "Issued" else "blue" if activity["activity_type"] == "Renewed" else "orange" if activity["activity_type"] == "Updated" else "red"
-            
-            st.markdown(
-                f"""
-                <div style="border-left: 4px solid {activity_color}; padding-left: 15px; margin-bottom: 15px;">
-                    <p style="margin: 0; font-weight: bold;">{activity["company"]} • {activity["license_type"]} License</p>
-                    <p style="margin: 0; color: {activity_color};">{activity["activity_type"]} on {activity["date"]}</p>
-                    <p style="margin: 5px 0 0 0; font-size: 0.9em;">{activity["description"]}</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-    
-    # Tab 3: Decision Workflows
-    with tabs[2]:
-        st.header("Governance Decision Workflows")
-        st.write("Track active governance procedures and decision-making processes.")
+    elif page == "Governance Timeline":
+        event_types = st.sidebar.multiselect(
+            "Event Types",
+            ["Policy Change", "Audit", "Compliance Check", "License Revocation", "System Update"],
+            default=["Policy Change", "Audit", "Compliance Check"]
+        )
+        priority_levels = st.sidebar.multiselect(
+            "Priority Levels",
+            ["Critical", "High", "Medium", "Low"],
+            default=["Critical", "High"]
+        )
+        governance_events = generate_governance_events(event_types, priority_levels)
+        show_governance_timeline(governance_events)
         
-        # Create workflow funnel
-        workflow_stages = {
-            "Proposal Submitted": 42,
-            "Under ECG Review": 28,
-            "Financial Analysis": 21,
-            "Technical Validation": 16,
-            "Emperor Approval": 8,
-            "Implementation": 5
-        }
+    elif page == "Integration Timeline":
+        integration_data = generate_integration_data()
+        create_integration_timeline(integration_data)
         
-        # Create funnel chart
-        workflow_fig = go.Figure(go.Funnel(
-            y=list(workflow_stages.keys()),
-            x=list(workflow_stages.values()),
-            textinfo="value+percent initial",
-            marker={
-                "color": [
-                    "#4B0082", "#600080", "#800080", 
-                    "#9A0080", "#B40080", "#CE0080"
-                ]
+    elif page == "Compliance Dashboard":
+        metric = st.sidebar.selectbox(
+            "Compliance Metric",
+            ["License Compliance", "Governance Alignment", "Realm Health", "ESG Standards"]
+        )
+        period = st.sidebar.selectbox(
+            "Time Period",
+            ["Last Quarter", "Year to Date", "Last 12 Months"]
+        )
+        compliance_data = generate_compliance_data(metric, period)
+        
+        st.subheader(f"{metric} Dashboard")
+        
+        # Compliance score
+        score = compliance_data["score"]
+        st.metric("Compliance Score", f"{score}%", f"{compliance_data['change']}%")
+        
+        # Create gauge chart for compliance score
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=score,
+            domain={'x': [0, 1], 'y': [0, 1]},
+            title={'text': f"{metric} Score"},
+            gauge={
+                'axis': {'range': [0, 100]},
+                'bar': {'color': "darkblue"},
+                'steps': [
+                    {'range': [0, 50], 'color': "red"},
+                    {'range': [50, 75], 'color': "orange"},
+                    {'range': [75, 90], 'color': "yellow"},
+                    {'range': [90, 100], 'color': "green"}
+                ],
+                'threshold': {
+                    'line': {'color': "black", 'width': 4},
+                    'thickness': 0.75,
+                    'value': 90
+                }
             }
         ))
+        st.plotly_chart(fig)
         
-        workflow_fig.update_layout(
-            title="Decision Workflow Funnel",
-            margin=dict(l=20, r=20, t=60, b=20)
+        # Show compliance trend
+        st.subheader("Compliance Trend")
+        trend_fig = px.line(
+            compliance_data["trend"], 
+            x="date", 
+            y="score",
+            title=f"{metric} - Trend Over Time"
         )
+        st.plotly_chart(trend_fig)
         
-        st.plotly_chart(workflow_fig, use_container_width=True)
-        
-        # Active workflows table
-        st.subheader("Active Governance Workflows")
-        
-        active_workflows = [
-            {"id": "GW-2025-042", "title": "CMP License Framework Update", "stage": "Financial Analysis", "owner": "CFO Office", "priority": "High", "due_date": "2025-04-15"},
-            {"id": "GW-2025-039", "title": "New Marketplace Integration Policy", "stage": "Technical Validation", "owner": "CIO Office", "priority": "Medium", "due_date": "2025-04-18"},
-            {"id": "GW-2025-035", "title": "Cross-Border Trade Policy", "stage": "Emperor Approval", "owner": "ECG Council", "priority": "High", "due_date": "2025-04-10"},
-            {"id": "GW-2025-031", "title": "Synergyze API Security Framework", "stage": "Implementation", "owner": "CIO Office", "priority": "Critical", "due_date": "2025-04-08"},
-            {"id": "GW-2025-028", "title": "Escrow Fund Management Update", "stage": "Under ECG Review", "owner": "CFO Office", "priority": "Medium", "due_date": "2025-04-22"},
-        ]
-        
-        # Convert to DataFrame for display
-        active_df = pd.DataFrame(active_workflows)
-        
-        # Add color highlighting based on priority
-        def highlight_priority(val):
-            if val == 'Critical':
-                return 'background-color: #FF000050'
-            elif val == 'High':
-                return 'background-color: #FFA50050'
-            elif val == 'Medium':
-                return 'background-color: #FFFF0050'
-            else:
-                return 'background-color: #00FF0050'
-        
-        # Display with styling
-        st.dataframe(
-            active_df.style.applymap(highlight_priority, subset=['priority']),
-            use_container_width=True
+        # Show compliance breakdown
+        st.subheader("Compliance Breakdown")
+        breakdown_fig = px.bar(
+            compliance_data["breakdown"],
+            x="category",
+            y="score",
+            color="score",
+            color_continuous_scale=["red", "yellow", "green"],
+            range_color=[0, 100],
+            title="Component Compliance Scores"
         )
+        st.plotly_chart(breakdown_fig)
         
-    # Tab 4: Impact Analysis
-    with tabs[3]:
-        st.header("Governance Impact Analysis")
-        st.write("Analyze the effects of governance decisions across the Empire.")
-        
-        # Create a network graph of impact relationships
-        st.subheader("Decision Impact Network")
-        
-        # Sample impact metrics over time
-        periods = ["Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024", "Q1 2025", "Q2 2025"]
-        
-        impact_metrics = {
-            "Licensee Satisfaction": [72, 75, 79, 83, 88, 92],
-            "Ecosystem Growth": [25, 32, 45, 58, 67, 76],
-            "Financial Stability": [68, 70, 75, 82, 87, 90],
-            "Technical Reliability": [85, 86, 88, 90, 92, 95],
-            "Compliance Score": [78, 82, 85, 88, 90, 92]
-        }
-        
-        # Create the impact radar chart
-        categories = list(impact_metrics.keys())
-        
-        fig = go.Figure()
-        
-        for i, period in enumerate(periods):
-            values = [impact_metrics[category][i] for category in categories]
-            # Add the first value again to close the loop
-            values.append(values[0])
-            categories_closed = categories + [categories[0]]
-            
-            fig.add_trace(go.Scatterpolar(
-                r=values,
-                theta=categories_closed,
-                name=period,
-                fill='toself',
-                opacity=0.4 + (i * 0.1),  # Increasing opacity for newer periods
-                line=dict(width=2)
-            ))
-        
-        fig.update_layout(
-            polar=dict(
-                radialaxis=dict(
-                    visible=True,
-                    range=[0, 100]
-                )
-            ),
-            showlegend=True,
-            height=500
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Decision impact heatmap
-        st.subheader("Decision Category Impact Heatmap")
-        
-        impact_areas = ["Financial Health", "Licensee Growth", "Market Reach", "System Stability", "Compliance"]
-        decision_categories = ["Policy Changes", "License Updates", "Fee Structure", "Technology Upgrades", "Compliance Rules"]
-        
-        # Generate impact scores (0-10)
-        impact_scores = np.random.randint(4, 10, size=(len(impact_areas), len(decision_categories)))
-        
-        # Create heatmap
-        heatmap_fig = px.imshow(
-            impact_scores,
-            labels=dict(x="Decision Category", y="Impact Area", color="Impact Score"),
-            x=decision_categories,
-            y=impact_areas,
-            color_continuous_scale="Viridis",
-            zmin=0, zmax=10
-        )
-        
-        heatmap_fig.update_layout(
-            height=400,
-            margin=dict(l=20, r=20, t=30, b=20)
-        )
-        
-        st.plotly_chart(heatmap_fig, use_container_width=True)
-        
-    # Emperor's action section at the bottom
-    st.markdown("---")
+        # Show non-compliance issues
+        st.subheader("Non-Compliance Issues")
+        issue_data = compliance_data["issues"]
+        if issue_data.empty:
+            st.success("No non-compliance issues detected!")
+        else:
+            st.dataframe(issue_data)
+
+def show_license_timeline(license_data):
+    """Display license data in a timeline view"""
+    st.subheader("License Issuance Timeline")
     
-    st.markdown(
-        """
-        <div style='background: rgba(75,0,130,0.1); padding: 20px; border-radius: 10px; border-left: 5px solid #4B0082;'>
-            <h3 style='margin-top: 0; color: #4B0082;'>Emperor's Actions</h3>
-            <p>Take direct actions to influence governance and license management across the Empire.</p>
-        </div>
-        """, 
-        unsafe_allow_html=True
+    # License issuance over time chart
+    issuance_fig = px.line(
+        license_data.groupby('date').size().reset_index(name='count'),
+        x="date",
+        y="count",
+        title="License Issuance Volume Over Time"
     )
+    st.plotly_chart(issuance_fig)
     
-    # Action buttons
-    col1, col2, col3 = st.columns(3)
+    # License types distribution
+    st.subheader("License Type Distribution")
+    type_fig = px.pie(
+        license_data, 
+        names='license_type', 
+        title="Distribution of License Types"
+    )
+    st.plotly_chart(type_fig)
+    
+    # License status timeline
+    st.subheader("License Status Timeline")
+    
+    # Create a color map for status
+    color_map = {
+        "APPROVED": "#2ecc71",  # Green
+        "CONDITIONAL": "#f39c12",  # Orange/Yellow
+        "PENDING": "#3498db",  # Blue
+        "DENIED": "#e74c3c",  # Red
+        "REVOKED": "#c0392b",  # Darker Red
+        "EXPIRED": "#95a5a6"   # Gray
+    }
+    
+    # Create the Gantt chart for license timeline
+    timeline_fig = px.timeline(
+        license_data,
+        x_start="issued_at",
+        x_end="expires_at",
+        y="license_id",
+        color="status",
+        color_discrete_map=color_map,
+        hover_data=["holder", "realm", "license_type"]
+    )
+    timeline_fig.update_yaxes(autorange="reversed")
+    st.plotly_chart(timeline_fig)
+    
+    # Divine principles distribution
+    st.subheader("Divine Principles in License Issuance")
+    principle_fig = px.bar(
+        license_data.groupby('divine_principle').size().reset_index(name='count'),
+        x="divine_principle",
+        y="count",
+        color="divine_principle",
+        title="Divine Principles Applied in Licensing"
+    )
+    st.plotly_chart(principle_fig)
+    
+    # Filter to show recent licenses
+    st.subheader("Recent License Activity")
+    
+    # Add status indicator function
+    def status_indicator(status):
+        if status == "APPROVED":
+            return "🟢 "
+        elif status == "CONDITIONAL":
+            return "🟠 "
+        elif status == "PENDING":
+            return "🔵 "
+        elif status == "DENIED":
+            return "🔴 "
+        elif status == "REVOKED":
+            return "⛔ "
+        elif status == "EXPIRED":
+            return "⚪ "
+        else:
+            return ""
+    
+    # Add status indicator to dataframe
+    license_data['status_icon'] = license_data['status'].apply(status_indicator)
+    license_data['display_status'] = license_data['status_icon'] + license_data['status']
+    
+    # Show recent licenses
+    recent_licenses = license_data.sort_values('issued_at', ascending=False).head(10)
+    display_cols = ['license_id', 'holder', 'license_type', 'realm', 'display_status', 'divine_principle', 'issued_at']
+    st.dataframe(recent_licenses[display_cols])
+    
+    # Show expanded view of a selected license
+    st.subheader("License Details")
+    selected_license = st.selectbox("Select License ID", license_data['license_id'].tolist())
+    
+    # Get details for selected license
+    license_details = license_data[license_data['license_id'] == selected_license].iloc[0]
+    
+    # Create columns for details
+    col1, col2 = st.columns(2)
     
     with col1:
-        st.button("📝 New Governance Directive", use_container_width=True)
-        st.button("🔍 Audit License Activities", use_container_width=True)
+        st.markdown(f"**License ID:** {license_details['license_id']}")
+        st.markdown(f"**Holder:** {license_details['holder']}")
+        st.markdown(f"**License Type:** {license_details['license_type']}")
+        st.markdown(f"**Realm:** {license_details['realm']}")
     
     with col2:
-        st.button("✅ Approve Pending Licenses", use_container_width=True)
-        st.button("📊 Generate Impact Report", use_container_width=True)
+        st.markdown(f"**Status:** {license_details['status']}")
+        st.markdown(f"**Issued At:** {license_details['issued_at']}")
+        st.markdown(f"**Expires At:** {license_details['expires_at']}")
+        st.markdown(f"**Divine Principle:** {license_details['divine_principle']}")
     
-    with col3:
-        st.button("📣 Issue ECG Council Notice", use_container_width=True)
-        st.button("🔒 Update Security Protocols", use_container_width=True)
+    # Show conditions if any
+    if isinstance(license_details.get('conditions'), list) and license_details['conditions']:
+        st.subheader("License Conditions")
+        for condition in license_details['conditions']:
+            st.markdown(f"- {condition}")
 
-def generate_timeline_data():
-    """Generate sample timeline data for demonstration"""
-    # Create date range from 3 months ago to 1 month in future
-    start_date = datetime.now() - timedelta(days=90)
-    end_date = datetime.now() + timedelta(days=30)
+def show_license_calendar(license_data):
+    """Display license data in a calendar view"""
+    st.subheader("License Calendar View")
     
-    # Categories and impacts
-    categories = ["Policy", "License", "Financial", "Technology", "Partnership"]
-    impacts = ["High", "Medium", "Low"]
+    # Convert dates to datetime if they're strings
+    license_data['issued_at'] = pd.to_datetime(license_data['issued_at'])
+    license_data['date'] = license_data['issued_at'].dt.date
     
-    # Sample events
-    events = [
-        {"title": "Empire OS Constitution Update", "category": "Policy", "impact": "High", 
-         "description": "Major revision to the core governance principles that guide the entire ecosystem."},
-        {"title": "Synergyze License Fee Structure Revision", "category": "License", "impact": "High", 
-         "description": "Updated pricing model for all license types to better align with market value."},
-        {"title": "Virtual Silk Road Map Expansion", "category": "Technology", "impact": "Medium", 
-         "description": "Added new regions and economic zones to the Virtual Silk Road visualization."},
-        {"title": "ECG Council Quarterly Review", "category": "Policy", "impact": "Medium", 
-         "description": "Regular governance review of all ecosystem performance metrics."},
-        {"title": "Escrow Fund Management Protocol Update", "category": "Financial", "impact": "High", 
-         "description": "Enhanced security and transparency measures for all escrow transactions."},
-        {"title": "CIO Security Framework Implementation", "category": "Technology", "impact": "High", 
-         "description": "Deployment of advanced security protocols across all Empire OS interfaces."},
-        {"title": "Manufacturer License Template v2.0 Release", "category": "License", "impact": "Medium", 
-         "description": "Updated license template for manufacturers with additional compliance requirements."},
-        {"title": "Cross-Border Trade Agreement", "category": "Partnership", "impact": "High", 
-         "description": "New agreement facilitating seamless trade between multiple license jurisdictions."},
-        {"title": "CFO Financial Visibility Enhancement", "category": "Financial", "impact": "Medium", 
-         "description": "Improved financial tracking and reporting tools for license-based revenue."},
-        {"title": "API Security Penetration Testing", "category": "Technology", "impact": "Low", 
-         "description": "Routine security assessment of all API endpoints and data exchange protocols."},
-        {"title": "ECG Partner Onboarding Optimization", "category": "Partnership", "impact": "Medium", 
-         "description": "Streamlined process for bringing new partners into the ecosystem."},
-        {"title": "License Compliance Audit", "category": "License", "impact": "High", 
-         "description": "Comprehensive audit of all active licenses for compliance with latest standards."},
-        {"title": "Emperor's Annual Address", "category": "Policy", "impact": "High", 
-         "description": "Strategic direction and vision for the ecosystem's next growth phase."},
-        {"title": "Smart Contract Implementation for Escrow", "category": "Technology", "impact": "High", 
-         "description": "Automated contract execution for financial transactions across the system."},
-        {"title": "Retail License Fee Adjustment", "category": "License", "impact": "Medium", 
-         "description": "Adjustment to retail license fees based on market performance data."},
-    ]
+    # Group by date and count licenses
+    daily_counts = license_data.groupby('date').size().reset_index(name='count')
+    daily_counts['date'] = pd.to_datetime(daily_counts['date'])
     
-    # Generate dates between start and end date
-    range_days = (end_date - start_date).days
-    dates = [start_date + timedelta(days=random.randint(0, range_days)) for _ in range(len(events))]
-    dates.sort()  # Sort dates chronologically
+    # Create heatmap calendar
+    daily_counts['day_of_week'] = daily_counts['date'].dt.day_name()
+    daily_counts['week'] = daily_counts['date'].dt.isocalendar().week
+    daily_counts['month'] = daily_counts['date'].dt.month_name()
     
-    # Create list of dictionaries with event data
-    timeline_data = []
-    for i, event in enumerate(events):
-        timeline_data.append({
-            "date": dates[i],
-            "title": event["title"],
-            "category": event["category"],
-            "impact": event["impact"],
-            "description": event["description"]
-        })
+    # Sort days of week properly
+    day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    daily_counts['day_order'] = daily_counts['day_of_week'].apply(lambda x: day_order.index(x))
+    daily_counts = daily_counts.sort_values(['week', 'day_order'])
+    
+    # Create heatmap
+    fig = px.density_heatmap(
+        daily_counts,
+        x='day_of_week',
+        y='week',
+        z='count',
+        category_orders={'day_of_week': day_order},
+        labels={'count': 'License Count', 'day_of_week': 'Day', 'week': 'Week'},
+        title='License Issuance Calendar Heatmap'
+    )
+    st.plotly_chart(fig)
+    
+    # Show daily license issuance
+    st.subheader("Daily License Issuance")
+    daily_fig = px.bar(
+        daily_counts.sort_values('date'),
+        x='date',
+        y='count',
+        title='Daily License Issuance Count'
+    )
+    st.plotly_chart(daily_fig)
+    
+    # Show license types by day of week
+    license_data['day_of_week'] = license_data['issued_at'].dt.day_name()
+    dow_type = pd.crosstab(license_data['day_of_week'], license_data['license_type'])
+    dow_type = dow_type.reindex(day_order)
+    
+    dow_fig = px.imshow(
+        dow_type,
+        labels=dict(x="License Type", y="Day of Week", color="Count"),
+        title="License Types by Day of Week"
+    )
+    st.plotly_chart(dow_fig)
+
+def show_governance_timeline(governance_events):
+    """Display governance events in a timeline visualization"""
+    st.subheader("Governance Timeline")
+    
+    # Create color map for event types
+    color_map = {
+        "Policy Change": "#3498db",  # Blue
+        "Audit": "#2ecc71",          # Green
+        "Compliance Check": "#f1c40f", # Yellow
+        "License Revocation": "#e74c3c", # Red
+        "System Update": "#9b59b6"    # Purple
+    }
+    
+    # Create symbols map for priority
+    symbol_map = {
+        "Critical": "diamond",
+        "High": "circle",
+        "Medium": "square",
+        "Low": "x"
+    }
+    
+    # Prepare the timeline
+    timeline_fig = go.Figure()
+    
+    for event_type in governance_events['event_type'].unique():
+        df_filtered = governance_events[governance_events['event_type'] == event_type]
+        
+        timeline_fig.add_trace(go.Scatter(
+            x=df_filtered['date'],
+            y=df_filtered['event_type'],
+            mode='markers',
+            marker=dict(
+                symbol=[symbol_map.get(p, 'circle') for p in df_filtered['priority']],
+                size=12,
+                color=color_map.get(event_type, '#333333'),
+                line=dict(width=1, color='darkgrey')
+            ),
+            name=event_type,
+            text=df_filtered['description'],
+            hovertemplate='<b>%{text}</b><br>Date: %{x}<br>Priority: ' + 
+                         df_filtered['priority'].astype(str)
+        ))
+    
+    timeline_fig.update_layout(
+        title="Empire OS Governance Events Timeline",
+        xaxis_title="Date",
+        yaxis_title="Event Type",
+        legend_title="Event Types",
+        height=600
+    )
+    
+    st.plotly_chart(timeline_fig)
+    
+    # Show event details table
+    st.subheader("Governance Events")
+    
+    # Function to color priority
+    def color_priority(val):
+        if val == "Critical":
+            return "background-color: #ffcccc"
+        elif val == "High":
+            return "background-color: #ffffcc"
+        elif val == "Medium":
+            return "background-color: #e6ffcc"
+        else:
+            return "background-color: #ccffcc"
+    
+    # Display the events table with styled priority
+    styled_events = governance_events.sort_values('date', ascending=False).style.applymap(
+        color_priority, subset=['priority']
+    )
+    st.dataframe(styled_events)
+    
+    # Show distribution of events by type and priority
+    st.subheader("Event Distribution")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        type_fig = px.pie(
+            governance_events, 
+            names='event_type', 
+            title="Event Types Distribution"
+        )
+        st.plotly_chart(type_fig)
+    
+    with col2:
+        priority_fig = px.pie(
+            governance_events, 
+            names='priority',
+            color='priority',
+            color_discrete_map={
+                "Critical": "#e74c3c",
+                "High": "#f39c12",
+                "Medium": "#3498db",
+                "Low": "#2ecc71"
+            },
+            title="Priority Distribution"
+        )
+        st.plotly_chart(priority_fig)
+
+def create_integration_timeline(integration_data):
+    """Create a timeline visualization of enterprise integrations"""
+    st.subheader("Enterprise Integration Timeline")
+    
+    # Create Gantt chart
+    fig = px.timeline(
+        integration_data,
+        x_start="start_date",
+        x_end="end_date",
+        y="integration",
+        color="status",
+        hover_name="integration",
+        hover_data=["description", "owner"],
+        color_discrete_map={
+            "Completed": "#2ecc71",
+            "In Progress": "#3498db",
+            "Planned": "#95a5a6",
+            "Delayed": "#e74c3c"
+        },
+        title="Empire OS Integration Timeline"
+    )
+    
+    fig.update_yaxes(autorange="reversed")
+    st.plotly_chart(fig)
+    
+    # Show integration status summary
+    st.subheader("Integration Status")
+    
+    status_counts = integration_data['status'].value_counts().reset_index()
+    status_counts.columns = ['Status', 'Count']
+    
+    status_fig = px.bar(
+        status_counts,
+        x='Status',
+        y='Count',
+        color='Status',
+        color_discrete_map={
+            "Completed": "#2ecc71",
+            "In Progress": "#3498db",
+            "Planned": "#95a5a6",
+            "Delayed": "#e74c3c"
+        },
+        title="Integration Status Summary"
+    )
+    st.plotly_chart(status_fig)
+    
+    # Show integration details
+    st.subheader("Integration Details")
+    
+    # Add current status indicator
+    today = datetime.now().date()
+    
+    def get_progress(row):
+        if row['status'] == 'Completed':
+            return 100
+        
+        start = pd.to_datetime(row['start_date']).date()
+        end = pd.to_datetime(row['end_date']).date()
+        total_days = (end - start).days
+        elapsed_days = (today - start).days
+        
+        if elapsed_days < 0:
+            return 0
+        if elapsed_days > total_days:
+            return 99  # Not 100 because it's not marked complete
+        
+        return int((elapsed_days / total_days) * 100)
+    
+    integration_data['progress'] = integration_data.apply(get_progress, axis=1)
+    
+    for idx, row in integration_data.iterrows():
+        with st.expander(f"{row['integration']} - {row['status']}"):
+            col1, col2 = st.columns([3,1])
+            
+            with col1:
+                st.markdown(f"**Description:** {row['description']}")
+                st.markdown(f"**Owner:** {row['owner']}")
+                st.markdown(f"**Timeline:** {row['start_date']} to {row['end_date']}")
+                
+                # Progress bar
+                if row['status'] != 'Planned':
+                    st.progress(row['progress'] / 100)
+                    st.text(f"Progress: {row['progress']}%")
+            
+            with col2:
+                if row['status'] == 'Completed':
+                    st.success("Completed")
+                elif row['status'] == 'In Progress':
+                    st.info("In Progress")
+                elif row['status'] == 'Planned':
+                    st.warning("Planned")
+                elif row['status'] == 'Delayed':
+                    st.error("Delayed")
+
+def generate_license_data(time_range):
+    """Generate sample license data based on the selected time range"""
+    # Determine date range based on selected time range
+    today = datetime.now()
+    
+    if time_range == "Last 7 Days":
+        start_date = today - timedelta(days=7)
+    elif time_range == "Last 30 Days":
+        start_date = today - timedelta(days=30)
+    elif time_range == "Last Quarter":
+        start_date = today - timedelta(days=90)
+    elif time_range == "Year to Date":
+        start_date = datetime(today.year, 1, 1)
+    elif time_range == "Current Month":
+        start_date = datetime(today.year, today.month, 1)
+    elif time_range == "Last 3 Months":
+        start_date = today - timedelta(days=90)
+    else:  # All Time
+        start_date = today - timedelta(days=365)
+    
+    # Generate number of licenses based on time range
+    if time_range in ["Last 7 Days", "Current Month"]:
+        num_licenses = random.randint(20, 50)
+    elif time_range in ["Last 30 Days", "Last 3 Months"]:
+        num_licenses = random.randint(50, 150)
+    else:
+        num_licenses = random.randint(150, 300)
+    
+    # License types and their probabilities
+    license_types = ["Viewer", "Operator", "Governor", "Emperor"]
+    type_probs = [0.4, 0.35, 0.2, 0.05]
+    
+    # License statuses and their probabilities
+    statuses = ["APPROVED", "CONDITIONAL", "PENDING", "DENIED", "REVOKED", "EXPIRED"]
+    status_probs = [0.6, 0.15, 0.1, 0.05, 0.05, 0.05]
+    
+    # Divine principles and their probabilities
+    principles = ["Al-Adl (Justice)", "Ar-Rahman (Mercy)", "Al-Hakim (Wisdom)", 
+                  "Al-Alim (Knowledge)", "Al-Muqsit (Equity)", "None"]
+    principle_probs = [0.25, 0.2, 0.2, 0.15, 0.15, 0.05]
+    
+    # Realms
+    realms = ["RealmOne", "RealmTwo", "RealmThree", "AllRealms"]
+    realm_probs = [0.4, 0.3, 0.2, 0.1]
+    
+    # Holders
+    holders = ["factory-operator", "retailer-agent", "realm-governor", "emperor", 
+               "logistics-manager", "financial-analyst", "customer-service"]
+    
+    # Generate license data
+    licenses = []
+    
+    for i in range(num_licenses):
+        # Random date within the range
+        date_range = (today - start_date).days
+        random_days = random.randint(0, date_range)
+        issue_date = today - timedelta(days=random_days)
+        
+        # Random expiration 30-90 days after issuance
+        expire_days = random.randint(30, 90)
+        expire_date = issue_date + timedelta(days=expire_days)
+        
+        # Select license type and other attributes
+        license_type = random.choices(license_types, weights=type_probs)[0]
+        status = random.choices(statuses, weights=status_probs)[0]
+        principle = random.choices(principles, weights=principle_probs)[0]
+        realm = random.choices(realms, weights=realm_probs)[0]
+        holder = random.choice(holders)
+        
+        # Generate license ID
+        license_id = f"LIC-{random.randint(10000, 99999)}"
+        
+        # Conditions (only for conditional licenses)
+        conditions = None
+        if status == "CONDITIONAL":
+            possible_conditions = [
+                "Initial batch limited to 500 units",
+                "Weekly progress reports required",
+                "Governance review after 15 days",
+                "ESG impact monitoring mandatory",
+                "Limited to non-critical operations"
+            ]
+            num_conditions = random.randint(1, 3)
+            conditions = random.sample(possible_conditions, num_conditions)
+        
+        # Create license object
+        license_obj = {
+            "license_id": license_id,
+            "holder": holder,
+            "license_type": license_type,
+            "realm": realm,
+            "status": status,
+            "divine_principle": principle,
+            "issued_at": issue_date,
+            "expires_at": expire_date,
+            "conditions": conditions,
+            "date": issue_date.date()  # For grouping
+        }
+        
+        licenses.append(license_obj)
     
     # Convert to DataFrame
-    return pd.DataFrame(timeline_data)
-
-def generate_license_data():
-    """Generate sample license data for visualization"""
-    license_types = ["Manufacturer", "Retailer", "Brand", "Distributor", "Financial"]
-    counts = [78, 92, 45, 18, 10]
+    license_df = pd.DataFrame(licenses)
     
-    return pd.DataFrame({
-        "license_type": license_types,
-        "count": counts
-    })
+    return license_df
 
-def generate_license_activity():
-    """Generate sample license activity stream"""
-    activities = [
+def generate_governance_events(event_types, priority_levels):
+    """Generate governance events based on selected filters"""
+    # Determine date range (last 6 months)
+    today = datetime.now()
+    start_date = today - timedelta(days=180)
+    
+    # Number of events based on filters
+    num_events = len(event_types) * len(priority_levels) * random.randint(2, 5)
+    
+    events = []
+    
+    for i in range(num_events):
+        # Random date within range
+        days_ago = random.randint(0, 180)
+        event_date = today - timedelta(days=days_ago)
+        
+        # Select event type and priority
+        event_type = random.choice(event_types)
+        priority = random.choice(priority_levels)
+        
+        # Generate description based on event type
+        if event_type == "Policy Change":
+            descriptions = [
+                "Updated license issuance criteria to include ESG impact assessment",
+                "Modified realm governance structure for better accountability",
+                "Added new divine principles to license evaluation",
+                "Revised transaction approval workflow for high-volume orders",
+                "Updated compliance requirements for cross-realm operations"
+            ]
+        elif event_type == "Audit":
+            descriptions = [
+                "Quarterly audit of license issuance compliance",
+                "Realm health verification audit",
+                "Divine alignment audit of governance decisions",
+                "ESG impact assessment validation",
+                "Audit of cross-realm transaction integrity"
+            ]
+        elif event_type == "Compliance Check":
+            descriptions = [
+                "Verified alignment of licenses with divine principles",
+                "Checked adherence to realm health guidelines",
+                "Reviewed ESG impact assessment accuracy",
+                "Validated license conditions enforcement",
+                "Verified transaction integrity across system"
+            ]
+        elif event_type == "License Revocation":
+            descriptions = [
+                "Revoked license due to repeated condition violations",
+                "Enterprise-wide license review resulting in selective revocations",
+                "Temporary suspension of licenses pending investigation",
+                "License downgrade from Governor to Operator level",
+                "Mandatory license renewal with enhanced scrutiny"
+            ]
+        else:  # System Update
+            descriptions = [
+                "Upgraded divine transformer algorithm for better recommendations",
+                "Enhanced realm scanner sensitivity to economic imbalances",
+                "Improved license gateway processing efficiency",
+                "Added new ESG impact metrics to validation system",
+                "Implemented faster transaction processing with integrity checks"
+            ]
+        
+        description = random.choice(descriptions)
+        
+        # Realm affected
+        realm = random.choice(["RealmOne", "RealmTwo", "RealmThree", "All Realms"])
+        
+        # Responsible entity
+        responsible = random.choice(["Emperor", "Realm Governor", "System", "Governance Council", "Audit Committee"])
+        
+        events.append({
+            "date": event_date,
+            "event_type": event_type,
+            "priority": priority,
+            "description": description,
+            "realm": realm,
+            "responsible": responsible
+        })
+    
+    # Convert to DataFrame and filter
+    events_df = pd.DataFrame(events)
+    
+    # Sort by date
+    events_df = events_df.sort_values("date")
+    
+    return events_df
+
+def generate_compliance_data(metric, period):
+    """Generate sample compliance data for visualization"""
+    # Generate overall compliance score
+    score = random.randint(75, 98)
+    change = random.uniform(-5, 8)
+    
+    # Generate trend data
+    if period == "Last Quarter":
+        days = 90
+    elif period == "Year to Date":
+        days = (datetime.now() - datetime(datetime.now().year, 1, 1)).days
+    else:  # Last 12 Months
+        days = 365
+    
+    # Create dates
+    dates = [datetime.now() - timedelta(days=i) for i in range(days, 0, -7)]
+    
+    # Generate scores with a slight upward trend and some noise
+    base_score = score - (change * 5)  # Start lower if change is positive
+    trend_scores = []
+    
+    for i in range(len(dates)):
+        trend_score = min(100, max(50, base_score + (i * change / 10) + random.uniform(-5, 5)))
+        trend_scores.append(trend_score)
+    
+    trend_data = pd.DataFrame({
+        "date": dates,
+        "score": trend_scores
+    })
+    
+    # Generate breakdown data
+    categories = []
+    
+    if metric == "License Compliance":
+        categories = ["License Issuance", "Condition Monitoring", "Expiration Management", 
+                      "Divine Alignment", "Cross-Realm Consistency"]
+    elif metric == "Governance Alignment":
+        categories = ["Policy Enforcement", "Decision Transparency", "Stakeholder Representation", 
+                     "Divine Principle Adherence", "Accountability Mechanisms"]
+    elif metric == "Realm Health":
+        categories = ["Social Dimension", "Economic Dimension", "Ecological Dimension", 
+                     "Spiritual Dimension", "Cross-Dimension Balance"]
+    else:  # ESG Standards
+        categories = ["Environmental Impact", "Social Responsibility", "Governance Quality", 
+                     "Reporting Transparency", "Continuous Improvement"]
+    
+    # Generate scores for each category
+    category_scores = []
+    
+    for category in categories:
+        # Base on overall score but add variation
+        cat_score = min(100, max(50, score + random.uniform(-15, 10)))
+        category_scores.append(cat_score)
+    
+    breakdown_data = pd.DataFrame({
+        "category": categories,
+        "score": category_scores
+    })
+    
+    # Generate issues data (more issues if score is lower)
+    issues = []
+    
+    if score < 85:
+        num_issues = random.randint(3, 6)
+    elif score < 95:
+        num_issues = random.randint(1, 3)
+    else:
+        num_issues = 0
+    
+    possible_issues = [
+        "Incomplete license documentation for cross-realm transactions",
+        "Divine principle application inconsistency in governance decisions",
+        "Delayed compliance reporting in ecological dimension",
+        "Insufficient stakeholder engagement in realm health monitoring",
+        "ESG impact assessments lacking quantitative metrics",
+        "Governance transparency declining in financial transactions",
+        "Realm scanner sensitivity requiring recalibration",
+        "License condition monitoring showing gaps in enforcement",
+        "Social dimension metrics showing negative trend in community wellbeing",
+        "Spiritual alignment verification process needs enhancement"
+    ]
+    
+    if num_issues > 0:
+        selected_issues = random.sample(possible_issues, num_issues)
+        severity = ["High", "Medium", "Low"]
+        
+        for issue in selected_issues:
+            issues.append({
+                "issue": issue,
+                "severity": random.choice(severity),
+                "identified": (datetime.now() - timedelta(days=random.randint(1, 30))).strftime("%Y-%m-%d"),
+                "status": random.choice(["Open", "In Progress", "Scheduled"])
+            })
+    
+    issues_data = pd.DataFrame(issues)
+    
+    # Combine all data
+    compliance_data = {
+        "score": score,
+        "change": round(change, 1),
+        "trend": trend_data,
+        "breakdown": breakdown_data,
+        "issues": issues_data
+    }
+    
+    return compliance_data
+
+def generate_integration_data():
+    """Generate integration timeline data"""
+    # Define integrations
+    integrations = [
         {
-            "company": "VoiJeans Retail India Pvt Ltd",
-            "license_type": "Retailer",
-            "activity_type": "Renewed",
-            "date": "April 02, 2025",
-            "description": "Annual license renewal with upgraded tier access to advanced retail analytics."
+            "integration": "Digital Me Identity System",
+            "description": "Core identity and authentication module integration",
+            "owner": "Identity Team",
+            "start_date": "2025-01-15",
+            "end_date": "2025-03-01",
+            "status": "Completed"
         },
         {
-            "company": "Fashionista Brands LLC",
-            "license_type": "Brand",
-            "activity_type": "Issued",
-            "date": "April 01, 2025",
-            "description": "New brand license issued with private label and house brand capabilities."
+            "integration": "License Gateway",
+            "description": "Divine principle-based licensing system",
+            "owner": "Governance Team",
+            "start_date": "2025-02-01",
+            "end_date": "2025-04-15",
+            "status": "Completed"
         },
         {
-            "company": "TextilePro Manufacturing",
-            "license_type": "Manufacturer",
-            "activity_type": "Updated",
-            "date": "March 29, 2025",
-            "description": "License updated to include FOB export compliance modules."
+            "integration": "ESG Validator",
+            "description": "Transaction validation based on ESG impact",
+            "owner": "Sustainability Team",
+            "start_date": "2025-03-01",
+            "end_date": "2025-05-15",
+            "status": "In Progress"
         },
         {
-            "company": "Global Fashion Logistics",
-            "license_type": "Distributor",
-            "activity_type": "Compliance Alert",
-            "date": "March 28, 2025",
-            "description": "Warning issued for delayed inventory reporting. Requires attention."
+            "integration": "Realm Scanner",
+            "description": "Realm health monitoring and alerting system",
+            "owner": "Monitoring Team",
+            "start_date": "2025-03-15",
+            "end_date": "2025-06-01",
+            "status": "In Progress"
         },
         {
-            "company": "FashionBank Financial Services",
-            "license_type": "Financial",
-            "activity_type": "Renewed",
-            "date": "March 25, 2025",
-            "description": "License renewed with supply chain financing capabilities added."
+            "integration": "Divine Transformer",
+            "description": "Divine principle recommendation engine",
+            "owner": "Core Algorithms Team",
+            "start_date": "2025-04-01",
+            "end_date": "2025-07-15",
+            "status": "In Progress"
+        },
+        {
+            "integration": "Federal Alignment Protocol",
+            "description": "Cross-realm governance synchronization",
+            "owner": "Integration Team",
+            "start_date": "2025-05-01",
+            "end_date": "2025-08-15",
+            "status": "Planned"
+        },
+        {
+            "integration": "Realm Action Ledger",
+            "description": "Immutable transaction recording system",
+            "owner": "Data Team",
+            "start_date": "2025-04-15",
+            "end_date": "2025-07-01",
+            "status": "In Progress"
+        },
+        {
+            "integration": "RiverOS Simulation Engine",
+            "description": "Predictive simulation for actions and decisions",
+            "owner": "Data Science Team",
+            "start_date": "2025-06-01",
+            "end_date": "2025-09-15",
+            "status": "Planned"
+        },
+        {
+            "integration": "Divine Alignment Layer",
+            "description": "Ethical oversight and alignment verification system",
+            "owner": "Ethics Team",
+            "start_date": "2025-06-15",
+            "end_date": "2025-10-01",
+            "status": "Planned"
+        },
+        {
+            "integration": "Virtual Silk Road Portal",
+            "description": "Public-facing marketplace and collaboration platform",
+            "owner": "User Experience Team",
+            "start_date": "2025-03-01",
+            "end_date": "2025-05-15",
+            "status": "Delayed"
         }
     ]
     
-    return activities
+    # Convert to DataFrame
+    return pd.DataFrame(integrations)
 
-def create_timeline_visualization(data):
-    """Create a visual timeline chart from the provided data"""
-    # Create a custom timeline visualization
-    fig = go.Figure()
-    
-    # Color mapping for categories
-    color_map = {
-        "Policy": "#4B0082",     # Indigo
-        "License": "#9370DB",    # Medium Purple
-        "Financial": "#800080",  # Purple
-        "Technology": "#8A2BE2", # Blue Violet
-        "Partnership": "#BA55D3" # Medium Orchid
-    }
-    
-    # Size mapping for impact
-    size_map = {
-        "High": 20,
-        "Medium": 15,
-        "Low": 10
-    }
-    
-    # Create scatter plot for timeline events
-    for category in data['category'].unique():
-        category_data = data[data['category'] == category]
-        
-        fig.add_trace(go.Scatter(
-            x=category_data['date'],
-            y=[category] * len(category_data),
-            mode='markers+text',
-            marker=dict(
-                color=color_map[category],
-                size=[size_map[impact] for impact in category_data['impact']],
-                line=dict(width=2, color='white')
-            ),
-            text=category_data['title'],
-            textposition="top center",
-            name=category,
-            hovertemplate=
-            "<b>%{text}</b><br>" +
-            "Date: %{x|%b %d, %Y}<br>" +
-            "Category: " + category + "<br>" +
-            "Impact: %{customdata}<br>" +
-            "Description: %{meta}<br>" +
-            "<extra></extra>",
-            customdata=category_data['impact'],
-            meta=category_data['description']
-        ))
-    
-    # Add horizontal lines for each category
-    for i, category in enumerate(data['category'].unique()):
-        fig.add_shape(
-            type="line",
-            x0=data['date'].min() - timedelta(days=5),
-            y0=category,
-            x1=data['date'].max() + timedelta(days=5),
-            y1=category,
-            line=dict(color="rgba(120, 120, 120, 0.3)", width=1, dash="dot")
-        )
-    
-    # Add today's date vertical line
-    today = datetime.now()
-    fig.add_shape(
-        type="line",
-        x0=today,
-        y0=-1,
-        x1=today,
-        y1=len(data['category'].unique()),
-        line=dict(color="rgba(255, 0, 0, 0.5)", width=2, dash="dash")
-    )
-    
-    # Add "Today" annotation
-    fig.add_annotation(
-        x=today,
-        y=-0.5,
-        text="Today",
-        showarrow=False,
-        font=dict(color="red")
-    )
-    
-    # Configure layout
-    fig.update_layout(
-        title="Empire Governance Timeline",
-        title_font=dict(size=20, color="#4B0082"),
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        height=500,
-        margin=dict(l=50, r=20, t=50, b=20),
-        xaxis=dict(
-            title="Timeline",
-            gridcolor="rgba(120, 120, 120, 0.2)",
-            type="date"
-        ),
-        yaxis=dict(
-            title="Category",
-            gridcolor="rgba(120, 120, 120, 0)",
-        ),
-        hovermode="closest",
-        showlegend=True,
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="center",
-            x=0.5
-        )
-    )
-    
-    return fig
+if __name__ == "__main__":
+    show_emperor_timeline()

@@ -665,7 +665,7 @@ def show_hsn_transactions():
             with template_col:
                 st.download_button(
                     "Download Template",
-                    data="Transaction Type,Date,HSN Code,Product,Quantity,Location\nInward,2023-04-01,6203,Men's Jeans,10,Mumbai\n",
+                    data="Transaction Type,Date,HSN Code,Product,Quantity,Location\nInward,2023-04-01,6203,\"Men's Jeans\",10,Mumbai\n",
                     file_name="transaction_import_template.csv",
                     mime="text/csv"
                 )
@@ -705,7 +705,7 @@ def show_hsn_transactions():
                 st.success("Export generated successfully.")
                 st.download_button(
                     "Download Export File",
-                    data="Transaction ID,Date,HSN Code,Product Category,Quantity,Transaction Type\nTRX-20230401-1234,2023-04-01,6203,Men's Jeans,10,Inward\n",
+                    data="Transaction ID,Date,HSN Code,Product Category,Quantity,Transaction Type\nTRX-20230401-1234,2023-04-01,6203,\"Men's Jeans\",10,Inward\n",
                     file_name=f"transaction_export_{datetime.now().strftime('%Y%m%d')}.csv",
                     mime="text/csv"
                 )
@@ -952,8 +952,8 @@ def show_trend_analysis():
         
         latest_data = pd.DataFrame({
             'HSN Code': ['6109', '6203', '6204', '6110', '6205', '4202', '6403', '6104', '6206', '6201'],
-            'Description': ['T-shirts', 'Men's trousers', 'Women's suits', 'Sweaters', 'Men's shirts', 
-                           'Handbags', 'Footwear', 'Women's suits (knitted)', 'Women's blouses', 'Men's coats'],
+            'Description': ['T-shirts', "Men's trousers", "Women's suits", 'Sweaters', "Men's shirts", 
+                           'Handbags', 'Footwear', "Women's suits (knitted)", "Women's blouses", "Men's coats"],
             'Transactions': [152, 143, 128, 87, 76, 68, 54, 47, 42, 38],
             'Growth': [12.3, 8.7, 15.2, -3.5, 5.6, 22.1, 4.8, -2.3, 6.7, 1.2]
         })
@@ -1874,7 +1874,7 @@ def show_gamified_leaderboard():
             
             improvement_data = pd.DataFrame({
                 'HSN Code': ['6109', '6204', '6403', '6110', '4202'],
-                'Description': ['T-shirts', 'Women's suits', 'Footwear', 'Sweaters', 'Handbags'],
+                'Description': ['T-shirts', "Women's suits", 'Footwear', 'Sweaters', 'Handbags'],
                 'Previous': [88.5, 90.2, 85.7, 92.1, 89.3],
                 'Current': [97.8, 95.6, 90.2, 96.0, 92.4],
                 'Improvement': [9.3, 5.4, 4.5, 3.9, 3.1]

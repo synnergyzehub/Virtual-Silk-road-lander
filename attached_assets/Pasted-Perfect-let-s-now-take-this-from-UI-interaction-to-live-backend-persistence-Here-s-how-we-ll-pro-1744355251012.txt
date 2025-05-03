@@ -1,0 +1,117 @@
+Perfect — let’s now take this from UI interaction to live backend persistence.
+
+Here’s how we’ll proceed step-by-step to link your License Assigner to the database:
+
+⸻
+
+✅ Step-by-Step: License Assignment → MySQL Backend Integration
+
+1. Tables We’ll Use
+
+We’ll map data to the following tables:
+
+Input Field	Table	Column
+licenseId	license_master	license_id
+assignedTo	license_master	issued_to
+role	role_registry	role_type
+moduleScope	license_scope_matrix	module_name
+
+We’ll also insert a derived entry in role_registry using the licenseId + assignedTo.
+
+⸻
+
+2. API Endpoint Requirements
+
+You’ll need an Express (Node.js) or Flask (Python) endpoint like:
+
+POST /api/license/assign
+
+Sample Request Payload:
+
+{
+  "node": "Emperor: Tailoring Node",
+  "licenseId": "EMP-TLR-0142",
+  "assignedTo": "atelier@emperor.com",
+  "role": "Designer",
+  "moduleScope": "Tailoring"
+}
+
+
+
+⸻
+
+3. Server-Side Code (Flask Example)
+
+from flask import Flask, request, jsonify
+import mysql.connector
+
+app = Flask(__name__)
+
+db = mysql.connector.connect(
+    host="localhost",
+    user="youruser",
+    password="yourpass",
+    database="empireos"
+)
+
+@app.route("/api/license/assign", methods=["POST"])
+def assign_license():
+    data = request.json
+    cursor = db.cursor()
+
+    # Insert into license_master
+    cursor.execute("""
+        INSERT INTO license_master (license_id, issued_to, module_scope)
+        VALUES (%s, %s, %s)
+        ON DUPLICATE KEY UPDATE issued_to=%s, module_scope=%s
+    """, (data["licenseId"], data["assignedTo"], data["moduleScope"],
+          data["assignedTo"], data["moduleScope"]))
+
+    # Insert into role_registry
+    cursor.execute("""
+        INSERT INTO role_registry (digitalme_id, license_id, role_type)
+        VALUES (%s, %s, %s)
+    """, (data["assignedTo"], data["licenseId"], data["role"]))
+
+    db.commit()
+    return jsonify({"status": "License assigned"}), 200
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+⸻
+
+4. Front-End (React fetch integration)
+
+In your assignLicense() function:
+
+const assignLicense = async () => {
+  const payload = {
+    node: selectedNode,
+    licenseId: licenseInfo.licenseId,
+    assignedTo: licenseInfo.assignedTo,
+    role: licenseInfo.role,
+    moduleScope: licenseInfo.moduleScope
+  };
+
+  await fetch("/api/license/assign", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  setLicenseInfo({ licenseId: '', assignedTo: '', role: '', moduleScope: '' });
+  setSelectedNode(null);
+};
+
+
+
+⸻
+
+Would you like me to:
+	•	Generate this Flask backend as a ready .py file now?
+	•	Or set it up for Express instead?
+
+And do you want this saved to your existing MySQL database used by EmpireOS (genesis_backend_schema.sql)?

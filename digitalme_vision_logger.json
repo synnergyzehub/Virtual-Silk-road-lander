@@ -1,0 +1,30 @@
+{
+  "license_id": "ESOM-VOI-JEANS-D2C-001",
+  "brand": "Voi Jeans",
+  "genesis_path": [
+    {
+      "day": "Day 2 – Waters",
+      "texture": "Ripple layers",
+      "emotion": "Flow, uncertainty, exploration",
+      "milestone": "Initial D2C product lines launched",
+      "timestamp": "2023-07-11T10:00:00Z"
+    },
+    {
+      "day": "Day 3 – Ground",
+      "texture": "Leaf veins / soil pattern",
+      "emotion": "Growth, structuring, root identity",
+      "milestone": "Manufacturing base and SCF factory alignment complete",
+      "timestamp": "2024-01-20T14:00:00Z"
+    },
+    {
+      "day": "Day 4 – Cosmos",
+      "texture": "Constellation mesh / star grid",
+      "emotion": "Expansion, modular scale, digital harmony",
+      "milestone": "EmpireOS + DigitalMe integrated into license system",
+      "timestamp": "2025-04-11T07:17:38.948369Z"
+    }
+  ],
+  "current_state": "Day 4 – Cosmos",
+  "projected_next": "Day 5 – Giants",
+  "ai_hint": "This brand is entering a scale phase; ready to explore bold, cross-realm disruptions."
+}

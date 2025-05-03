@@ -1,0 +1,91 @@
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
+export default function VirtualSilkRoadMap() {
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [licenseInfo, setLicenseInfo] = useState({ licenseId: '', assignedTo: '' });
+
+  const handleNodeClick = (label) => {
+    setSelectedNode(label);
+  };
+
+  const assignLicense = () => {
+    console.log(`Assigned License ${licenseInfo.licenseId} to ${licenseInfo.assignedTo} at ${selectedNode}`);
+    setLicenseInfo({ licenseId: '', assignedTo: '' });
+    setSelectedNode(null);
+  };
+
+  return (
+    <TooltipProvider>
+      <div className="p-6 space-y-6">
+        <h1 className="text-3xl font-bold">Empire Virtual Silk Road Map</h1>
+        <Card>
+          <CardContent className="p-4">
+            <div className="relative">
+              <Image
+                src="/empire_virtual_silk_road.png"
+                alt="Empire Virtual Silk Road Architecture"
+                width={1200}
+                height={900}
+                className="rounded-xl shadow-md"
+              />
+              {[
+                { label: 'CPU Cluster (EmpireOS + SynAdmin)', top: '10%', left: '25%' },
+                { label: 'GPU Cluster (RiverOS + Simulation)', top: '10%', left: '65%' },
+                { label: 'SCF: Factory Node', top: '70%', left: '30%' },
+                { label: 'VOI: Retail Node', top: '75%', left: '50%' },
+                { label: 'Emperor: Tailoring Node', top: '80%', left: '70%' },
+                { label: 'Virtual Silk Road (Intent-Aware Transfer Layer)', top: '40%', left: '48%' }
+              ].map(({ label, top, left }) => (
+                <Tooltip key={label}>
+                  <TooltipTrigger
+                    onClick={() => handleNodeClick(label)}
+                    className="absolute w-10 h-10 bg-transparent"
+                    style={{ top, left }}
+                  />
+                  <TooltipContent>{label}</TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              This visual represents your Empire computing environment — where the Virtual Silk Road links CPU + GPU operations to brand clusters in a morally aligned, intent-aware network.
+            </p>
+          </CardContent>
+        </Card>
+
+        {selectedNode && (
+          <Card>
+            <CardContent className="p-4 space-y-4">
+              <h2 className="text-xl font-semibold">Configure Node: {selectedNode}</h2>
+              <div className="space-y-2">
+                <Label htmlFor="licenseId">License ID</Label>
+                <Input
+                  id="licenseId"
+                  value={licenseInfo.licenseId}
+                  onChange={(e) => setLicenseInfo({ ...licenseInfo, licenseId: e.target.value })}
+                  placeholder="Enter license ID"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="assignedTo">Assigned To</Label>
+                <Input
+                  id="assignedTo"
+                  value={licenseInfo.assignedTo}
+                  onChange={(e) => setLicenseInfo({ ...licenseInfo, assignedTo: e.target.value })}
+                  placeholder="Developer or Org Name"
+                />
+              </div>
+              <Button onClick={assignLicense}>Assign License</Button>
+              <Button variant="ghost" onClick={() => setSelectedNode(null)}>Cancel</Button>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </TooltipProvider>
+  );
+}

@@ -1,10 +1,23 @@
 import streamlit as st
 
-# Show we're running
-print("Starting Streamlit test app...")
-
 st.title("Test Streamlit App")
-st.write("This is a test to ensure Streamlit is working properly.")
+st.write("This is a simple test app to verify that Streamlit is working properly.")
 
-# Print confirmation of app startup
-print("Streamlit app is running and should be accessible on port 5000")
+st.header("Sample Data Display")
+import pandas as pd
+import numpy as np
+
+# Create a sample dataframe
+data = pd.DataFrame({
+    'Category': ['A', 'B', 'C', 'D', 'E'],
+    'Value': np.random.randint(1, 100, 5)
+})
+
+st.dataframe(data)
+
+st.header("Interactive Elements")
+name = st.text_input("Enter your name")
+if name:
+    st.write(f"Hello, {name}!")
+
+st.button("Click Me!")

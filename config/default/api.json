@@ -1,0 +1,8 @@
+{
+  "api_key": "${EMPIRE_API_KEY:-supersecretkey}",
+  "api_base_url": "http://localhost:5001",
+  "api_timeout": 30,
+  "api_retry_attempts": 3,
+  "jwt_secret": "${JWT_SECRET:-genesis_stack_default_secret}",
+  "jwt_expiry": 86400
+}
