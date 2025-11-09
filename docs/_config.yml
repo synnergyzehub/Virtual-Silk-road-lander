@@ -1,0 +1,6 @@
+---
+# Jekyll configuration for GitHub Pages
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://yourusername.github.io" # the base hostname & protocol for your site
+# Other configuration settings go here
+---
